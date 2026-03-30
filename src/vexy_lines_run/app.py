@@ -1147,6 +1147,13 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
             text="Export \u25b6", fg_color="#2E7D32", hover_color="#1B5E20", command=self._do_export, state="normal"
         )
         logger.info("Export finished: {}", message)
+        if self._output_path:
+            try:
+                from showinfm import show_in_file_manager  # noqa: PLC0415
+
+                show_in_file_manager(self._output_path)
+            except Exception:
+                logger.opt(exception=True).debug("Could not reveal output in file manager")
 
     def _on_export_error(self, error: str) -> None:
         self._is_exporting = False

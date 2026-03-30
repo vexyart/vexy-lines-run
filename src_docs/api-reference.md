@@ -13,7 +13,7 @@ app = App()
 app.mainloop()
 ```
 
-**Window defaults:** Title "Style with Vexy Lines", 1024x768, minimum 960x480.
+**Window defaults:** Title "Vexy Lines Run", 1024x768, minimum 960x480.
 
 **Key instance attributes:**
 
@@ -107,7 +107,7 @@ The `size` string is parsed internally:
 
 ## Video
 
-Re-exported from `vexy_lines_api.video`. Requires the `[video]` extra: PyAV, OpenCV, resvg-py, svglab.
+Re-exported from `vexy_lines_api.video`. Video dependencies (PyAV, OpenCV, resvg-py, svglab) are included in the base install.
 
 ### `VideoInfo`
 

@@ -334,10 +334,15 @@ def _process_video_to_mp4(
     style = _load_style(style_path) if style_path else None
     end_style = _load_style(end_style_path) if end_style_path else None
 
+    # GUI range is 1-based inclusive; API end_frame is exclusive
     start = frame_range[0] if frame_range else 0
-    end = frame_range[1] if frame_range else info.total_frames
+    end = (frame_range[1] + 1) if frame_range else info.total_frames
+    total = max(end - start, 1)
 
-    _report_progress(on_progress, 0, max(end - start, 1), "Processing video...")
+    _report_progress(on_progress, 0, total, "Processing video...")
+
+    def _on_frame(current: int, _total: int) -> None:
+        _report_progress(on_progress, current, total, "Processing video...")
 
     process_video_with_style(
         input_path=input_path,
@@ -350,6 +355,7 @@ def _process_video_to_mp4(
         size_multiplier=_parse_size_multiplier(size),
         relative=relative_style,
         abort_event=abort_event,
+        on_progress=_on_frame,
     )
 
 
@@ -375,8 +381,9 @@ def _process_video_to_frames(
     style = _load_style(style_path) if style_path else None
     end_style = _load_style(end_style_path) if end_style_path else None
 
+    # GUI range is 1-based inclusive; convert to exclusive
     start = frame_range[0] if frame_range else 0
-    end = min(frame_range[1] if frame_range else info.total_frames, info.total_frames)
+    end = min((frame_range[1] + 1) if frame_range else info.total_frames, info.total_frames)
     total = max(end - start, 1)
 
     cap = cv2.VideoCapture(input_path)

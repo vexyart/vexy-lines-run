@@ -71,7 +71,7 @@ Turn a 5-second bear clip into vector art, frame by frame.
 
 ![Video tab showing first and last frames of a bear video, with a range slider set to 5 frames](images/video-mode.png)
 
-1. Install the video extra: `pip install "vexy-lines-run[video]"`
+1. Install vexy-lines-run: `pip install vexy-lines-run` (video dependencies are included)
 2. Switch to the **Video** tab
 3. Click **Open Video...** and load `bear.mp4`
 4. The first and last frames appear as previews. The range slider shows 1 to total frames.
@@ -94,11 +94,7 @@ For MP4, you pick a save filename. For image frames, you pick a folder.
 
 ## Drag-and-drop workflow
 
-With the `[dnd]` extra installed, you can skip file dialogs entirely:
-
-```bash
-pip install "vexy-lines-run[dnd]"
-```
+Drag-and-drop is included in the base install. Skip file dialogs entirely:
 
 - Drag `.lines` files onto the **Lines** tab list or preview area
 - Drag photos onto the **Images** tab list or preview area

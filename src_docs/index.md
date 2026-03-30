@@ -12,28 +12,7 @@ Drop images in. Pick a style. Get vector art out.
 - [On Github](https://github.com/vexyart/vexy-lines-run)
 - [On PyPI](https://pypi.org/project/vexy-lines-run/)
 
-## Three tabs, one workflow
-
-| Tab | Input | What happens |
-|-----|-------|-------------|
-| **Lines** | `.lines` files | Re-export with a different style, or extract embedded previews |
-| **Images** | PNG, JPG, WEBP, BMP, TIFF, GIF | Apply vector fill patterns through the MCP engine |
-| **Video** | MP4, MOV, MKV, AVI, WEBM | Style transfer frame-by-frame with audio passthrough |
-
-Pick a primary style from any `.lines` file. Optionally pick an end style — the app interpolates between them across the input sequence for smooth transitions.
-
-## What you get
-
-- **Style picker** with live thumbnail previews
-- **Style interpolation** — blend two styles across a batch or video
-- **Drag-and-drop** onto any panel (`[dnd]` extra)
-- **Background export** with a live progress bar and cancel button
-- **Output formats:** SVG, PNG, JPG (1x–4x upscale), MP4, LINES
-- **Keyboard shortcuts** — Cmd/Ctrl+O, Cmd/Ctrl+E, Escape
-- **Native menu bar** (`[menus]` extra)
-- **Dark mode** follows your system appearance
-
-## Quick start
+## Running Vexy Lines Run
 
 ### macOS
 
@@ -58,9 +37,30 @@ from vexy_lines_run import launch
 launch()
 ```
 
+## Three tabs, one workflow
+
+| Tab | Input | What happens |
+|-----|-------|-------------|
+| **Lines** | `.lines` files | Re-export with a different style, or extract embedded previews |
+| **Images** | PNG, JPG, WEBP, BMP, TIFF, GIF | Apply vector fill patterns through the MCP engine |
+| **Video** | MP4, MOV, MKV, AVI, WEBM | Style transfer frame-by-frame with audio passthrough |
+
+Pick a primary style from any `.lines` file. Optionally pick an end style — the app interpolates between them across the input sequence for smooth transitions.
+
+## What you get
+
+- **Style picker** with live thumbnail previews
+- **Style interpolation** — blend two styles across a batch or video
+- **Drag-and-drop** onto any panel
+- **Background export** with a live progress bar and cancel button
+- **Output formats:** SVG, PNG, JPG (1x–4x upscale), MP4, LINES
+- **Keyboard shortcuts** — Cmd/Ctrl+O, Cmd/Ctrl+E, Escape
+- **Native menu bar**
+- **Dark mode** follows your system appearance
+
 ## Next steps
 
-- [Installation](installation.md) — extras, platform notes, dev setup
+- [Installation](installation.md) — platform notes, dev setup
 - [GUI Guide](gui-guide.md) — what every button does, with screenshots
 - [Examples](examples.md) — real workflows, step by step
 - [API Reference](api-reference.md) — Python API for App, processing, video, and widgets

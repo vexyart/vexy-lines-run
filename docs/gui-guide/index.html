@@ -922,7 +922,7 @@
 +-----------------------------------------------------------+
 </code></pre></div>
 <p>The left panel takes roughly two-thirds of the window. The right panel holds your style. The bottom strip handles export.</p>
-<p>The window title reads "Style with Vexy Lines". Default size is 1024x768, minimum 960x480. Resize freely — previews, file lists, and path labels adapt automatically.</p>
+<p>The window title reads "Vexy Lines Run". Default size is 1024x768, minimum 960x480. Resize freely — previews, file lists, and path labels adapt automatically.</p>
 <h2 id="menu-bar">Menu bar<a class="headerlink" href="#menu-bar" title="Permanent link">&para;</a></h2>
 <p>Six menus sit at the top: <strong>File</strong>, <strong>Lines</strong>, <strong>Image</strong>, <strong>Video</strong>, <strong>Style</strong>, <strong>Export</strong>.</p>
 <table>
@@ -959,7 +959,7 @@
 </tr>
 </tbody>
 </table>
-<p>The menu bar requires the <code>[menus]</code> extra. Without it, the app works fine — you just use the buttons instead.</p>
+<p>The menu bar is included in the base install — you can use menus or buttons interchangeably.</p>
 <h2 id="lines-tab">Lines tab<a class="headerlink" href="#lines-tab" title="Permanent link">&para;</a></h2>
 <p>Load <code>.lines</code> files — the native Vexy Lines document format.</p>
 <p><img alt="Lines tab: nine files listed on the left, a purple-and-teal &quot;Vexy Lines&quot; lettering preview on the right" src="../images/lines-mode.png" /></p>
@@ -1022,7 +1022,7 @@
 <h2 id="video-tab">Video tab<a class="headerlink" href="#video-tab" title="Permanent link">&para;</a></h2>
 <p>Process video frame-by-frame with style transfer.</p>
 <p><img alt="Video tab: first and last frames of a teddy bear video side by side, a range slider set to frames 1–5, and a halftone cat style loaded" src="../images/video-mode.png" /></p>
-<p>Requires the <code>[video]</code> extra (<code>pip install "vexy-lines-run[video]"</code>). Supported formats: MP4, MOV, MKV, AVI, WEBM.</p>
+<p>Requires <code>vexy-lines-run</code> (video dependencies are included). Supported formats: MP4, MOV, MKV, AVI, WEBM.</p>
 <p>Two preview panes sit side by side — the first and last frames of your selected range. Below them:</p>
 <table>
 <thead>
@@ -1169,10 +1169,7 @@
 <p>User-initiated cancellation ("Export aborted by user") does not show an error dialog — it resets silently.</p>
 <p>For batch exports (multiple images), a single file failure logs a warning and continues. The export doesn't abort over one bad apple.</p>
 <h2 id="drag-and-drop">Drag-and-drop<a class="headerlink" href="#drag-and-drop" title="Permanent link">&para;</a></h2>
-<p>Install the <code>[dnd]</code> extra:</p>
-<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;vexy-lines-run[dnd]&quot;</span>
-</code></pre></div>
-<p>Now drop files directly onto the app:</p>
+<p>Drag-and-drop is included in the base install. Drop files directly onto the app:</p>
 <table>
 <thead>
 <tr>

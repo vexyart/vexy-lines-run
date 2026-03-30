@@ -20,7 +20,7 @@ Three tabs on the left. Style picker on the right. Export controls at the bottom
 
 The left panel takes roughly two-thirds of the window. The right panel holds your style. The bottom strip handles export.
 
-The window title reads "Style with Vexy Lines". Default size is 1024x768, minimum 960x480. Resize freely — previews, file lists, and path labels adapt automatically.
+The window title reads "Vexy Lines Run". Default size is 1024x768, minimum 960x480. Resize freely — previews, file lists, and path labels adapt automatically.
 
 ## Menu bar
 
@@ -35,7 +35,7 @@ Six menus sit at the top: **File**, **Lines**, **Image**, **Video**, **Style**, 
 | **Style** | Open Style, Open End Style, Reset Styles |
 | **Export** | Export, Stop, Location, Format submenu, Size submenu, Audio toggle |
 
-The menu bar requires the `[menus]` extra. Without it, the app works fine — you just use the buttons instead.
+The menu bar is included in the base install — you can use menus or buttons interchangeably.
 
 ## Lines tab
 
@@ -85,7 +85,7 @@ Process video frame-by-frame with style transfer.
 
 ![Video tab: first and last frames of a teddy bear video side by side, a range slider set to frames 1–5, and a halftone cat style loaded](images/video-mode.png)
 
-Requires the `[video]` extra (`pip install "vexy-lines-run[video]"`). Supported formats: MP4, MOV, MKV, AVI, WEBM.
+Requires `vexy-lines-run` (video dependencies are included). Supported formats: MP4, MOV, MKV, AVI, WEBM.
 
 Two preview panes sit side by side — the first and last frames of your selected range. Below them:
 
@@ -192,13 +192,7 @@ For batch exports (multiple images), a single file failure logs a warning and co
 
 ## Drag-and-drop
 
-Install the `[dnd]` extra:
-
-```bash
-pip install "vexy-lines-run[dnd]"
-```
-
-Now drop files directly onto the app:
+Drag-and-drop is included in the base install. Drop files directly onto the app:
 
 | Drop target | Accepts |
 |-------------|---------|

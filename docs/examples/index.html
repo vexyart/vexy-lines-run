@@ -770,7 +770,7 @@
 <p>Turn a 5-second bear clip into vector art, frame by frame.</p>
 <p><img alt="Video tab showing first and last frames of a bear video, with a range slider set to 5 frames" src="../images/video-mode.png" /></p>
 <ol>
-<li>Install the video extra: <code>pip install "vexy-lines-run[video]"</code></li>
+<li>Install vexy-lines-run: <code>pip install vexy-lines-run</code> (video dependencies are included)</li>
 <li>Switch to the <strong>Video</strong> tab</li>
 <li>Click <strong>Open Video...</strong> and load <code>bear.mp4</code></li>
 <li>The first and last frames appear as previews. The range slider shows 1 to total frames.</li>
@@ -791,9 +791,7 @@
 <li>Audio passthrough only works with full-range MP4 — partial ranges drop audio to avoid timing mismatch</li>
 </ul>
 <h2 id="drag-and-drop-workflow">Drag-and-drop workflow<a class="headerlink" href="#drag-and-drop-workflow" title="Permanent link">&para;</a></h2>
-<p>With the <code>[dnd]</code> extra installed, you can skip file dialogs entirely:</p>
-<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;vexy-lines-run[dnd]&quot;</span>
-</code></pre></div>
+<p>Drag-and-drop is included in the base install. Skip file dialogs entirely:</p>
 <ul>
 <li>Drag <code>.lines</code> files onto the <strong>Lines</strong> tab list or preview area</li>
 <li>Drag photos onto the <strong>Images</strong> tab list or preview area</li>

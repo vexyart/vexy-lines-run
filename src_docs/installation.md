@@ -18,18 +18,13 @@ With uv (faster):
 uv add vexy-lines-run
 ```
 
-## Optional extras
+## All features included
 
-The base install handles `.lines` files and images. Extras unlock more:
+The base install includes all functionality — video processing, drag-and-drop, and native menus. No optional extras needed:
 
-| Extra | What it adds | Install |
-|-------|-------------|---------|
-| `dnd` | Drag-and-drop files onto the app | `pip install "vexy-lines-run[dnd]"` |
-| `video` | Video processing — PyAV, OpenCV, resvg, svglab | `pip install "vexy-lines-run[video]"` |
-| `menus` | Native menu bar (CTkMenuBarPlus) | `pip install "vexy-lines-run[menus]"` |
-| `all` | Everything above | `pip install "vexy-lines-run[all]"` |
-
-Without `[dnd]`, you use file dialogs instead of drag-and-drop. Without `[video]`, the Video tab still appears but can't load anything. Without `[menus]`, you use the in-panel buttons — nothing is lost, just a different workflow.
+```bash
+pip install vexy-lines-run
+```
 
 ## Runtime dependencies
 
@@ -79,11 +74,11 @@ print("vexy-lines-run is ready")
 
 ### macOS
 
-Works out of the box. Tk ships with the Python.org and Homebrew installers. Drag-and-drop requires the `[dnd]` extra.
+Works out of the box. Tk ships with the Python.org and Homebrew installers.
 
 ### Windows
 
-Works out of the box. Tk ships with the python.org installer. Drag-and-drop requires the `[dnd]` extra.
+Works out of the box. Tk ships with the python.org installer.
 
 ### Linux
 
@@ -100,15 +95,13 @@ sudo dnf install python3-tkinter
 sudo pacman -S tk
 ```
 
-Drag-and-drop requires `[dnd]` **plus** the `tkdnd` system library (`sudo apt install tkdnd` on Debian/Ubuntu).
-
 ## Development install
 
 ```bash
 git clone https://github.com/vexyart/vexy-lines.git
 cd vexy-lines/vexy-lines-run
 uv venv --python 3.12
-uv pip install -e ".[all,dev]"
+uv pip install -e ".[dev]"
 ```
 
 Run tests:

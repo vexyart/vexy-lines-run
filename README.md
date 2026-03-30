@@ -10,18 +10,7 @@ Built with CustomTkinter. Runs on macOS, Windows, and Linux wherever Tk is avail
 pip install vexy-lines-run
 ```
 
-Optional extras:
-
-| Extra | What it adds |
-|-------|-------------|
-| `dnd` | Drag-and-drop file support (`tkinterdnd2`) |
-| `video` | Video processing (PyAV, OpenCV, resvg, svglab) |
-| `menus` | Native menu bar (`CTkMenuBarPlus`) |
-| `all` | Everything above |
-
-```bash
-pip install "vexy-lines-run[all]"
-```
+All dependencies (CustomTkinter, tkinterdnd2, PyAV, OpenCV, resvg, svglab, CTkMenuBarPlus) are installed automatically.
 
 ## Launch
 
@@ -63,7 +52,7 @@ Select a primary style from any `.lines` file. Optionally select an end style â€
 | MP4 | Re-encoded video with styled frames, optional audio |
 | LINES | Copy `.lines` files directly (Lines tab only) |
 
-**Drag-and-drop** onto any input list (requires `[dnd]`)
+**Drag-and-drop** onto any input list (via `tkinterdnd2`)
 
 **Background processing** â€” export runs on a daemon thread; the progress bar updates live and the UI stays responsive
 

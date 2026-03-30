@@ -353,10 +353,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#optional-extras" class="md-nav__link">
+  <a href="#all-features-included" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Optional extras
+        All features included
       
     </span>
   </a>
@@ -622,10 +622,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#optional-extras" class="md-nav__link">
+  <a href="#all-features-included" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Optional extras
+        All features included
       
     </span>
   </a>
@@ -754,40 +754,10 @@
 <p>With uv (faster):</p>
 <div class="highlight"><pre><span></span><code>uv<span class="w"> </span>add<span class="w"> </span>vexy-lines-run
 </code></pre></div>
-<h2 id="optional-extras">Optional extras<a class="headerlink" href="#optional-extras" title="Permanent link">&para;</a></h2>
-<p>The base install handles <code>.lines</code> files and images. Extras unlock more:</p>
-<table>
-<thead>
-<tr>
-<th>Extra</th>
-<th>What it adds</th>
-<th>Install</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>dnd</code></td>
-<td>Drag-and-drop files onto the app</td>
-<td><code>pip install "vexy-lines-run[dnd]"</code></td>
-</tr>
-<tr>
-<td><code>video</code></td>
-<td>Video processing — PyAV, OpenCV, resvg, svglab</td>
-<td><code>pip install "vexy-lines-run[video]"</code></td>
-</tr>
-<tr>
-<td><code>menus</code></td>
-<td>Native menu bar (CTkMenuBarPlus)</td>
-<td><code>pip install "vexy-lines-run[menus]"</code></td>
-</tr>
-<tr>
-<td><code>all</code></td>
-<td>Everything above</td>
-<td><code>pip install "vexy-lines-run[all]"</code></td>
-</tr>
-</tbody>
-</table>
-<p>Without <code>[dnd]</code>, you use file dialogs instead of drag-and-drop. Without <code>[video]</code>, the Video tab still appears but can't load anything. Without <code>[menus]</code>, you use the in-panel buttons — nothing is lost, just a different workflow.</p>
+<h2 id="all-features-included">All features included<a class="headerlink" href="#all-features-included" title="Permanent link">&para;</a></h2>
+<p>The base install includes all functionality — video processing, drag-and-drop, and native menus. No optional extras needed:</p>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>vexy-lines-run
+</code></pre></div>
 <h2 id="runtime-dependencies">Runtime dependencies<a class="headerlink" href="#runtime-dependencies" title="Permanent link">&para;</a></h2>
 <p>These install automatically with the base package:</p>
 <table>
@@ -838,9 +808,9 @@ python<span class="w"> </span>-m<span class="w"> </span>vexy_lines_run
 </code></pre></div>
 <h2 id="platform-notes">Platform notes<a class="headerlink" href="#platform-notes" title="Permanent link">&para;</a></h2>
 <h3 id="macos">macOS<a class="headerlink" href="#macos" title="Permanent link">&para;</a></h3>
-<p>Works out of the box. Tk ships with the Python.org and Homebrew installers. Drag-and-drop requires the <code>[dnd]</code> extra.</p>
+<p>Works out of the box. Tk ships with the Python.org and Homebrew installers.</p>
 <h3 id="windows">Windows<a class="headerlink" href="#windows" title="Permanent link">&para;</a></h3>
-<p>Works out of the box. Tk ships with the python.org installer. Drag-and-drop requires the <code>[dnd]</code> extra.</p>
+<p>Works out of the box. Tk ships with the python.org installer.</p>
 <h3 id="linux">Linux<a class="headerlink" href="#linux" title="Permanent link">&para;</a></h3>
 <p>Tk might not be bundled with your system Python. Install it:</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># Debian/Ubuntu</span>
@@ -852,12 +822,11 @@ sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> <
 <span class="c1"># Arch</span>
 sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>tk
 </code></pre></div>
-<p>Drag-and-drop requires <code>[dnd]</code> <strong>plus</strong> the <code>tkdnd</code> system library (<code>sudo apt install tkdnd</code> on Debian/Ubuntu).</p>
 <h2 id="development-install">Development install<a class="headerlink" href="#development-install" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/vexyart/vexy-lines.git
 <span class="nb">cd</span><span class="w"> </span>vexy-lines/vexy-lines-run
 uv<span class="w"> </span>venv<span class="w"> </span>--python<span class="w"> </span><span class="m">3</span>.12
-uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[all,dev]&quot;</span>
+uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[dev]&quot;</span>
 </code></pre></div>
 <p>Run tests:</p>
 <div class="highlight"><pre><span></span><code>uvx<span class="w"> </span>hatch<span class="w"> </span><span class="nb">test</span>

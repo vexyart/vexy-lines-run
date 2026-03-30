@@ -302,37 +302,15 @@
     <ul class="md-nav__list" data-md-component="toc">
       
         <li class="md-nav__item">
-  <a href="#three-tabs-one-workflow" class="md-nav__link">
+  <a href="#running-vexy-lines-run" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Three tabs, one workflow
+        Running Vexy Lines Run
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#what-you-get" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        What you get
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#quick-start" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Quick start
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Quick start">
+    <nav class="md-nav" aria-label="Running Vexy Lines Run">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -370,6 +348,28 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#three-tabs-one-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Three tabs, one workflow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-you-get" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What you get
+      
+    </span>
+  </a>
   
 </li>
       
@@ -554,37 +554,15 @@
     <ul class="md-nav__list" data-md-component="toc">
       
         <li class="md-nav__item">
-  <a href="#three-tabs-one-workflow" class="md-nav__link">
+  <a href="#running-vexy-lines-run" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Three tabs, one workflow
+        Running Vexy Lines Run
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#what-you-get" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        What you get
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#quick-start" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Quick start
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Quick start">
+    <nav class="md-nav" aria-label="Running Vexy Lines Run">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -626,6 +604,28 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#three-tabs-one-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Three tabs, one workflow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-you-get" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What you get
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#next-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -660,6 +660,19 @@
 <li><a href="https://github.com/vexyart/vexy-lines-run">On Github</a></li>
 <li><a href="https://pypi.org/project/vexy-lines-run/">On PyPI</a></li>
 </ul>
+<h2 id="running-vexy-lines-run">Running Vexy Lines Run<a class="headerlink" href="#running-vexy-lines-run" title="Permanent link">&para;</a></h2>
+<h3 id="macos">macOS<a class="headerlink" href="#macos" title="Permanent link">&para;</a></h3>
+<p>Open Terminal, paste, press Enter:</p>
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-LsSf<span class="w"> </span>https://astral.sh/uv/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/.local/bin:</span><span class="nv">$PATH</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>uvx<span class="w"> </span>--python<span class="w"> </span><span class="m">3</span>.12<span class="w"> </span>vexy-lines-run
+</code></pre></div>
+<h3 id="windows">Windows<a class="headerlink" href="#windows" title="Permanent link">&para;</a></h3>
+<p>Open Command Prompt, paste, press Enter:</p>
+<div class="highlight"><pre><span></span><code>powershell -ExecutionPolicy ByPass -c <span class="s2">&quot;irm https://astral.sh/uv/install.ps1 | iex; $env:Path = \&quot;</span>$HOME\.local\bin;$HOME\AppData\Roaming\uv;$env:Path\<span class="s2">&quot;; uvx --python 3.12 vexy-lines-run&quot;</span>
+</code></pre></div>
+<h3 id="from-python">From Python<a class="headerlink" href="#from-python" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">vexy_lines_run</span><span class="w"> </span><span class="kn">import</span> <span class="n">launch</span>
+<span class="n">launch</span><span class="p">()</span>
+</code></pre></div>
 <h2 id="three-tabs-one-workflow">Three tabs, one workflow<a class="headerlink" href="#three-tabs-one-workflow" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -692,29 +705,16 @@
 <ul>
 <li><strong>Style picker</strong> with live thumbnail previews</li>
 <li><strong>Style interpolation</strong> — blend two styles across a batch or video</li>
-<li><strong>Drag-and-drop</strong> onto any panel (<code>[dnd]</code> extra)</li>
+<li><strong>Drag-and-drop</strong> onto any panel</li>
 <li><strong>Background export</strong> with a live progress bar and cancel button</li>
 <li><strong>Output formats:</strong> SVG, PNG, JPG (1x–4x upscale), MP4, LINES</li>
 <li><strong>Keyboard shortcuts</strong> — Cmd/Ctrl+O, Cmd/Ctrl+E, Escape</li>
-<li><strong>Native menu bar</strong> (<code>[menus]</code> extra)</li>
+<li><strong>Native menu bar</strong></li>
 <li><strong>Dark mode</strong> follows your system appearance</li>
 </ul>
-<h2 id="quick-start">Quick start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
-<h3 id="macos">macOS<a class="headerlink" href="#macos" title="Permanent link">&para;</a></h3>
-<p>Open Terminal, paste, press Enter:</p>
-<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-LsSf<span class="w"> </span>https://astral.sh/uv/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/.local/bin:</span><span class="nv">$PATH</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>uvx<span class="w"> </span>--python<span class="w"> </span><span class="m">3</span>.12<span class="w"> </span>vexy-lines-run
-</code></pre></div>
-<h3 id="windows">Windows<a class="headerlink" href="#windows" title="Permanent link">&para;</a></h3>
-<p>Open Command Prompt, paste, press Enter:</p>
-<div class="highlight"><pre><span></span><code>powershell -ExecutionPolicy ByPass -c <span class="s2">&quot;irm https://astral.sh/uv/install.ps1 | iex; $env:Path = \&quot;</span>$HOME\.local\bin;$HOME\AppData\Roaming\uv;$env:Path\<span class="s2">&quot;; uvx --python 3.12 vexy-lines-run&quot;</span>
-</code></pre></div>
-<h3 id="from-python">From Python<a class="headerlink" href="#from-python" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">vexy_lines_run</span><span class="w"> </span><span class="kn">import</span> <span class="n">launch</span>
-<span class="n">launch</span><span class="p">()</span>
-</code></pre></div>
 <h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="installation/">Installation</a> — extras, platform notes, dev setup</li>
+<li><a href="installation/">Installation</a> — platform notes, dev setup</li>
 <li><a href="gui-guide/">GUI Guide</a> — what every button does, with screenshots</li>
 <li><a href="examples/">Examples</a> — real workflows, step by step</li>
 <li><a href="api-reference/">API Reference</a> — Python API for App, processing, video, and widgets</li>
