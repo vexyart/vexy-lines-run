@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- Python 3.10 or newer
+- Python 3.11 or newer
 - Tk/Tcl (ships with most Python installs; on Linux, install `python3-tk`)
 - The [Vexy Lines](https://vexy.art) desktop app for style transfer via MCP
 

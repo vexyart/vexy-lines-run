@@ -7,6 +7,7 @@
 
 | ID | Time | T | Title | Read |
 |----|------|---|-------|------|
+| #2357 | 1:28 PM | 🔄 | Moved video module import from vexy-lines-run to vexy-lines-api | ~308 |
 | #2335 | 2:57 AM | 🔴 | Fixed all critical MCP client and parser bugs across vexy-lines SDK | ~723 |
 | #2332 | 2:55 AM | 🟣 | Completed faithful GUI port from vexy-lines-utils to vexy-lines-run | ~678 |
 </claude-mem-context>

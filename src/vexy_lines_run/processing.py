@@ -294,7 +294,7 @@ def _process_video_to_mp4(
     on_progress: Callable[[int, int, str], None] | None,
 ) -> None:
     """Full video-to-video processing via the style engine."""
-    from vexy_lines_run.video import probe, process_video_with_style
+    from vexy_lines_api.video import probe, process_video_with_style
 
     info = probe(input_path)
     style = _load_style(style_path) if style_path else None
@@ -333,7 +333,7 @@ def _process_video_to_frames(
     """Extract styled video frames as individual image files."""
     from vexy_lines_api import MCPClient, apply_style, interpolate_style, styles_compatible
 
-    from vexy_lines_run.video import probe
+    from vexy_lines_api.video import probe
 
     info = probe(input_path)
     out_dir = Path(output_path)
@@ -473,7 +473,7 @@ def _save_svg_as_image(
         fmt: Target raster format (``"PNG"`` or ``"JPG"``).
         multiplier: Scale factor.
     """
-    from vexy_lines_run.video import _svg_to_pil
+    from vexy_lines_api.video import _svg_to_pil
 
     svg_str = svg_data if isinstance(svg_data, str) else svg_data.decode()
     w, h = _estimate_svg_dimensions(svg_str)
