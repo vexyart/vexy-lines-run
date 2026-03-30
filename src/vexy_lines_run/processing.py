@@ -1,10 +1,19 @@
 # this_file: src/vexy_lines_run/processing.py
 """Export processing pipeline for the Vexy Lines GUI.
 
-Dispatches export work for three input modes (lines, images, video) and
-invokes the MCP style engine from ``vexy_lines_api``.  All heavy work runs
-on a background thread; calbacks ``on_progress``, ``on_complete``, and
-``on_error`` are invoked to communicate with the GUI.
+Dispatches export jobs for three input modes (lines, images, video) and
+calls into the MCP style engine from ``vexy_lines_api``.
+
+All heavy work runs on a background thread started by
+:meth:`~vexy_lines_run.app.App._on_export`.  Three callbacks communicate
+results back to the GUI thread:
+
+- ``on_progress(current, total, message)`` — integer progress counters
+- ``on_complete(message)`` — called once on success
+- ``on_error(message)`` — called once on failure
+
+Callbacks are always invoked via ``root.after(0, ...)`` in the App layer, so
+they are safe to call from the worker thread without extra locking.
 """
 
 from __future__ import annotations
@@ -18,6 +27,8 @@ from loguru import logger
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+
+__all__ = ["process_export"]
 
 # ---------------------------------------------------------------------------
 # Public entry point
@@ -35,7 +46,8 @@ def process_export(
     *,
     audio: bool = True,
     frame_range: tuple[int, int] | None = None,
-    on_progress: Callable[[float, str], None] | None = None,
+    relative_style: bool = False,
+    on_progress: Callable[[int, int, str], None] | None = None,
     on_complete: Callable[[str], None] | None = None,
     on_error: Callable[[str], None] | None = None,
 ) -> None:
@@ -54,6 +66,8 @@ def process_export(
         size: Size multiplier string (``"1x"``, ``"2x"``).
         audio: Whether to include audio (video mode only).
         frame_range: Optional ``(start, end)`` frame indices for video.
+        relative_style: Scale spatial fill parameters to match the target
+            image/frame dimensions.  Default ``False`` (absolute mode).
         on_progress: Progress callback ``(fraction, message)``.
         on_complete: Success callback ``(message)``.
         on_error: Error callback ``(error_message)``.
@@ -67,6 +81,7 @@ def process_export(
                 output_path=output_path,
                 fmt=fmt,
                 size=size,
+                relative_style=relative_style,
                 on_progress=on_progress,
             )
         elif mode == "images":
@@ -77,6 +92,7 @@ def process_export(
                 output_path=output_path,
                 fmt=fmt,
                 size=size,
+                relative_style=relative_style,
                 on_progress=on_progress,
             )
         elif mode == "video":
@@ -89,6 +105,7 @@ def process_export(
                 size=size,
                 audio=audio,
                 frame_range=frame_range,
+                relative_style=relative_style,
                 on_progress=on_progress,
             )
         else:
@@ -114,14 +131,15 @@ def _process_lines(
     output_path: str,
     fmt: str,
     size: str,
-    on_progress: Callable[[float, str], None] | None,
+    relative_style: bool = False,
+    on_progress: Callable[[int, int, str], None] | None,
 ) -> None:
     """Process .lines file exports.
 
     Extracts embedded previews/source images from ``.lines`` files and saves
     them in the requested format.
     """
-    from vexy_lines import extract_preview_image, extract_source_image
+    from vexy_lines import parse as parse_lines
 
     total = len(input_paths)
     out_dir = Path(output_path)
@@ -129,7 +147,7 @@ def _process_lines(
     multiplier = _parse_size_multiplier(size)
 
     for idx, path in enumerate(input_paths):
-        _report_progress(on_progress, idx / total, f"Processing {Path(path).name}")
+        _report_progress(on_progress, idx, total, f"Processing {Path(path).name}")
 
         if fmt == "LINES":
             # Copy the .lines file directly
@@ -138,10 +156,15 @@ def _process_lines(
             shutil.copy2(path, out_dir / Path(path).name)
             continue
 
-        # Extract preview or source image
-        img_bytes = extract_source_image(path)
+        # Extract preview or source image bytes from the parsed document
+        try:
+            doc = parse_lines(path)
+        except Exception:
+            logger.opt(exception=True).warning("Could not parse {}", path)
+            continue
+        img_bytes: bytes | None = doc.source_image_data
         if img_bytes is None:
-            img_bytes = extract_preview_image(path)
+            img_bytes = doc.preview_image_data
 
         if img_bytes is None:
             logger.warning("No image data in {}", path)
@@ -149,7 +172,7 @@ def _process_lines(
 
         # Apply style if provided
         if style_path is not None:
-            img_bytes = _apply_style_to_bytes(img_bytes, style_path, end_style_path)
+            img_bytes = _apply_style_to_bytes(img_bytes, style_path, end_style_path, relative=relative_style)
 
         stem = Path(path).stem
         if fmt in ("PNG", "JPG"):
@@ -158,7 +181,7 @@ def _process_lines(
             # SVG bytes written directly
             (out_dir / f"{stem}.svg").write_bytes(img_bytes if isinstance(img_bytes, bytes) else img_bytes.encode())
 
-    _report_progress(on_progress, 1.0, "Done")
+    _report_progress(on_progress, total, total, "Done")
 
 
 def _process_images(
@@ -169,10 +192,11 @@ def _process_images(
     output_path: str,
     fmt: str,
     size: str,
-    on_progress: Callable[[float, str], None] | None,
+    relative_style: bool = False,
+    on_progress: Callable[[int, int, str], None] | None,
 ) -> None:
     """Process raster image exports via the MCP style engine."""
-    from vexy_lines_api import MCPClient, apply_style, extract_style, interpolate_style, styles_compatible
+    from vexy_lines_api import MCPClient, apply_style, interpolate_style, styles_compatible
 
     total = len(input_paths)
     out_dir = Path(output_path)
@@ -184,27 +208,37 @@ def _process_images(
     end_style = _load_style(end_style_path) if end_style_path else None
 
     for idx, path in enumerate(input_paths):
-        _report_progress(on_progress, idx / total, f"Styling {Path(path).name}")
+        _report_progress(on_progress, idx, total, f"Styling {Path(path).name}")
 
-        img_data = Path(path).read_bytes()
+        stem = Path(path).stem
 
         if style is not None:
             try:
+                current_style = style
+                if end_style is not None and styles_compatible(style, end_style) and total > 1:
+                    t = idx / (total - 1)
+                    current_style = interpolate_style(style, end_style, t)
+
                 with MCPClient() as client:
-                    result = apply_style(client, img_data, style)
-                    if end_style is not None and styles_compatible(style, end_style):
-                        t = (idx + 1) / total  # interpolation parameter
-                        blended = interpolate_style(style, end_style, t)
-                        result = apply_style(client, img_data, blended)
-                    img_data = result
+                    svg_string = apply_style(
+                        client, current_style, path,
+                        relative=relative_style,
+                    )
+
+                if fmt == "SVG":
+                    (out_dir / f"{stem}.svg").write_text(svg_string, encoding="utf-8")
+                else:
+                    _save_svg_as_image(svg_string, out_dir / f"{stem}.{fmt.lower()}", fmt, multiplier)
+                continue
             except Exception:
                 logger.opt(exception=True).warning("Style application failed for {}", path)
 
-        stem = Path(path).stem
+        # No style — just copy the image with optional resize
+        img_data = Path(path).read_bytes()
         ext = fmt.lower()
         _save_image_bytes(img_data, out_dir / f"{stem}.{ext}", fmt, multiplier)
 
-    _report_progress(on_progress, 1.0, "Done")
+    _report_progress(on_progress, total, total, "Done")
 
 
 def _process_video(
@@ -217,7 +251,8 @@ def _process_video(
     size: str,
     audio: bool,
     frame_range: tuple[int, int] | None,
-    on_progress: Callable[[float, str], None] | None,
+    relative_style: bool = False,
+    on_progress: Callable[[int, int, str], None] | None,
 ) -> None:
     """Dispatch video processing to the appropriate handler."""
     if fmt == "MP4":
@@ -229,6 +264,7 @@ def _process_video(
             size=size,
             audio=audio,
             frame_range=frame_range,
+            relative_style=relative_style,
             on_progress=on_progress,
         )
     else:
@@ -240,6 +276,7 @@ def _process_video(
             fmt=fmt,
             size=size,
             frame_range=frame_range,
+            relative_style=relative_style,
             on_progress=on_progress,
         )
 
@@ -253,7 +290,8 @@ def _process_video_to_mp4(
     size: str,
     audio: bool,
     frame_range: tuple[int, int] | None,
-    on_progress: Callable[[float, str], None] | None,
+    relative_style: bool = False,
+    on_progress: Callable[[int, int, str], None] | None,
 ) -> None:
     """Full video-to-video processing via the style engine."""
     from vexy_lines_run.video import probe, process_video_with_style
@@ -265,7 +303,7 @@ def _process_video_to_mp4(
     start = frame_range[0] if frame_range else 0
     end = frame_range[1] if frame_range else info.total_frames
 
-    _report_progress(on_progress, 0.0, "Processing video...")
+    _report_progress(on_progress, 0, max(end - start, 1), "Processing video...")
 
     process_video_with_style(
         input_path=input_path,
@@ -276,6 +314,7 @@ def _process_video_to_mp4(
         end_frame=end,
         include_audio=audio,
         size_multiplier=_parse_size_multiplier(size),
+        relative=relative_style,
     )
 
 
@@ -288,7 +327,8 @@ def _process_video_to_frames(
     fmt: str,
     size: str,
     frame_range: tuple[int, int] | None,
-    on_progress: Callable[[float, str], None] | None,
+    relative_style: bool = False,
+    on_progress: Callable[[int, int, str], None] | None,
 ) -> None:
     """Extract styled video frames as individual image files."""
     from vexy_lines_api import MCPClient, apply_style, interpolate_style, styles_compatible
@@ -321,7 +361,7 @@ def _process_video_to_frames(
         if not ret:
             break
 
-        _report_progress(on_progress, i / total, f"Frame {start + i}")
+        _report_progress(on_progress, i, total, f"Frame {start + i}")
 
         # Encode frame to PNG bytes
         _, buf = cv2.imencode(".png", frame)
@@ -334,7 +374,7 @@ def _process_video_to_frames(
                     current_style = style
                     if end_style is not None and styles_compatible(style, end_style):
                         current_style = interpolate_style(style, end_style, t)
-                    frame_bytes = apply_style(client, frame_bytes, current_style)
+                    frame_bytes = apply_style(client, frame_bytes, current_style, relative=relative_style)
             except Exception:
                 logger.opt(exception=True).debug("Style failed on frame {}", start + i)
 
@@ -342,7 +382,7 @@ def _process_video_to_frames(
         _save_image_bytes(frame_bytes, out_dir / f"frame_{start + i:06d}.{ext}", fmt, multiplier)
 
     cap.release()
-    _report_progress(on_progress, 1.0, "Done")
+    _report_progress(on_progress, total, total, "Done")
 
 
 # ---------------------------------------------------------------------------
@@ -452,10 +492,9 @@ def _load_style(path: str) -> Any:
         A ``Style`` object, or ``None`` on failure.
     """
     try:
-        from vexy_lines_api import MCPClient, extract_style
+        from vexy_lines_api import extract_style
 
-        with MCPClient() as client:
-            return extract_style(client, path)
+        return extract_style(path)
     except Exception:
         logger.opt(exception=True).warning("Could not load style from {}", path)
         return None
@@ -465,17 +504,25 @@ def _apply_style_to_bytes(
     img_bytes: bytes,
     style_path: str,
     end_style_path: str | None,
-) -> bytes:
-    """Apply a style (and optional end-style blend) to raw image bytes.
+    *,
+    relative: bool = False,
+) -> str | bytes:
+    """Apply a style to raw image bytes via a temp file, returning SVG string.
+
+    Writes the image bytes to a temp file, applies the style via MCP, and
+    returns the SVG result.  Falls back to the original bytes on failure.
 
     Args:
-        img_bytes: Source image data.
+        img_bytes: Source image data (JPEG or PNG).
         style_path: Path to the primary style ``.lines`` file.
         end_style_path: Optional path to the end-style ``.lines`` file.
+        relative: Scale spatial fill parameters to match target dimensions.
 
     Returns:
-        Styled image bytes, or the original on failure.
+        SVG string on success, or the original bytes on failure.
     """
+    import tempfile
+
     try:
         from vexy_lines_api import MCPClient, apply_style, interpolate_style, styles_compatible
 
@@ -483,14 +530,22 @@ def _apply_style_to_bytes(
         if style is None:
             return img_bytes
 
-        with MCPClient() as client:
-            result = apply_style(client, img_bytes, style)
-            if end_style_path:
-                end_style = _load_style(end_style_path)
-                if end_style is not None and styles_compatible(style, end_style):
-                    blended = interpolate_style(style, end_style, 0.5)
-                    result = apply_style(client, img_bytes, blended)
-            return result  # type: ignore[no-any-return]
+        current_style = style
+        if end_style_path:
+            end_style = _load_style(end_style_path)
+            if end_style is not None and styles_compatible(style, end_style):
+                current_style = interpolate_style(style, end_style, 0.5)
+
+        # Write bytes to a temp file so apply_style can use the path
+        with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as tmp:
+            tmp.write(img_bytes)
+            tmp_path = Path(tmp.name)
+
+        try:
+            with MCPClient() as client:
+                return apply_style(client, current_style, str(tmp_path), relative=relative)
+        finally:
+            tmp_path.unlink(missing_ok=True)
     except Exception:
         logger.opt(exception=True).warning("Style application failed")
         return img_bytes
@@ -502,20 +557,22 @@ def _apply_style_to_bytes(
 
 
 def _report_progress(
-    callback: Callable[[float, str], None] | None,
-    fraction: float,
+    callback: Callable[[int, int, str], None] | None,
+    current: int,
+    total: int,
     message: str,
 ) -> None:
     """Safely invoke the progress callback.
 
     Args:
         callback: The progress function, or ``None``.
-        fraction: Progress fraction in ``[0.0, 1.0]``.
+        current: Current item index (0-based).
+        total: Total number of items.
         message: Human-readable status string.
     """
     if callback is not None:
         try:
-            callback(fraction, message)
+            callback(current, total, message)
         except Exception:
             logger.opt(exception=True).debug("Progress callback failed")
 

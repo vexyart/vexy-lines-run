@@ -1,4 +1,4 @@
-# this_file: tests/test_app.py
+# this_file: vexy-lines-run/tests/test_app.py
 """Tests for vexy_lines_run.app -- GUI helpers and constants.
 
 GUI widget tests are limited (no display server in CI), so we focus on
@@ -177,7 +177,7 @@ class TestExtractPreviewFromLines:
         result = extract_preview_from_lines(tmp_path / "nonexistent.lines")
         assert result is None
 
-    @patch("vexy_lines_run.app.extract_preview_image")
+    @patch("vexy_lines.extract_preview_image")
     def test_delegates_to_parser(self, mock_extract):
         from vexy_lines_run.app import extract_preview_from_lines
 
@@ -186,7 +186,7 @@ class TestExtractPreviewFromLines:
         assert result == b"\x89PNG..."
         mock_extract.assert_called_once_with("/some/file.lines")
 
-    @patch("vexy_lines_run.app.extract_preview_image", side_effect=Exception("parse error"))
+    @patch("vexy_lines.extract_preview_image", side_effect=Exception("parse error"))
     def test_returns_none_on_exception(self, mock_extract):
         from vexy_lines_run.app import extract_preview_from_lines
 
@@ -245,4 +245,4 @@ class TestParseDropData:
         from vexy_lines_run.app import App
 
         result = App._parse_drop_data("")
-        assert result == [""]  # split on empty produces one empty element
+        assert result == []  # str.split() on empty string returns empty list

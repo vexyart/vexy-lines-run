@@ -1,4 +1,4 @@
-# this_file: tests/test_processing.py
+# this_file: vexy-lines-run/tests/test_processing.py
 """Tests for vexy_lines_run.processing -- export pipeline helpers."""
 
 from __future__ import annotations
@@ -106,19 +106,19 @@ class TestReportProgress:
         from vexy_lines_run.processing import _report_progress
 
         cb = MagicMock()
-        _report_progress(cb, 0.5, "halfway")
-        cb.assert_called_once_with(0.5, "halfway")
+        _report_progress(cb, 5, 10, "halfway")
+        cb.assert_called_once_with(5, 10, "halfway")
 
     def test_none_callback_no_error(self):
         from vexy_lines_run.processing import _report_progress
 
-        _report_progress(None, 0.5, "halfway")  # should not raise
+        _report_progress(None, 5, 10, "halfway")  # should not raise
 
     def test_exception_in_callback_suppressed(self):
         from vexy_lines_run.processing import _report_progress
 
         cb = MagicMock(side_effect=RuntimeError("boom"))
-        _report_progress(cb, 0.5, "test")  # should not raise
+        _report_progress(cb, 5, 10, "test")  # should not raise
 
 
 class TestReportComplete:

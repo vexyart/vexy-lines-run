@@ -1,4 +1,4 @@
-# this_file: tests/test_video.py
+# this_file: vexy-lines-run/tests/test_video.py
 """Tests for vexy_lines_run.video -- video utilities and data structures."""
 
 from __future__ import annotations

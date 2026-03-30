@@ -1,37 +1,41 @@
 # vexy-lines-run
 
-GUI desktop application for [Vexy Lines](https://vexy.art) style transfer.
+Desktop GUI for [Vexy Lines](https://vexy.art) style transfer — load images, `.lines` files, or video, pick a style, export.
 
-Apply, preview, and export Vexy Lines fill styles across `.lines` files, raster images, and video -- all from a single desktop window.
+Built with CustomTkinter. Runs on macOS, Windows, and Linux wherever Tk is available.
 
-## Installation
+## Install
 
 ```bash
 pip install vexy-lines-run
-```
-
-With all optional features (drag-and-drop, video processing, menus):
-
-```bash
-pip install vexy-lines-run[all]
 ```
 
 Optional extras:
 
 | Extra | What it adds |
 |-------|-------------|
-| `dnd` | Drag-and-drop file support (tkinterdnd2) |
+| `dnd` | Drag-and-drop file support (`tkinterdnd2`) |
 | `video` | Video processing (PyAV, OpenCV, resvg, svglab) |
-| `menus` | Native menu bar (CTkMenuBarPlus) |
+| `menus` | Native menu bar (`CTkMenuBarPlus`) |
 | `all` | Everything above |
 
-## Usage
+```bash
+pip install "vexy-lines-run[all]"
+```
+
+## Launch
 
 ```bash
 vexy-lines-gui
 ```
 
-Or from Python:
+Or:
+
+```bash
+python -m vexy_lines_run
+```
+
+From Python:
 
 ```python
 from vexy_lines_run import launch
@@ -40,21 +44,43 @@ launch()
 
 ## Features
 
-- **Three input modes** -- Lines, Images, and Video tabs for different workflows
-- **Style picker** -- Browse and preview `.lines` style files with thumbnail extraction
-- **End-style interpolation** -- Blend between two styles across a batch or video timeline
-- **Export controls** -- SVG, PNG, JPG, MP4, and LINES output formats at 1x or 2x resolution
-- **Drag-and-drop** -- Drop files directly onto the window (requires `tkinterdnd2`)
-- **Video processing** -- Per-frame style transfer with audio passthrough (requires `[video]` extra)
-- **Background processing** -- Exports run in a thread so the UI stays responsive
+**Three input tabs**
 
-## Dependencies
+- **Lines** — load `.lines` files; export embedded previews or apply a new style
+- **Images** — load PNG, JPG, WEBP, and other rasters; style applied via the MCP API
+- **Video** — load MP4, MOV, MKV, or similar; per-frame style transfer with audio passthrough
 
-- [vexy-lines-apy](../vexy-lines-apy) -- MCP client and style engine
-- [vexy-lines-py](../vexy-lines-py) -- `.lines` file parser (transitive via vexy-lines-apy)
-- [CustomTkinter](https://github.com/TomSchimansky/CustomTkinter) -- Modern Tk UI toolkit
-- [Pillow](https://python-pillow.org/) -- Image handling
-- [loguru](https://github.com/Delgan/loguru) -- Logging
+**Style picker**
+
+Select a primary style from any `.lines` file. Optionally select an end style — the two are interpolated linearly across the input sequence. Both show inline thumbnail previews.
+
+**Export formats**
+
+| Format | Notes |
+|--------|-------|
+| SVG | Vector output from the style engine |
+| PNG / JPG | Raster, with optional 2× upscale |
+| MP4 | Re-encoded video with styled frames, optional audio |
+| LINES | Copy `.lines` files directly (Lines tab only) |
+
+**Drag-and-drop** onto any input list (requires `[dnd]`)
+
+**Background processing** — export runs on a daemon thread; the progress bar updates live and the UI stays responsive
+
+## Architecture
+
+```
+app.py          App(CTk)         — window, three tabs, style pickers, export bar
+processing.py   process_export() — background thread dispatcher for lines/images/video
+video.py        probe()          — PyAV-based video metadata and per-frame processing
+widgets.py      CTkRangeSlider   — dual-handle range slider for video frame selection
+```
+
+Style transfer calls into `vexy-lines-apy` (`MCPClient`, `apply_style`, `interpolate_style`). Video uses PyAV for mux/demux and OpenCV for frame extraction.
+
+## Full documentation
+
+[Read the docs](https://vexyart.github.io/vexy-lines/vexy-lines-run/) for the complete GUI guide, API reference, and more examples.
 
 ## License
 

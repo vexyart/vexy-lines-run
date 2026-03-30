@@ -1,4 +1,4 @@
-# this_file: src/vexy_lines_run/__main__.py
+# this_file: vexy-lines-run/src/vexy_lines_run/__main__.py
 """Entry point for ``python -m vexy_lines_run``."""
 
 from __future__ import annotations

@@ -1,14 +1,14 @@
 # this_file: src/vexy_lines_run/__init__.py
-"""GUI desktop application for Vexy Lines style transfer.
+"""Vexy Lines desktop GUI — apply, preview, and export styles.
 
-Provides a CustomTkinter-based desktop application for applying, previewing,
-and exporting Vexy Lines styles across images, .lines files, and video.
+Three-tab CustomTkinter app supporting .lines files, raster images, and video.
+Style transfer runs on a background thread; progress feeds back to the UI.
 
 Usage::
 
     from vexy_lines_run import App, launch
 
-    launch()  # opens the GUI
+    launch()  # open the GUI window
 """
 
 from __future__ import annotations

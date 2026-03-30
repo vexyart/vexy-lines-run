@@ -1,4 +1,4 @@
-# this_file: tests/test_widgets.py
+# this_file: vexy-lines-run/tests/test_widgets.py
 """Tests for vexy_lines_run.widgets -- CTkRangeSlider."""
 
 from __future__ import annotations

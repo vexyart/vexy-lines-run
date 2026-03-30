@@ -1,9 +1,20 @@
-# this_file: src/vexy_lines_run/video.py
+# this_file: vexy-lines-run/src/vexy_lines_run/video.py
 """Video processing utilities for the Vexy Lines GUI.
 
-Provides video probing, SVG-to-PIL rasterisation, and frame-by-frame style
-transfer for video files.  Requires optional dependencies: ``av``,
-``opencv-python``, and one of ``resvg-py`` or ``svglab`` for SVG rasterisation.
+Three public entry points:
+
+- :func:`probe` — read frame count, FPS, dimensions, and audio presence.
+- :func:`process_video` — re-encode with optional trim and scale (no style).
+- :func:`process_video_with_style` — per-frame style transfer via the MCP API.
+
+Per-frame pipeline in :func:`process_video_with_style`::
+
+    av decode → PIL Image → PNG bytes → MCP apply_style → PIL Image → av encode
+
+Optional dependencies (install via ``vexy-lines-run[video]``):
+- ``av`` — video decode/encode (required for all video functions)
+- ``opencv-python`` — frame extraction for previews
+- ``resvg-py`` or ``svglab`` — SVG rasterisation in :func:`_svg_to_pil`
 """
 
 from __future__ import annotations
@@ -16,6 +27,13 @@ from loguru import logger
 
 if TYPE_CHECKING:
     from PIL import Image
+
+__all__ = [
+    "VideoInfo",
+    "probe",
+    "process_video",
+    "process_video_with_style",
+]
 
 
 # ---------------------------------------------------------------------------
@@ -246,6 +264,7 @@ def process_video_with_style(
     end_frame: int | None = None,
     include_audio: bool = True,
     size_multiplier: int = 1,
+    relative: bool = False,
 ) -> VideoInfo:
     """Process a video with per-frame style transfer.
 
@@ -262,6 +281,8 @@ def process_video_with_style(
         end_frame: Last frame (exclusive), or ``None`` for all.
         include_audio: Copy the audio stream if present.
         size_multiplier: Integer scale factor for output resolution.
+        relative: Scale spatial fill parameters to match the target frame
+            dimensions.  Default ``False`` (absolute mode).
 
     Returns:
         A :class:`VideoInfo` for the output file.
@@ -331,7 +352,7 @@ def process_video_with_style(
                         current_style = interpolate_style(style, end_style, t)
 
                     try:
-                        styled_bytes = apply_style(client, frame_bytes, current_style)
+                        styled_bytes = apply_style(client, frame_bytes, current_style, relative=relative)
                         styled_img = PILImage.open(io.BytesIO(styled_bytes)).convert("RGB")
                     except Exception:
                         logger.opt(exception=True).debug("Style failed on frame {}", frame_idx)
