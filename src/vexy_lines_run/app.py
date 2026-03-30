@@ -954,10 +954,9 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
     def _probe_video_audio(self, path: str) -> bool:
         """Check whether a video file contains an audio track."""
         try:
-            import av  # noqa: PLC0415
+            from vexy_lines_api.video import probe  # noqa: PLC0415
 
-            with av.open(path) as container:
-                return len(container.streams.audio) > 0
+            return probe(path).has_audio
         except Exception:  # noqa: BLE001
             return True
 

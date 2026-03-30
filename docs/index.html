@@ -663,16 +663,16 @@
 <h2 id="running-vexy-lines-run">Running Vexy Lines Run<a class="headerlink" href="#running-vexy-lines-run" title="Permanent link">&para;</a></h2>
 <h3 id="macos">macOS<a class="headerlink" href="#macos" title="Permanent link">&para;</a></h3>
 <p>Open Terminal, paste, press Enter:</p>
-<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-LsSf<span class="w"> </span>https://astral.sh/uv/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/.local/bin:</span><span class="nv">$PATH</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>uvx<span class="w"> </span>--python<span class="w"> </span><span class="m">3</span>.12<span class="w"> </span>vexy-lines-run
-</code></pre></div>
+<p><code>sh
+curl -LsSf https://astral.sh/uv/install.sh | sh &amp;&amp; export PATH="$HOME/.local/bin:$PATH" &amp;&amp; uvx --python 3.12 vexy-lines-run</code></p>
 <h3 id="windows">Windows<a class="headerlink" href="#windows" title="Permanent link">&para;</a></h3>
 <p>Open Command Prompt, paste, press Enter:</p>
-<div class="highlight"><pre><span></span><code>powershell -ExecutionPolicy ByPass -c <span class="s2">&quot;irm https://astral.sh/uv/install.ps1 | iex; $env:Path = \&quot;</span>$HOME\.local\bin;$HOME\AppData\Roaming\uv;$env:Path\<span class="s2">&quot;; uvx --python 3.12 vexy-lines-run&quot;</span>
-</code></pre></div>
+<p><code>bat
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex; $env:Path = \"$HOME\.local\bin;$HOME\AppData\Roaming\uv;$env:Path\"; uvx --python 3.12 vexy-lines-run"</code></p>
 <h3 id="from-python">From Python<a class="headerlink" href="#from-python" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">vexy_lines_run</span><span class="w"> </span><span class="kn">import</span> <span class="n">launch</span>
-<span class="n">launch</span><span class="p">()</span>
-</code></pre></div>
+<p><code>python
+from vexy_lines_run import launch
+launch()</code></p>
 <h2 id="three-tabs-one-workflow">Three tabs, one workflow<a class="headerlink" href="#three-tabs-one-workflow" title="Permanent link">&para;</a></h2>
 <table>
 <thead>

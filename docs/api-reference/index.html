@@ -903,11 +903,11 @@
 <h2 id="app">App<a class="headerlink" href="#app" title="Permanent link">&para;</a></h2>
 <h3 id="appcustomtkinterctk"><code>App(customtkinter.CTk)</code><a class="headerlink" href="#appcustomtkinterctk" title="Permanent link">&para;</a></h3>
 <p>The main GUI window. Handles layout, file management, style selection, and export dispatch.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">vexy_lines_run</span><span class="w"> </span><span class="kn">import</span> <span class="n">App</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">App</span><span class="p">()</span>
-<span class="n">app</span><span class="o">.</span><span class="n">mainloop</span><span class="p">()</span>
-</code></pre></div>
+<p>```python
+from vexy_lines_run import App</p>
+<p>app = App()
+app.mainloop()
+```</p>
 <p><strong>Window defaults:</strong> Title "Vexy Lines Run", 1024x768, minimum 960x480.</p>
 <p><strong>Key instance attributes:</strong></p>
 <table>
@@ -963,25 +963,25 @@
 </table>
 <h3 id="launch-none"><code>launch() -&gt; None</code><a class="headerlink" href="#launch-none" title="Permanent link">&para;</a></h3>
 <p>Creates an <code>App</code> and calls <code>mainloop()</code>. The simplest way to start the GUI.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">vexy_lines_run</span><span class="w"> </span><span class="kn">import</span> <span class="n">launch</span>
-<span class="n">launch</span><span class="p">()</span>
-</code></pre></div>
+<p><code>python
+from vexy_lines_run import launch
+launch()</code></p>
 <hr />
 <h2 id="processing">Processing<a class="headerlink" href="#processing" title="Permanent link">&para;</a></h2>
 <h3 id="process_export-none"><code>process_export(...) -&gt; None</code><a class="headerlink" href="#process_export-none" title="Permanent link">&para;</a></h3>
 <p>The export pipeline. Dispatches to mode-specific processors based on the <code>mode</code> parameter. Called by <code>App</code> on a background thread, but works fine called directly for scripting.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">vexy_lines_run.processing</span><span class="w"> </span><span class="kn">import</span> <span class="n">process_export</span>
-
-<span class="n">process_export</span><span class="p">(</span>
-    <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;images&quot;</span><span class="p">,</span>
-    <span class="n">input_paths</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;photo.jpg&quot;</span><span class="p">],</span>
-    <span class="n">style_path</span><span class="o">=</span><span class="s2">&quot;style.lines&quot;</span><span class="p">,</span>
-    <span class="n">end_style_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">output_path</span><span class="o">=</span><span class="s2">&quot;./output&quot;</span><span class="p">,</span>
-    <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;SVG&quot;</span><span class="p">,</span>
-    <span class="n">size</span><span class="o">=</span><span class="s2">&quot;1x&quot;</span><span class="p">,</span>
-<span class="p">)</span>
-</code></pre></div>
+<p>```python
+from vexy_lines_run.processing import process_export</p>
+<p>process_export(
+    mode="images",
+    input_paths=["photo.jpg"],
+    style_path="style.lines",
+    end_style_path=None,
+    output_path="./output",
+    fmt="SVG",
+    size="1x",
+)
+```</p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -1199,30 +1199,29 @@
 </table>
 <h3 id="probepath-str-videoinfo"><code>probe(path: str) -&gt; VideoInfo</code><a class="headerlink" href="#probepath-str-videoinfo" title="Permanent link">&para;</a></h3>
 <p>Read video metadata without decoding any frames. Returns instantly even for large files.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">vexy_lines_run.video</span><span class="w"> </span><span class="kn">import</span> <span class="n">probe</span>
-
-<span class="n">info</span> <span class="o">=</span> <span class="n">probe</span><span class="p">(</span><span class="s2">&quot;clip.mp4&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">width</span><span class="si">}</span><span class="s2">x</span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">height</span><span class="si">}</span><span class="s2"> @ </span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">fps</span><span class="si">}</span><span class="s2">fps&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">total_frames</span><span class="si">}</span><span class="s2"> frames, </span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">duration</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">s&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Audio: </span><span class="si">{</span><span class="s1">&#39;yes&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">info</span><span class="o">.</span><span class="n">has_audio</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;no&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</code></pre></div>
+<p>```python
+from vexy_lines_run.video import probe</p>
+<p>info = probe("clip.mp4")
+print(f"{info.width}x{info.height} @ {info.fps}fps")
+print(f"{info.total_frames} frames, {info.duration:.1f}s")
+print(f"Audio: {'yes' if info.has_audio else 'no'}")
+```</p>
 <h3 id="process_video-videoinfo"><code>process_video(...) -&gt; VideoInfo</code><a class="headerlink" href="#process_video-videoinfo" title="Permanent link">&para;</a></h3>
 <p>Decode a video, process each frame through a callback, and re-encode to a new file.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">vexy_lines_run.video</span><span class="w"> </span><span class="kn">import</span> <span class="n">process_video</span>
-
-<span class="k">def</span><span class="w"> </span><span class="nf">frame_callback</span><span class="p">(</span><span class="n">frame_index</span><span class="p">,</span> <span class="n">total_frames</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;angle&quot;</span><span class="p">:</span> <span class="mi">45</span><span class="p">,</span> <span class="s2">&quot;interval&quot;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">}</span>
-
-<span class="n">info</span> <span class="o">=</span> <span class="n">process_video</span><span class="p">(</span>
-    <span class="n">input_path</span><span class="o">=</span><span class="s2">&quot;clip.mp4&quot;</span><span class="p">,</span>
-    <span class="n">output_path</span><span class="o">=</span><span class="s2">&quot;result.mp4&quot;</span><span class="p">,</span>
-    <span class="n">frame_params</span><span class="o">=</span><span class="n">frame_callback</span><span class="p">,</span>
-    <span class="n">max_frames</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-    <span class="n">host</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span>
-    <span class="n">port</span><span class="o">=</span><span class="mi">47384</span><span class="p">,</span>
-    <span class="n">dpi</span><span class="o">=</span><span class="mi">72</span><span class="p">,</span>
-<span class="p">)</span>
-</code></pre></div>
+<p>```python
+from vexy_lines_run.video import process_video</p>
+<p>def frame_callback(frame_index, total_frames):
+    return {"angle": 45, "interval": 2.0}</p>
+<p>info = process_video(
+    input_path="clip.mp4",
+    output_path="result.mp4",
+    frame_params=frame_callback,
+    max_frames=100,
+    host="127.0.0.1",
+    port=47384,
+    dpi=72,
+)
+```</p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -1283,18 +1282,18 @@
 <h2 id="widgets">Widgets<a class="headerlink" href="#widgets" title="Permanent link">&para;</a></h2>
 <h3 id="ctkrangeslider"><code>CTkRangeSlider</code><a class="headerlink" href="#ctkrangeslider" title="Permanent link">&para;</a></h3>
 <p>A dual-handle range slider for CustomTkinter. Used in the Video tab to select frame ranges. Works as a standalone widget in any CustomTkinter app.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">customtkinter</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ctk</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">vexy_lines_run.widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">CTkRangeSlider</span>
-
-<span class="n">slider</span> <span class="o">=</span> <span class="n">CTkRangeSlider</span><span class="p">(</span>
-    <span class="n">parent</span><span class="p">,</span>
-    <span class="n">from_</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-    <span class="n">to</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-    <span class="n">number_of_steps</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-    <span class="n">command</span><span class="o">=</span><span class="k">lambda</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">low</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">high</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span>
-<span class="p">)</span>
-<span class="n">slider</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">fill</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-</code></pre></div>
+<p>```python
+import customtkinter as ctk
+from vexy_lines_run.widgets import CTkRangeSlider</p>
+<p>slider = CTkRangeSlider(
+    parent,
+    from_=0,
+    to=100,
+    number_of_steps=100,
+    command=lambda low, high: print(f"{low}-{high}"),
+)
+slider.pack(fill="x", padx=10)
+```</p>
 <p><strong>Constructor parameters:</strong></p>
 <table>
 <thead>

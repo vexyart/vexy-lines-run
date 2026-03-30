@@ -44,10 +44,9 @@ dependencies = [
     "CTkToolTip",
     "Pillow>=12.1.0",
     "tkinterdnd2>=0.4.0",
-    "av>=17.0.0",
     "resvg-py>=0.2.0",
     "svglab>=0.1.0",
-    "opencv-python>=4.8.0",
+    "opencv-python-headless>=4.8.0",
     "CTkMenuBarPlus>=0.1.0",
     "show-in-file-manager>=1.1.4",
 ]
@@ -199,7 +198,6 @@ module = [
     "CTkMenuBarPlus.*",
     "CTkToolTip.*",
     "cv2.*",
-    "av.*",
     "resvg.*",
     "svglab.*",
 ]
