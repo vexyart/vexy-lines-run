@@ -1,6 +1,6 @@
 # GUI Guide
 
-The Vexy Lines GUI is a CustomTkinter desktop app with three sections: input selection, style pickers, and export controls.
+The Vexy Lines Run is a CustomTkinter desktop app with three sections: input selection, style pickers, and export controls.
 
 ## Layout
 

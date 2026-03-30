@@ -17,7 +17,13 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 from tkinter import filedialog
 
+import cv2
 from loguru import logger
+from PIL import Image
+
+from vexy_lines import extract_preview_image
+from vexy_lines_run.processing import process_export
+from vexy_lines_run.widgets import CTkRangeSlider
 
 _CTK_MISSING = "customtkinter is required for the GUI. Install with: pip install customtkinter"
 _MENUBAR_MISSING = "CTkMenuBarPlus is required for the GUI. Install with: pip install CTkMenuBarPlus"
@@ -34,17 +40,15 @@ except ImportError as exc:
     raise ImportError(_MENUBAR_MISSING) from exc
 
 try:
-    from PIL import Image
-except ImportError as exc:
-    raise ImportError(_PIL_MISSING) from exc
+    from CTkToolTip import CTkToolTip
+except ImportError:
+    CTkToolTip = None  # type: ignore[assignment,misc]
 
 try:
     from tkinterdnd2 import DND_FILES, TkinterDnD
 except ImportError:
     TkinterDnD = None  # type: ignore[assignment,misc]
     DND_FILES = None
-
-from vexy_lines_run.widgets import CTkRangeSlider  # noqa: E402
 
 # -- Constants ---------------------------------------------------------------
 IMAGE_EXTENSIONS: set[str] = {".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff", ".webp"}
@@ -58,8 +62,11 @@ EXPORT_FORMATS_VIDEO: list[str] = ["MP4", "PNG", "JPG"]
 
 SIZE_OPTIONS: list[str] = ["1x", "2x"]
 
+MAX_STORED_STYLES = 5
+
 
 # -- Utility helpers ---------------------------------------------------------
+
 
 def truncate_middle(text: str, max_width: int = 40) -> str:
     """Shorten *text* by replacing the middle with ``...``."""
@@ -75,7 +82,7 @@ def truncate_start(text: str, max_chars: int = 60) -> str:
     """Trim leading characters, keeping only the last *max_chars*."""
     if len(text) <= max_chars:
         return text
-    return f"...{text[-(max_chars - 3):]}"
+    return f"...{text[-(max_chars - 3) :]}"
 
 
 def extract_preview_from_lines(filepath: str) -> bytes | None:
@@ -85,13 +92,13 @@ def extract_preview_from_lines(filepath: str) -> bytes | None:
     falling back to direct XML parsing.
     """
     try:
-        from vexy_lines import extract_preview_image  # noqa: PLC0415
         return extract_preview_image(str(filepath))
     except ImportError:
         pass
     except Exception:
         logger.opt(exception=True).debug("Could not extract preview from {}", filepath)
         return None
+
     # Fallback: parse XML directly
     try:
         tree = ET.parse(str(filepath))  # noqa: S314
@@ -107,12 +114,8 @@ def extract_preview_from_lines(filepath: str) -> bytes | None:
         return None
 
 
-def extract_frame(video_path: str, frame_number: int = 1) -> "Image.Image | None":
+def extract_frame(video_path: str, frame_number: int = 1) -> Image.Image | None:
     """Extract a single frame from *video_path* (1-indexed) via OpenCV."""
-    try:
-        import cv2  # noqa: PLC0415
-    except ImportError:
-        return None
     try:
         cap = cv2.VideoCapture(video_path)
         cap.set(cv2.CAP_PROP_POS_FRAMES, frame_number - 1)
@@ -126,18 +129,26 @@ def extract_frame(video_path: str, frame_number: int = 1) -> "Image.Image | None
         return None
 
 
-def create_placeholder_image(width: int, height: int, text: str) -> "Image.Image":  # noqa: ARG001
-    """Return a plain dark-grey image used as a placeholder."""
-    return Image.new("RGB", (width, height), "#1d1f22")
+def create_placeholder_image(width: int, height: int, text: str) -> None:  # noqa: ARG001
+    """Placeholder marker — returns ``None`` to signal an empty preview.
+
+    Callers pass the result to :meth:`App._set_label_image` which clears
+    the label when it receives ``None``.
+    """
+    return
 
 
-def fit_image_to_box(image: "Image.Image", width: int, height: int) -> "Image.Image":
-    """Scale *image* to fit inside *width*x*height*, pasting onto a dark canvas."""
+def fit_image_to_box(image: Image.Image, width: int, height: int) -> Image.Image:
+    """Scale *image* to fit inside *width*x*height*, composited on white."""
     fitted = image.copy()
     fitted.thumbnail((max(1, width), max(1, height)), Image.Resampling.LANCZOS)
-    canvas = Image.new("RGB", (max(1, width), max(1, height)), "#1d1f22")
+    canvas = Image.new("RGBA", (max(1, width), max(1, height)), (255, 255, 255, 0))
+    # Composite alpha images against white
+    if fitted.mode == "RGBA":
+        white = Image.new("RGBA", fitted.size, (255, 255, 255, 255))
+        fitted = Image.alpha_composite(white, fitted)
     canvas.paste(fitted, (0, 0))
-    return canvas
+    return canvas.convert("RGB")
 
 
 # -- App class ---------------------------------------------------------------
@@ -153,7 +164,7 @@ class _AppMeta(type(customtkinter.CTk)):
 class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
     """Style-with-Vexy-Lines GUI application window."""
 
-    def __init__(self) -> None:  # noqa: PLR0915
+    def __init__(self) -> None:
         super().__init__()
         if TkinterDnD is not None:
             self.TkdndVersion = TkinterDnD._require(self)
@@ -165,21 +176,26 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         self._style_paths: dict[str, str | None] = {"start": None, "end": None}
         self._style_labels: dict[str, customtkinter.CTkLabel] = {}
         self._style_previews: dict[str, customtkinter.CTkLabel] = {}
-        self._style_default_text: dict[str, str] = {"start": "Style", "end": "End Style"}
+        self._style_raw_images: dict[str, Image.Image | None] = {"start": None, "end": None}
+        self._style_default_text: dict[str, str] = {"start": "Drop lines here", "end": "Drop lines here"}
 
         self._image_paths: list[str] = []
         self._image_rows: list[customtkinter.CTkLabel] = []
         self._selected_image_index: int | None = None
+        self._images_raw_image: Image.Image | None = None
 
         self._lines_paths: list[str] = []
         self._lines_rows: list[customtkinter.CTkLabel] = []
         self._selected_lines_index: int | None = None
+        self._lines_raw_image: Image.Image | None = None
 
         self._video_path: str = ""
         self._video_total_frames: int = 0
         self._video_has_audio: bool = False
         self._video_range: tuple[int, int] = (1, 1)
         self._syncing_video_controls: bool = False
+        self._video_first_raw_image: Image.Image | None = None
+        self._video_last_raw_image: Image.Image | None = None
 
         self._output_path: str = ""
         self.format_var = tk.StringVar(value="SVG")
@@ -195,6 +211,8 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
             self._font = tkfont.Font(font=sample_font)
         self._last_width: int = 0
         self._resize_job: str | None = None
+
+        self.abort_event = threading.Event()
 
         self._build_layout()
         self._register_drop_targets()
@@ -212,6 +230,12 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         self.after(100, lambda: self.attributes("-topmost", False))
         self.focus_force()
 
+    def add_ctk_tooltip(self, widget: tk.Widget, message: str) -> None:
+        """Add a tooltip to *widget* if ``CTkToolTip`` is available."""
+        if CTkToolTip is None:
+            return
+        CTkToolTip(widget, message=message, delay=0.2, follow=True, x_offset=20, y_offset=10, alpha=0.95)
+
     # -- Layout --------------------------------------------------------------
 
     def _build_layout(self) -> None:
@@ -228,7 +252,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
 
     # -- Menu bar ------------------------------------------------------------
 
-    def _build_menu_bar(self) -> None:  # noqa: PLR0915
+    def _build_menu_bar(self) -> None:
         menu_bar = CTkMenuBar(self)
 
         file_btn = menu_bar.add_cascade("File")
@@ -236,6 +260,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         file_menu.add_option("Add Lines\u2026", command=self._menu_add_lines)
         file_menu.add_separator()
         file_menu.add_option("Export \u25b6", command=self._do_export)
+        file_menu.add_option("Stop Export", command=self._stop_export)
         file_menu.add_separator()
         file_menu.add_option("Quit", command=self.destroy, accelerator="CmdOrCtrl+Q")
 
@@ -328,14 +353,30 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         content.grid_rowconfigure(0, weight=1)
         self.lines_list_frame = customtkinter.CTkScrollableFrame(content)
         self.lines_list_frame.grid(row=0, column=0, sticky="nsew", padx=(10, 5), pady=(10, 8))
-        self.lines_preview_label = customtkinter.CTkLabel(content, text="")
-        self.lines_preview_label.grid(row=0, column=1, sticky="nw", padx=(5, 10), pady=(10, 8))
-        self._set_label_image(self.lines_preview_label, create_placeholder_image(300, 240, "Lines"), 300, 240)
+
+        self.lines_preview_container = customtkinter.CTkFrame(content, fg_color="transparent")
+        self.lines_preview_container.grid(row=0, column=1, sticky="nsew", padx=(5, 10), pady=(10, 8))
+        self.lines_preview_container.grid_propagate(False)
+        self.lines_preview_container.grid_rowconfigure(0, weight=1)
+        self.lines_preview_container.grid_columnconfigure(0, weight=1)
+
+        self.lines_preview_label = customtkinter.CTkLabel(self.lines_preview_container, text="")
+        self.lines_preview_label.grid(row=0, column=0, sticky="nsew")
+        self._update_lines_preview()
+        self._refresh_lines_list()
         controls = customtkinter.CTkFrame(tab)
         controls.pack(fill="x", expand=False, side="bottom", padx=8, pady=(0, 8))
-        customtkinter.CTkButton(controls, text="+", width=36, command=self._choose_lines).pack(side="left", padx=(8, 0), pady=8)
-        customtkinter.CTkButton(controls, text="\u2212", width=36, command=self._remove_selected_lines).pack(side="left", padx=6, pady=8)
-        customtkinter.CTkButton(controls, text="\u2715", width=36, command=self._clear_all_lines).pack(side="right", padx=(0, 8), pady=8)
+        add_lines_btn = customtkinter.CTkButton(controls, text="Add Lines\u2026", command=self._choose_lines)
+        add_lines_btn.pack(side="left", padx=(8, 0), pady=8)
+        self.add_ctk_tooltip(add_lines_btn, "Import vector lines from a file")
+
+        rm_lines_btn = customtkinter.CTkButton(controls, text="\u2212", width=36, command=self._remove_selected_lines)
+        rm_lines_btn.pack(side="left", padx=6, pady=8)
+        self.add_ctk_tooltip(rm_lines_btn, "Remove selected line file")
+
+        clear_lines_btn = customtkinter.CTkButton(controls, text="\u2715", width=36, command=self._clear_all_lines)
+        clear_lines_btn.pack(side="right", padx=(0, 8), pady=8)
+        self.add_ctk_tooltip(clear_lines_btn, "Clear all line files")
 
     def _build_images_tab(self, tab: customtkinter.CTkFrame) -> None:
         content = customtkinter.CTkFrame(tab)
@@ -345,27 +386,56 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         content.grid_rowconfigure(0, weight=1)
         self.images_list_frame = customtkinter.CTkScrollableFrame(content)
         self.images_list_frame.grid(row=0, column=0, sticky="nsew", padx=(10, 5), pady=(10, 8))
-        self.images_preview_label = customtkinter.CTkLabel(content, text="")
-        self.images_preview_label.grid(row=0, column=1, sticky="nw", padx=(5, 10), pady=(10, 8))
-        self._set_label_image(self.images_preview_label, create_placeholder_image(300, 240, "Images"), 300, 240)
+
+        self.images_preview_container = customtkinter.CTkFrame(content, fg_color="transparent")
+        self.images_preview_container.grid(row=0, column=1, sticky="nsew", padx=(5, 10), pady=(10, 8))
+        self.images_preview_container.grid_propagate(False)
+        self.images_preview_container.grid_rowconfigure(0, weight=1)
+        self.images_preview_container.grid_columnconfigure(0, weight=1)
+
+        self.images_preview_label = customtkinter.CTkLabel(self.images_preview_container, text="")
+        self.images_preview_label.grid(row=0, column=0, sticky="nsew")
+        self._update_images_preview()
+        self._refresh_image_list()
         controls = customtkinter.CTkFrame(tab)
         controls.pack(fill="x", expand=False, side="bottom", padx=8, pady=(0, 8))
-        customtkinter.CTkButton(controls, text="+", width=36, command=self._choose_images).pack(side="left", padx=(8, 0), pady=8)
-        customtkinter.CTkButton(controls, text="\u2212", width=36, command=self._remove_selected_image).pack(side="left", padx=6, pady=8)
-        customtkinter.CTkButton(controls, text="\u2715", width=36, command=self._clear_all_images).pack(side="right", padx=(0, 8), pady=8)
+        add_images_btn = customtkinter.CTkButton(controls, text="Add Images\u2026", command=self._choose_images)
+        add_images_btn.pack(side="left", padx=(8, 0), pady=8)
+        self.add_ctk_tooltip(add_images_btn, "Import raster images to be vectorized")
 
-    def _build_video_tab(self, tab: customtkinter.CTkFrame) -> None:  # noqa: PLR0915
+        rm_images_btn = customtkinter.CTkButton(controls, text="\u2212", width=36, command=self._remove_selected_image)
+        rm_images_btn.pack(side="left", padx=6, pady=8)
+        self.add_ctk_tooltip(rm_images_btn, "Remove selected image")
+
+        clear_images_btn = customtkinter.CTkButton(controls, text="\u2715", width=36, command=self._clear_all_images)
+        clear_images_btn.pack(side="right", padx=(0, 8), pady=8)
+        self.add_ctk_tooltip(clear_images_btn, "Clear all images")
+
+    def _build_video_tab(self, tab: customtkinter.CTkFrame) -> None:
         previews = customtkinter.CTkFrame(tab)
         previews.pack(fill="both", expand=True, padx=8, pady=(8, 4))
         previews.grid_columnconfigure(0, weight=1, uniform="half")
         previews.grid_columnconfigure(1, weight=1, uniform="half")
         previews.grid_rowconfigure(0, weight=1)
-        self.video_first_preview = customtkinter.CTkLabel(previews, text="")
-        self.video_first_preview.grid(row=0, column=0, sticky="nw", padx=(10, 5), pady=(10, 8))
-        self._set_label_image(self.video_first_preview, create_placeholder_image(300, 240, "First"), 300, 240)
-        self.video_last_preview = customtkinter.CTkLabel(previews, text="")
-        self.video_last_preview.grid(row=0, column=1, sticky="nw", padx=(5, 10), pady=(10, 8))
-        self._set_label_image(self.video_last_preview, create_placeholder_image(300, 240, "Last"), 300, 240)
+
+        self.video_first_preview_container = customtkinter.CTkFrame(previews, fg_color="transparent")
+        self.video_first_preview_container.grid(row=0, column=0, sticky="nsew", padx=(10, 5), pady=(10, 8))
+        self.video_first_preview_container.grid_propagate(False)
+        self.video_first_preview_container.grid_rowconfigure(0, weight=1)
+        self.video_first_preview_container.grid_columnconfigure(0, weight=1)
+
+        self.video_first_preview = customtkinter.CTkLabel(self.video_first_preview_container, text="")
+        self.video_first_preview.grid(row=0, column=0, sticky="nsew")
+
+        self.video_last_preview_container = customtkinter.CTkFrame(previews, fg_color="transparent")
+        self.video_last_preview_container.grid(row=0, column=1, sticky="nsew", padx=(5, 10), pady=(10, 8))
+        self.video_last_preview_container.grid_propagate(False)
+        self.video_last_preview_container.grid_rowconfigure(0, weight=1)
+        self.video_last_preview_container.grid_columnconfigure(0, weight=1)
+
+        self.video_last_preview = customtkinter.CTkLabel(self.video_last_preview_container, text="")
+        self.video_last_preview.grid(row=0, column=0, sticky="nsew")
+        self._update_video_previews()
         controls = customtkinter.CTkFrame(tab)
         controls.pack(fill="x", expand=False, side="bottom", padx=8, pady=(0, 8))
         range_row = customtkinter.CTkFrame(controls, fg_color="transparent")
@@ -375,7 +445,12 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         self.video_start_entry.insert(0, "1")
         self.video_start_entry.bind("<Return>", self._on_video_entries_submit)
         self.video_start_entry.bind("<FocusOut>", self._on_video_entries_submit)
-        self.video_range_slider = CTkRangeSlider(range_row, from_=0, to=1, command=self._on_video_slider_change)
+
+        def _range_change_cmd(values: tuple[float, float] | float) -> None:
+            if isinstance(values, (list, tuple)):
+                self._on_video_slider_change(values)
+
+        self.video_range_slider = CTkRangeSlider(range_row, from_=0, to=1, command=_range_change_cmd)
         self.video_range_slider.pack(side="left", fill="x", expand=True, padx=8)
         self.video_range_slider.set([0, 1])
         self.video_count_label = customtkinter.CTkLabel(range_row, text="0 frames")
@@ -387,8 +462,8 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         self.video_end_entry.bind("<FocusOut>", self._on_video_entries_submit)
         path_row = customtkinter.CTkFrame(controls, fg_color="transparent")
         path_row.pack(fill="x", padx=8, pady=(0, 8))
-        customtkinter.CTkButton(path_row, text="+", width=36, command=self._choose_video).pack(side="left")
-        self.video_path_label = customtkinter.CTkLabel(path_row, text="Video", anchor="w")
+        customtkinter.CTkButton(path_row, text="Open Video\u2026", command=self._choose_video).pack(side="left")
+        self.video_path_label = customtkinter.CTkLabel(path_row, text="", anchor="w")
         self.video_path_label.pack(side="left", fill="x", expand=True, padx=8)
         customtkinter.CTkButton(path_row, text="\u2715", width=36, command=self._clear_video).pack(side="right")
 
@@ -408,15 +483,19 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         content.grid_columnconfigure(0, weight=1)
         preview = customtkinter.CTkLabel(content, text="")
         preview.grid(row=0, column=0, sticky="nw", padx=10, pady=(10, 8))
-        self._set_label_image(preview, create_placeholder_image(300, 240, self._style_default_text[key]), 300, 240)
+        self._set_label_image(preview, create_placeholder_image(300, 240, "Drop lines here"), 300, 240)
         self._style_previews[key] = preview
         controls = customtkinter.CTkFrame(tab)
         controls.pack(fill="x", expand=False, side="bottom", padx=8, pady=(0, 8))
-        customtkinter.CTkButton(controls, text="+", width=36, command=lambda k=key: self._choose_style_file(k)).pack(side="left", padx=(8, 0), pady=8)
+        customtkinter.CTkButton(
+            controls, text="Open Lines\u2026", command=lambda k=key: self._choose_style_file(k)
+        ).pack(side="left", padx=(8, 0), pady=8)
         path_label = customtkinter.CTkLabel(controls, text=self._style_default_text[key], anchor="w")
         path_label.pack(side="left", fill="x", expand=True, padx=8, pady=8)
         self._style_labels[key] = path_label
-        customtkinter.CTkButton(controls, text="\u2715", width=36, command=lambda k=key: self._clear_style_file(k)).pack(side="right", padx=(0, 8), pady=8)
+        customtkinter.CTkButton(
+            controls, text="\u2715", width=36, command=lambda k=key: self._clear_style_file(k)
+        ).pack(side="right", padx=(0, 8), pady=8)
 
     # -- Bottom bar: outputs + export ----------------------------------------
 
@@ -424,14 +503,29 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         outputs = customtkinter.CTkFrame(parent)
         outputs.grid(row=1, column=0, columnspan=2, sticky="ew")
         customtkinter.CTkLabel(outputs, text="Export as").pack(side="left", padx=(10, 4), pady=10)
-        self.format_menu = customtkinter.CTkOptionMenu(outputs, values=["SVG", "PNG", "JPG", "MP4", "LINES"], variable=self.format_var, command=self._on_format_change, width=90)
+        self.format_menu = customtkinter.CTkOptionMenu(
+            outputs,
+            values=["SVG", "PNG", "JPG", "MP4", "LINES"],
+            variable=self.format_var,
+            command=self._on_format_change,
+            width=90,
+        )
         self.format_menu.pack(side="left", padx=(0, 8), pady=10)
         self.size_menu = customtkinter.CTkOptionMenu(outputs, values=["\u2014"], variable=self.size_var, width=80)
         self.size_menu.pack(side="left", padx=(0, 8), pady=10)
-        self.audio_toggle = customtkinter.CTkSwitch(outputs, text="\u266a", variable=self.audio_var, onvalue=True, offvalue=False)
+        self.audio_toggle = customtkinter.CTkSwitch(
+            outputs, text="\u266a", variable=self.audio_var, onvalue=True, offvalue=False
+        )
         self.audio_toggle.pack(side="left", padx=(0, 8), pady=10)
-        self.convert_button = customtkinter.CTkButton(outputs, text="Export \u25b6", command=self._do_export, width=120, fg_color="#D32F2F", hover_color="#B71C1C")
+
+        self.convert_button = customtkinter.CTkButton(
+            outputs, text="Export \u25b6", command=self._do_export, width=120, fg_color="#2E7D32", hover_color="#1B5E20"
+        )
         self.convert_button.pack(side="right", padx=(0, 10), pady=10)
+        self.add_ctk_tooltip(self.convert_button, "Process and save the result")
+
+        self.progress_bar = customtkinter.CTkProgressBar(outputs)
+        self.progress_bar.set(0)
 
     # -- Tab change hook + drop targets --------------------------------------
 
@@ -439,10 +533,12 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         segmented = getattr(self.inputs_tabview, "_segmented_button", None)
         if segmented is not None:
             original_cmd = segmented.cget("command")
+
             def _chained(tab_name: str) -> None:
                 if callable(original_cmd):
                     original_cmd(tab_name)
                 self._on_inputs_tab_changed(tab_name)
+
             segmented.configure(command=_chained)
         self.after(150, self._poll_active_tab)
 
@@ -477,6 +573,17 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
             db = getattr(vt, "dnd_bind", None)
             if callable(db):
                 db("<<Drop>>", self._on_video_drop)
+        # Style tab drop targets
+        for key, tab_name in [("start", "Style"), ("end", "End Style")]:
+            style_tab = self.styles_tabview.tab(tab_name)
+            style_targets = [style_tab, self._style_previews[key], self._style_labels[key]]
+            for st in style_targets:
+                dr = getattr(st, "drop_target_register", None)
+                if callable(dr):
+                    dr(DND_FILES)
+                db = getattr(st, "dnd_bind", None)
+                if callable(db):
+                    db("<<Drop>>", lambda e, k=key: self._on_style_drop(e, k))
 
     # -- Drop data parsing ---------------------------------------------------
 
@@ -487,22 +594,34 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
             return []
         if "{" in data:
             import re
+
             return re.findall(r"\{(.+?)\}", data)
         return data.split()
 
     # -- Shared helpers ------------------------------------------------------
 
-    def _set_label_image(self, label: customtkinter.CTkLabel, image: "Image.Image", width: int, height: int) -> None:
+    def _set_label_image(
+        self,
+        label: customtkinter.CTkLabel,
+        image: Image.Image | None,
+        width: int,
+        height: int,
+    ) -> None:
+        if image is None:
+            # Clear: no image, transparent background
+            label.configure(image=None, text="", fg_color="transparent")
+            label._image = None
+            return
         fitted = fit_image_to_box(image, width, height)
         ctk_img = customtkinter.CTkImage(light_image=fitted, dark_image=fitted, size=(width, height))
-        label.configure(image=ctk_img, text="")
-        label._ctk_image = ctk_img  # noqa: SLF001
+        label.configure(image=ctk_img, text="", fg_color="transparent")
+        label._image = ctk_img
 
     def _truncate_start_for_width(self, path: str, width_px: int) -> str:
         if self._font.measure(path) <= width_px:
             return path
         avg = self._font.measure("x") or 7
-        return truncate_start(path, max(5, width_px // avg))
+        return truncate_start(path, max(MAX_STORED_STYLES, width_px // avg))
 
     # -- Resize handling -----------------------------------------------------
 
@@ -510,7 +629,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         if event.widget is not self:
             return
         w = self.winfo_width()
-        if abs(w - self._last_width) <= 5:
+        if abs(w - self._last_width) <= 5:  # noqa: PLR2004
             return
         self._last_width = w
         if self._resize_job is not None:
@@ -522,6 +641,11 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         self._refresh_image_list()
         self._refresh_lines_list()
         self._retruncate_labels()
+        self._redraw_images_preview()
+        self._redraw_lines_preview()
+        self._redraw_video_previews()
+        self._set_style_preview_image("start")
+        self._set_style_preview_image("end")
 
     def _retruncate_labels(self) -> None:
         if self._video_path:
@@ -553,13 +677,17 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
     def _set_children_state(self, widget: tk.Widget, state: str) -> None:
         for child in widget.winfo_children():
             with contextlib.suppress(tk.TclError, ValueError):
-                child.configure(state=state)
-            self._set_children_state(child, state)
+                if hasattr(child, "configure"):
+                    child.configure(state=state)  # type: ignore
+            if isinstance(child, tk.Widget):
+                self._set_children_state(child, state)
 
     # -- Style file management -----------------------------------------------
 
     def _choose_style_file(self, key: str) -> None:
-        path = filedialog.askopenfilename(title="Choose style", filetypes=[("Vexy Lines", "*.lines"), ("All files", "*.*")])
+        path = filedialog.askopenfilename(
+            title="Choose style", filetypes=[("Vexy Lines", "*.lines"), ("All files", "*.*")]
+        )
         if path:
             self._set_style_file(key, path)
 
@@ -569,20 +697,47 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         lbl.configure(text=self._truncate_start_for_width(path, max(10, lbl.winfo_width() - 10)))
         preview_bytes = extract_preview_from_lines(path)
         if preview_bytes is not None:
-            preview_img = Image.open(io.BytesIO(preview_bytes))
+            self._style_raw_images[key] = Image.open(io.BytesIO(preview_bytes))
         else:
-            preview_img = create_placeholder_image(300, 240, self._style_default_text[key])
-        self._set_label_image(self._style_previews[key], preview_img, 300, 240)
+            self._style_raw_images[key] = create_placeholder_image(300, 240, self._style_default_text[key])
+        self._set_style_preview_image(key)
+
+    def _set_style_preview_image(self, key: str) -> None:
+        try:
+            container = self._style_previews[key].master
+            w = max(10, container.winfo_width())
+            h = max(10, container.winfo_height())
+        except (KeyError, AttributeError):
+            w, h = 300, 240
+
+        img = self._style_raw_images.get(key)
+        if img is None:
+            img = create_placeholder_image(w, h, self._style_default_text[key])
+
+        self._set_label_image(self._style_previews[key], img, w, h)
+
+    def _on_style_drop(self, event: tk.Event, key: str) -> None:
+        data = getattr(event, "data", "")
+        if isinstance(data, str):
+            dropped = self._parse_drop_data(data)
+            for p in dropped:
+                if Path(p).suffix.lower() in LINES_EXTENSIONS:
+                    self._set_style_file(key, p)
+                    return
 
     def _clear_style_file(self, key: str) -> None:
         self._style_paths[key] = None
         self._style_labels[key].configure(text=self._style_default_text[key])
-        self._set_label_image(self._style_previews[key], create_placeholder_image(300, 240, self._style_default_text[key]), 300, 240)
+        self._set_label_image(
+            self._style_previews[key], create_placeholder_image(300, 240, "Drop lines here"), 300, 240
+        )
 
     # -- Lines file management -----------------------------------------------
 
     def _choose_lines(self) -> None:
-        files = filedialog.askopenfilenames(title="Choose .lines files", filetypes=[("Vexy Lines", "*.lines"), ("All files", "*.*")])
+        files = filedialog.askopenfilenames(
+            title="Choose .lines files", filetypes=[("Vexy Lines", "*.lines"), ("All files", "*.*")]
+        )
         if files:
             self._add_lines(list(files))
 
@@ -621,8 +776,25 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
             r.destroy()
         self._lines_rows.clear()
         wpx = max(10, self.lines_list_frame.winfo_width() - 24)
+        if not self._lines_paths:
+            placeholder = customtkinter.CTkLabel(
+                self.lines_list_frame,
+                text="Drop lines here",
+                font=(self._font.actual("family"), 12, "italic"),
+                text_color=("#888888", "#777777"),
+            )
+            placeholder.pack(expand=True, pady=40)
+            self._lines_rows.append(placeholder)
+            return
         for i, p in enumerate(self._lines_paths):
-            row = customtkinter.CTkLabel(self.lines_list_frame, text=self._truncate_start_for_width(p, wpx), anchor="w", padx=8, corner_radius=6, fg_color=("#e9e9e9", "#2a2a2a"))
+            row = customtkinter.CTkLabel(
+                self.lines_list_frame,
+                text=self._truncate_start_for_width(p, wpx),
+                anchor="w",
+                padx=8,
+                corner_radius=6,
+                fg_color=("#e9e9e9", "#2a2a2a"),
+            )
             row.pack(fill="x", padx=2, pady=2)
             row.bind("<Button-1>", lambda _e, idx=i: self._select_lines_row(idx))
             self._lines_rows.append(row)
@@ -636,22 +808,32 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
 
     def _update_lines_row_styles(self) -> None:
         for idx, row in enumerate(self._lines_rows):
-            row.configure(fg_color=("#3B8ED0", "#1F6AA5") if idx == self._selected_lines_index else ("#e9e9e9", "#2a2a2a"))
+            row.configure(
+                fg_color=("#3B8ED0", "#1F6AA5") if idx == self._selected_lines_index else ("#e9e9e9", "#2a2a2a")
+            )
 
     def _update_lines_preview(self) -> None:
         if not self._lines_paths:
-            self._set_label_image(self.lines_preview_label, create_placeholder_image(300, 240, "Lines"), 300, 240)
-            return
-        idx = self._selected_lines_index if self._selected_lines_index is not None else 0
-        if not (0 <= idx < len(self._lines_paths)):
-            idx = 0
-            self._selected_lines_index = 0
-        preview_bytes = extract_preview_from_lines(self._lines_paths[idx])
-        if preview_bytes is not None:
-            preview_img = Image.open(io.BytesIO(preview_bytes))
+            self._lines_raw_image = None
         else:
-            preview_img = create_placeholder_image(300, 240, "No preview")
-        self._set_label_image(self.lines_preview_label, preview_img, 300, 240)
+            idx = self._selected_lines_index if self._selected_lines_index is not None else 0
+            if not (0 <= idx < len(self._lines_paths)):
+                idx = 0
+                self._selected_lines_index = 0
+            preview_bytes = extract_preview_from_lines(self._lines_paths[idx])
+            if preview_bytes is not None:
+                self._lines_raw_image = Image.open(io.BytesIO(preview_bytes))
+            else:
+                self._lines_raw_image = create_placeholder_image(300, 240, "No preview")
+        self._redraw_lines_preview()
+
+    def _redraw_lines_preview(self) -> None:
+        w = max(10, self.lines_preview_container.winfo_width())
+        h = max(10, self.lines_preview_container.winfo_height())
+        if self._lines_raw_image is None:
+            self._set_label_image(self.lines_preview_label, create_placeholder_image(w, h, "Lines"), w, h)
+        else:
+            self._set_label_image(self.lines_preview_label, self._lines_raw_image, w, h)
 
     def _on_lines_drop(self, event: tk.Event) -> None:
         data = getattr(event, "data", "")
@@ -661,7 +843,10 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
     # -- Image file management -----------------------------------------------
 
     def _choose_images(self) -> None:
-        files = filedialog.askopenfilenames(title="Choose images", filetypes=[("Images", "*.png *.jpg *.jpeg *.gif *.bmp *.tiff *.webp"), ("All files", "*.*")])
+        files = filedialog.askopenfilenames(
+            title="Choose images",
+            filetypes=[("Images", "*.png *.jpg *.jpeg *.gif *.bmp *.tiff *.webp"), ("All files", "*.*")],
+        )
         if files:
             self._add_images(list(files))
 
@@ -700,8 +885,25 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
             r.destroy()
         self._image_rows.clear()
         wpx = max(10, self.images_list_frame.winfo_width() - 24)
+        if not self._image_paths:
+            placeholder = customtkinter.CTkLabel(
+                self.images_list_frame,
+                text="Drop images here",
+                font=(self._font.actual("family"), 12, "italic"),
+                text_color=("#888888", "#777777"),
+            )
+            placeholder.pack(expand=True, pady=40)
+            self._image_rows.append(placeholder)
+            return
         for i, p in enumerate(self._image_paths):
-            row = customtkinter.CTkLabel(self.images_list_frame, text=self._truncate_start_for_width(p, wpx), anchor="w", padx=8, corner_radius=6, fg_color=("#e9e9e9", "#2a2a2a"))
+            row = customtkinter.CTkLabel(
+                self.images_list_frame,
+                text=self._truncate_start_for_width(p, wpx),
+                anchor="w",
+                padx=8,
+                corner_radius=6,
+                fg_color=("#e9e9e9", "#2a2a2a"),
+            )
             row.pack(fill="x", padx=2, pady=2)
             row.bind("<Button-1>", lambda _e, idx=i: self._select_image_row(idx))
             self._image_rows.append(row)
@@ -715,21 +917,31 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
 
     def _update_image_row_styles(self) -> None:
         for idx, row in enumerate(self._image_rows):
-            row.configure(fg_color=("#3B8ED0", "#1F6AA5") if idx == self._selected_image_index else ("#e9e9e9", "#2a2a2a"))
+            row.configure(
+                fg_color=("#3B8ED0", "#1F6AA5") if idx == self._selected_image_index else ("#e9e9e9", "#2a2a2a")
+            )
 
     def _update_images_preview(self) -> None:
         if not self._image_paths:
-            self._set_label_image(self.images_preview_label, create_placeholder_image(300, 240, "Images"), 300, 240)
-            return
-        idx = self._selected_image_index if self._selected_image_index is not None else 0
-        if not (0 <= idx < len(self._image_paths)):
-            idx = 0
-            self._selected_image_index = 0
-        try:
-            img = Image.open(self._image_paths[idx]).convert("RGB")
-        except (OSError, ValueError):
-            img = create_placeholder_image(300, 240, "Unreadable image")
-        self._set_label_image(self.images_preview_label, img, 300, 240)
+            self._images_raw_image = None
+        else:
+            idx = self._selected_image_index if self._selected_image_index is not None else 0
+            if not (0 <= idx < len(self._image_paths)):
+                idx = 0
+                self._selected_image_index = 0
+            try:
+                self._images_raw_image = Image.open(self._image_paths[idx]).convert("RGB")
+            except (OSError, ValueError):
+                self._images_raw_image = create_placeholder_image(300, 240, "Unreadable image")
+        self._redraw_images_preview()
+
+    def _redraw_images_preview(self) -> None:
+        w = max(10, self.images_preview_container.winfo_width())
+        h = max(10, self.images_preview_container.winfo_height())
+        if self._images_raw_image is None:
+            self._set_label_image(self.images_preview_label, create_placeholder_image(w, h, "Images"), w, h)
+        else:
+            self._set_label_image(self.images_preview_label, self._images_raw_image, w, h)
 
     def _on_images_drop(self, event: tk.Event) -> None:
         data = getattr(event, "data", "")
@@ -739,7 +951,9 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
     # -- Video management ----------------------------------------------------
 
     def _choose_video(self) -> None:
-        path = filedialog.askopenfilename(title="Choose video", filetypes=[("Videos", "*.mp4 *.mov *.avi *.mkv *.webm"), ("All files", "*.*")])
+        path = filedialog.askopenfilename(
+            title="Choose video", filetypes=[("Videos", "*.mp4 *.mov *.avi *.mkv *.webm"), ("All files", "*.*")]
+        )
         if path:
             self._apply_video_path(path)
 
@@ -757,17 +971,15 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         if total <= 0:
             return
         self._video_path = path
-        self.video_path_label.configure(text=self._truncate_start_for_width(path, max(10, self.video_path_label.winfo_width() - 10)))
+        self.video_path_label.configure(
+            text=self._truncate_start_for_width(path, max(10, self.video_path_label.winfo_width() - 10))
+        )
         self._video_total_frames = total
         self._video_has_audio = True
         self._set_video_range(1, total)
         self._update_audio_toggle_visibility()
 
     def _get_video_frame_count(self, path: str) -> int:
-        try:
-            import cv2  # noqa: PLC0415
-        except ImportError:
-            return 0
         cap = cv2.VideoCapture(path)
         try:
             return max(0, int(cap.get(cv2.CAP_PROP_FRAME_COUNT)))
@@ -779,7 +991,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         self._video_total_frames = 0
         self._video_has_audio = False
         self._video_range = (1, 1)
-        self.video_path_label.configure(text="Video")
+        self.video_path_label.configure(text="")
         self.video_start_entry.delete(0, "end")
         self.video_start_entry.insert(0, "1")
         self.video_end_entry.delete(0, "end")
@@ -789,8 +1001,9 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         self.video_range_slider.configure(from_=0, to=1)
         self.video_range_slider.set([0, 1])
         self._syncing_video_controls = False
-        self._set_label_image(self.video_first_preview, create_placeholder_image(300, 240, "First"), 300, 240)
-        self._set_label_image(self.video_last_preview, create_placeholder_image(300, 240, "Last"), 300, 240)
+        self._video_first_raw_image = None
+        self._video_last_raw_image = None
+        self._redraw_video_previews()
         self._update_audio_toggle_visibility()
 
     def _on_video_slider_change(self, values: tuple[float, float] | list[float] | None) -> None:
@@ -828,14 +1041,28 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
 
     def _update_video_previews(self) -> None:
         if not self._video_path or self._video_total_frames <= 0:
-            self._set_label_image(self.video_first_preview, create_placeholder_image(300, 240, "First"), 300, 240)
-            self._set_label_image(self.video_last_preview, create_placeholder_image(300, 240, "Last"), 300, 240)
-            return
-        lo, hi = self._video_range
-        f1 = extract_frame(self._video_path, lo)
-        f2 = extract_frame(self._video_path, hi)
-        self._set_label_image(self.video_first_preview, f1 or create_placeholder_image(300, 240, "First"), 300, 240)
-        self._set_label_image(self.video_last_preview, f2 or create_placeholder_image(300, 240, "Last"), 300, 240)
+            self._video_first_raw_image = None
+            self._video_last_raw_image = None
+        else:
+            lo, hi = self._video_range
+            self._video_first_raw_image = extract_frame(self._video_path, lo)
+            self._video_last_raw_image = extract_frame(self._video_path, hi)
+        self._redraw_video_previews()
+
+    def _redraw_video_previews(self) -> None:
+        w1 = max(10, self.video_first_preview_container.winfo_width())
+        h1 = max(10, self.video_first_preview_container.winfo_height())
+        if self._video_first_raw_image is None:
+            self._set_label_image(self.video_first_preview, create_placeholder_image(w1, h1, "First"), w1, h1)
+        else:
+            self._set_label_image(self.video_first_preview, self._video_first_raw_image, w1, h1)
+
+        w2 = max(10, self.video_last_preview_container.winfo_width())
+        h2 = max(10, self.video_last_preview_container.winfo_height())
+        if self._video_last_raw_image is None:
+            self._set_label_image(self.video_last_preview, create_placeholder_image(w2, h2, "Last"), w2, h2)
+        else:
+            self._set_label_image(self.video_last_preview, self._video_last_raw_image, w2, h2)
 
     # -- Format / size / audio state -----------------------------------------
 
@@ -880,7 +1107,12 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         fmt = self.format_var.get()
         idir = self._get_default_export_dir()
         if fmt == "MP4":
-            sel = filedialog.asksaveasfilename(title="Export as MP4", defaultextension=".mp4", filetypes=[("MP4 files", "*.mp4"), ("All files", "*.*")], initialdir=idir or None)
+            sel = filedialog.asksaveasfilename(
+                title="Export as MP4",
+                defaultextension=".mp4",
+                filetypes=[("MP4 files", "*.mp4"), ("All files", "*.*")],
+                initialdir=idir or None,
+            )
         else:
             sel = filedialog.askdirectory(title=f"Export {fmt} to folder", initialdir=idir or None)
         if not sel:
@@ -890,16 +1122,41 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         ipaths = self._get_input_paths()
         sp = self._style_paths.get("start")
         ep = self._style_paths.get("end")
-        self.convert_button.configure(state="disabled", text="Exporting\u2026")
+
+        self.abort_event.clear()
+        self.convert_button.configure(
+            state="normal", text="Stop ■", fg_color="#D32F2F", hover_color="#B71C1C", command=self._stop_export
+        )
+        self.progress_bar.pack(side="left", fill="x", expand=True, padx=(10, 10))
+        self.progress_bar.set(0)
+
         threading.Thread(target=self._run_export, args=(mode, ipaths, sp, ep), daemon=True).start()
 
-    def _run_export(self, mode: str, input_paths: list[str], style_path: str | None, end_style_path: str | None) -> None:
+    def _stop_export(self) -> None:
+        self.abort_event.set()
+        self.convert_button.configure(state="disabled", text="Stopping\u2026")
+
+    def _reset_export_ui(self) -> None:
+        self.convert_button.configure(
+            state="normal", text="Export \u25b6", fg_color="#2E7D32", hover_color="#1B5E20", command=self._do_export
+        )
+        self.progress_bar.pack_forget()
+        self.progress_bar.set(0)
+
+    def _run_export(
+        self, mode: str, input_paths: list[str], style_path: str | None, end_style_path: str | None
+    ) -> None:
         try:
-            from vexy_lines_run.processing import process_export  # noqa: PLC0415
             process_export(
-                mode=mode, input_paths=input_paths, style_path=style_path, end_style_path=end_style_path,
-                output_path=self._output_path, fmt=self.format_var.get(), size=self.size_var.get(),
-                audio=self.audio_var.get(), frame_range=self._video_range if mode == "video" else None,
+                mode=mode,
+                input_paths=input_paths,
+                style_path=style_path,
+                end_style_path=end_style_path,
+                output_path=self._output_path,
+                fmt=self.format_var.get(),
+                size=self.size_var.get(),
+                audio=self.audio_var.get(),
+                frame_range=self._video_range if mode == "video" else None,
                 on_progress=lambda c, t, m: self.after(0, self._update_progress, c, t, m),
                 on_complete=lambda msg: self.after(0, self._export_complete, msg),
                 on_error=lambda msg: self.after(0, self._export_error, msg),
@@ -921,15 +1178,17 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
             return [self._video_path] if self._video_path else []
         return []
 
-    def _update_progress(self, current: int, total: int, message: str) -> None:
-        self.convert_button.configure(text=f"{int(current / total * 100)}% {message}" if total > 0 else message)
+    def _update_progress(self, current: int, total: int, _message: str) -> None:
+        if total > 0:
+            self.progress_bar.set(current / total)
 
     def _export_complete(self, message: str) -> None:  # noqa: ARG002
-        self.convert_button.configure(state="normal", text="Export \u25b6")
+        self._reset_export_ui()
 
     def _export_error(self, message: str) -> None:
-        self.convert_button.configure(state="normal", text="Export \u25b6")
-        _show_error_dialog(self, message)
+        self._reset_export_ui()
+        if message and message != "Export aborted by user":
+            _show_error_dialog(self, message)
 
     def _choose_output_path(self) -> None:
         self._do_export()
@@ -947,13 +1206,15 @@ def _show_error_dialog(parent: tk.Tk, message: str) -> None:
     dlg.resizable(False, False)
     dlg.transient(parent)
     dlg.grab_set()
-    customtkinter.CTkLabel(dlg, text=message, wraplength=380, justify="left").pack(padx=20, pady=(20, 10), fill="both", expand=True)
+    customtkinter.CTkLabel(dlg, text=message, wraplength=380, justify="left").pack(
+        padx=20, pady=(20, 10), fill="both", expand=True
+    )
     customtkinter.CTkButton(dlg, text="OK", width=80, command=dlg.destroy).pack(pady=(0, 16))
 
 
 def launch() -> None:
     """Launch the Vexy Lines style transfer GUI."""
-    logger.info("Starting Vexy Lines GUI")
+    logger.info("Starting Vexy Lines Run")
     customtkinter.set_appearance_mode("dark")
     app = App()
     app.mainloop()

@@ -8,7 +8,6 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-
 # ---------------------------------------------------------------------------
 # _parse_size_multiplier
 # ---------------------------------------------------------------------------
@@ -176,12 +175,12 @@ class TestSaveImageBytes:
         assert dest.read_bytes() == data
 
     def test_save_png(self, tmp_path):
-        from vexy_lines_run.processing import _save_image_bytes
+        # Create a small valid PNG in memory
+        import io
 
         from PIL import Image
 
-        # Create a small valid PNG in memory
-        import io
+        from vexy_lines_run.processing import _save_image_bytes
 
         img = Image.new("RGB", (10, 10), color="red")
         buf = io.BytesIO()
@@ -195,11 +194,11 @@ class TestSaveImageBytes:
         assert reopened.size == (10, 10)
 
     def test_save_png_with_multiplier(self, tmp_path):
-        from vexy_lines_run.processing import _save_image_bytes
+        import io
 
         from PIL import Image
 
-        import io
+        from vexy_lines_run.processing import _save_image_bytes
 
         img = Image.new("RGB", (10, 10), color="blue")
         buf = io.BytesIO()
@@ -213,11 +212,11 @@ class TestSaveImageBytes:
         assert reopened.size == (20, 20)
 
     def test_save_jpg(self, tmp_path):
-        from vexy_lines_run.processing import _save_image_bytes
+        import io
 
         from PIL import Image
 
-        import io
+        from vexy_lines_run.processing import _save_image_bytes
 
         img = Image.new("RGB", (8, 8), color="green")
         buf = io.BytesIO()

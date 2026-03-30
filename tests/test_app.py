@@ -12,7 +12,6 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-
 # ---------------------------------------------------------------------------
 # Import tests
 # ---------------------------------------------------------------------------
@@ -177,7 +176,7 @@ class TestExtractPreviewFromLines:
         result = extract_preview_from_lines(tmp_path / "nonexistent.lines")
         assert result is None
 
-    @patch("vexy_lines.extract_preview_image")
+    @patch("vexy_lines_run.app.extract_preview_image")
     def test_delegates_to_parser(self, mock_extract):
         from vexy_lines_run.app import extract_preview_from_lines
 
@@ -186,8 +185,8 @@ class TestExtractPreviewFromLines:
         assert result == b"\x89PNG..."
         mock_extract.assert_called_once_with("/some/file.lines")
 
-    @patch("vexy_lines.extract_preview_image", side_effect=Exception("parse error"))
-    def test_returns_none_on_exception(self, mock_extract):
+    @patch("vexy_lines.parse", side_effect=Exception("parse error"))
+    def test_returns_none_on_exception(self, mock_parse):
         from vexy_lines_run.app import extract_preview_from_lines
 
         result = extract_preview_from_lines("/bad/file.lines")

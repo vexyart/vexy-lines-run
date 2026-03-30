@@ -7,7 +7,7 @@ from vexy_lines_run.app import launch
 
 
 def main() -> None:
-    """Launch the Vexy Lines GUI application."""
+    """Launch the Vexy Lines Run application."""
     launch()
 
 

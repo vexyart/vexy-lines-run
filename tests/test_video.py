@@ -7,7 +7,6 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-
 # ---------------------------------------------------------------------------
 # VideoInfo
 # ---------------------------------------------------------------------------
@@ -102,8 +101,9 @@ class TestSvgToPil:
             assert img.mode == "RGBA"
 
     def test_returns_pil_image(self):
-        from vexy_lines_run.video import _svg_to_pil
         from PIL import Image
+
+        from vexy_lines_run.video import _svg_to_pil
 
         img = _svg_to_pil("<svg></svg>", 50, 50)
         assert isinstance(img, Image.Image)
@@ -111,8 +111,9 @@ class TestSvgToPil:
     @patch("vexy_lines_run.video.resvg", create=True)
     def test_uses_resvg_when_available(self, mock_resvg):
         """When resvg is importable, _svg_to_pil should call svg_to_png."""
-        from PIL import Image
         import io
+
+        from PIL import Image
 
         # Create a valid PNG that resvg would return
         img = Image.new("RGBA", (100, 80))

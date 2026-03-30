@@ -1,5 +1,5 @@
 # this_file: src/vexy_lines_run/processing.py
-"""Export processing pipeline for the Vexy Lines GUI.
+"""Export processing pipeline for the Vexy Lines Run.
 
 Dispatches export jobs for three input modes (lines, images, video) and
 calls into the MCP style engine from ``vexy_lines_api``.
@@ -20,13 +20,35 @@ from __future__ import annotations
 
 import io
 import re
+import shutil
+import tempfile
+import time
+from collections.abc import Callable
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
+import cv2  # type: ignore[import-untyped]
 from loguru import logger
+from PIL import Image
+
+from vexy_lines import parse as parse_lines
+from vexy_lines.parse import LinesDocument
+from vexy_lines_api import (
+    MCPClient,
+    apply_style,
+    extract_style,
+    interpolate_style,
+    styles_compatible,
+)
+from vexy_lines_api.video import (
+    _svg_to_pil,
+    probe,
+    process_video,
+    process_video_with_style,
+)
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    pass
 
 __all__ = ["process_export"]
 
@@ -134,13 +156,7 @@ def _process_lines(
     relative_style: bool = False,
     on_progress: Callable[[int, int, str], None] | None,
 ) -> None:
-    """Process .lines file exports.
-
-    Extracts embedded previews/source images from ``.lines`` files and saves
-    them in the requested format.
-    """
-    from vexy_lines import parse as parse_lines
-
+    """Process .lines file exports."""
     total = len(input_paths)
     out_dir = Path(output_path)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -151,8 +167,6 @@ def _process_lines(
 
         if fmt == "LINES":
             # Copy the .lines file directly
-            import shutil
-
             shutil.copy2(path, out_dir / Path(path).name)
             continue
 
@@ -196,8 +210,6 @@ def _process_images(
     on_progress: Callable[[int, int, str], None] | None,
 ) -> None:
     """Process raster image exports via the MCP style engine."""
-    from vexy_lines_api import MCPClient, apply_style, interpolate_style, styles_compatible
-
     total = len(input_paths)
     out_dir = Path(output_path)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -221,7 +233,9 @@ def _process_images(
 
                 with MCPClient() as client:
                     svg_string = apply_style(
-                        client, current_style, path,
+                        client,
+                        current_style,
+                        path,
                         relative=relative_style,
                     )
 
@@ -294,8 +308,6 @@ def _process_video_to_mp4(
     on_progress: Callable[[int, int, str], None] | None,
 ) -> None:
     """Full video-to-video processing via the style engine."""
-    from vexy_lines_api.video import probe, process_video_with_style
-
     info = probe(input_path)
     style = _load_style(style_path) if style_path else None
     end_style = _load_style(end_style_path) if end_style_path else None
@@ -331,10 +343,6 @@ def _process_video_to_frames(
     on_progress: Callable[[int, int, str], None] | None,
 ) -> None:
     """Extract styled video frames as individual image files."""
-    from vexy_lines_api import MCPClient, apply_style, interpolate_style, styles_compatible
-
-    from vexy_lines_api.video import probe
-
     info = probe(input_path)
     out_dir = Path(output_path)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -346,12 +354,6 @@ def _process_video_to_frames(
     start = frame_range[0] if frame_range else 0
     end = min(frame_range[1] if frame_range else info.total_frames, info.total_frames)
     total = max(end - start, 1)
-
-    try:
-        import cv2  # type: ignore[import-untyped]
-    except ImportError as exc:
-        msg = "opencv-python is required for frame extraction"
-        raise ImportError(msg) from exc
 
     cap = cv2.VideoCapture(input_path)
     cap.set(cv2.CAP_PROP_POS_FRAMES, start)
@@ -441,8 +443,6 @@ def _save_image_bytes(
         fmt: Format hint (``"PNG"``, ``"JPG"``, ``"SVG"``).
         multiplier: Integer scale factor applied to raster output.
     """
-    from PIL import Image
-
     if fmt == "SVG":
         dest.write_bytes(data)
         return
@@ -473,7 +473,6 @@ def _save_svg_as_image(
         fmt: Target raster format (``"PNG"`` or ``"JPG"``).
         multiplier: Scale factor.
     """
-    from vexy_lines_api.video import _svg_to_pil
 
     svg_str = svg_data if isinstance(svg_data, str) else svg_data.decode()
     w, h = _estimate_svg_dimensions(svg_str)
@@ -492,8 +491,6 @@ def _load_style(path: str) -> Any:
         A ``Style`` object, or ``None`` on failure.
     """
     try:
-        from vexy_lines_api import extract_style
-
         return extract_style(path)
     except Exception:
         logger.opt(exception=True).warning("Could not load style from {}", path)
@@ -521,11 +518,7 @@ def _apply_style_to_bytes(
     Returns:
         SVG string on success, or the original bytes on failure.
     """
-    import tempfile
-
     try:
-        from vexy_lines_api import MCPClient, apply_style, interpolate_style, styles_compatible
-
         style = _load_style(style_path)
         if style is None:
             return img_bytes

@@ -13,7 +13,7 @@ import sys
 import tkinter as tk
 from typing import TYPE_CHECKING
 
-from customtkinter.windows.widgets.core_rendering import CTkCanvas, DrawEngine
+from customtkinter.windows.widgets.core_rendering import CTkCanvas
 from customtkinter.windows.widgets.core_widget_classes import CTkBaseClass
 from customtkinter.windows.widgets.theme import ThemeManager
 
@@ -43,13 +43,25 @@ class CustomDrawEngine:
 
     # -- polygon_shapes rounded rect -----------------------------------------
 
-    def __draw_rounded_rect_with_border_polygon_shapes(self, width, height, corner_radius, border_width, inner_corner_radius):
+    def __draw_rounded_rect_with_border_polygon_shapes(
+        self, width, height, corner_radius, border_width, inner_corner_radius
+    ):
         requires_recoloring = False
         if border_width > 0:
             if not self._canvas.find_withtag("border_parts"):
                 self._canvas.create_polygon((0, 0, 0, 0), tags=("border_line_1", "border_parts"))
                 requires_recoloring = True
-            self._canvas.coords("border_line_1", corner_radius, corner_radius, width - corner_radius, corner_radius, width - corner_radius, height - corner_radius, corner_radius, height - corner_radius)
+            self._canvas.coords(
+                "border_line_1",
+                corner_radius,
+                corner_radius,
+                width - corner_radius,
+                corner_radius,
+                width - corner_radius,
+                height - corner_radius,
+                corner_radius,
+                height - corner_radius,
+            )
             self._canvas.itemconfig("border_line_1", joinstyle=tk.ROUND, width=corner_radius * 2)
         else:
             self._canvas.delete("border_parts")
@@ -57,7 +69,17 @@ class CustomDrawEngine:
             self._canvas.create_polygon((0, 0, 0, 0), tags=("inner_line_1", "inner_parts"), joinstyle=tk.ROUND)
             requires_recoloring = True
         bottom_right_shift = -1 if corner_radius <= border_width else 0
-        self._canvas.coords("inner_line_1", border_width + inner_corner_radius, border_width + inner_corner_radius, width - (border_width + inner_corner_radius) + bottom_right_shift, border_width + inner_corner_radius, width - (border_width + inner_corner_radius) + bottom_right_shift, height - (border_width + inner_corner_radius) + bottom_right_shift, border_width + inner_corner_radius, height - (border_width + inner_corner_radius) + bottom_right_shift)
+        self._canvas.coords(
+            "inner_line_1",
+            border_width + inner_corner_radius,
+            border_width + inner_corner_radius,
+            width - (border_width + inner_corner_radius) + bottom_right_shift,
+            border_width + inner_corner_radius,
+            width - (border_width + inner_corner_radius) + bottom_right_shift,
+            height - (border_width + inner_corner_radius) + bottom_right_shift,
+            border_width + inner_corner_radius,
+            height - (border_width + inner_corner_radius) + bottom_right_shift,
+        )
         self._canvas.itemconfig("inner_line_1", width=inner_corner_radius * 2)
         if requires_recoloring:
             self._canvas.tag_lower("inner_parts")
@@ -66,22 +88,33 @@ class CustomDrawEngine:
 
     # -- font_shapes rounded rect --------------------------------------------
 
-    def __draw_rounded_rect_with_border_font_shapes(self, width, height, corner_radius, border_width, inner_corner_radius, exclude_parts):
+    def __draw_rounded_rect_with_border_font_shapes(
+        self, width, height, corner_radius, border_width, inner_corner_radius, exclude_parts
+    ):
         requires_recoloring = False
         if border_width > 0:
             if corner_radius > 0:
                 for tag_num, cond, x, y in [
                     (1, True, corner_radius, corner_radius),
                     (2, width > 2 * corner_radius, width - corner_radius, corner_radius),
-                    (3, height > 2 * corner_radius and width > 2 * corner_radius, width - corner_radius, height - corner_radius),
+                    (
+                        3,
+                        height > 2 * corner_radius and width > 2 * corner_radius,
+                        width - corner_radius,
+                        height - corner_radius,
+                    ),
                     (4, height > 2 * corner_radius, corner_radius, height - corner_radius),
                 ]:
                     tag_a = f"border_oval_{tag_num}_a"
                     tag_b = f"border_oval_{tag_num}_b"
                     excl = f"border_oval_{tag_num}"
                     if not self._canvas.find_withtag(tag_a) and cond and excl not in exclude_parts:
-                        self._canvas.create_aa_circle(0, 0, 0, tags=(tag_a, "border_corner_part", "border_parts"), anchor=tk.CENTER)
-                        self._canvas.create_aa_circle(0, 0, 0, tags=(tag_b, "border_corner_part", "border_parts"), anchor=tk.CENTER, angle=180)
+                        self._canvas.create_aa_circle(
+                            0, 0, 0, tags=(tag_a, "border_corner_part", "border_parts"), anchor=tk.CENTER
+                        )
+                        self._canvas.create_aa_circle(
+                            0, 0, 0, tags=(tag_b, "border_corner_part", "border_parts"), anchor=tk.CENTER, angle=180
+                        )
                         requires_recoloring = True
                     elif self._canvas.find_withtag(tag_a) and (not cond or excl in exclude_parts):
                         self._canvas.delete(tag_a, tag_b)
@@ -90,8 +123,12 @@ class CustomDrawEngine:
             else:
                 self._canvas.delete("border_corner_part")
             if not self._canvas.find_withtag("border_rectangle_1"):
-                self._canvas.create_rectangle(0, 0, 0, 0, tags=("border_rectangle_1", "border_rectangle_part", "border_parts"), width=0)
-                self._canvas.create_rectangle(0, 0, 0, 0, tags=("border_rectangle_2", "border_rectangle_part", "border_parts"), width=0)
+                self._canvas.create_rectangle(
+                    0, 0, 0, 0, tags=("border_rectangle_1", "border_rectangle_part", "border_parts"), width=0
+                )
+                self._canvas.create_rectangle(
+                    0, 0, 0, 0, tags=("border_rectangle_2", "border_rectangle_part", "border_parts"), width=0
+                )
                 requires_recoloring = True
             self._canvas.coords("border_rectangle_1", (0, corner_radius, width, height - corner_radius))
             self._canvas.coords("border_rectangle_2", (corner_radius, 0, width - corner_radius, height))
@@ -101,16 +138,36 @@ class CustomDrawEngine:
         if inner_corner_radius > 0:
             for tag_num, cond, x, y in [
                 (1, True, border_width + inner_corner_radius, border_width + inner_corner_radius),
-                (2, width - (2 * border_width) > 2 * inner_corner_radius, width - border_width - inner_corner_radius, border_width + inner_corner_radius),
-                (3, height - (2 * border_width) > 2 * inner_corner_radius and width - (2 * border_width) > 2 * inner_corner_radius, width - border_width - inner_corner_radius, height - border_width - inner_corner_radius),
-                (4, height - (2 * border_width) > 2 * inner_corner_radius, border_width + inner_corner_radius, height - border_width - inner_corner_radius),
+                (
+                    2,
+                    width - (2 * border_width) > 2 * inner_corner_radius,
+                    width - border_width - inner_corner_radius,
+                    border_width + inner_corner_radius,
+                ),
+                (
+                    3,
+                    height - (2 * border_width) > 2 * inner_corner_radius
+                    and width - (2 * border_width) > 2 * inner_corner_radius,
+                    width - border_width - inner_corner_radius,
+                    height - border_width - inner_corner_radius,
+                ),
+                (
+                    4,
+                    height - (2 * border_width) > 2 * inner_corner_radius,
+                    border_width + inner_corner_radius,
+                    height - border_width - inner_corner_radius,
+                ),
             ]:
                 tag_a = f"inner_oval_{tag_num}_a"
                 tag_b = f"inner_oval_{tag_num}_b"
                 excl = f"inner_oval_{tag_num}"
                 if not self._canvas.find_withtag(tag_a) and cond and excl not in exclude_parts:
-                    self._canvas.create_aa_circle(0, 0, 0, tags=(tag_a, "inner_corner_part", "inner_parts"), anchor=tk.CENTER)
-                    self._canvas.create_aa_circle(0, 0, 0, tags=(tag_b, "inner_corner_part", "inner_parts"), anchor=tk.CENTER, angle=180)
+                    self._canvas.create_aa_circle(
+                        0, 0, 0, tags=(tag_a, "inner_corner_part", "inner_parts"), anchor=tk.CENTER
+                    )
+                    self._canvas.create_aa_circle(
+                        0, 0, 0, tags=(tag_b, "inner_corner_part", "inner_parts"), anchor=tk.CENTER, angle=180
+                    )
                     requires_recoloring = True
                 elif self._canvas.find_withtag(tag_a) and (not cond or excl in exclude_parts):
                     self._canvas.delete(tag_a, tag_b)
@@ -120,15 +177,33 @@ class CustomDrawEngine:
             self._canvas.delete("inner_corner_part")
 
         if not self._canvas.find_withtag("inner_rectangle_1"):
-            self._canvas.create_rectangle(0, 0, 0, 0, tags=("inner_rectangle_1", "inner_rectangle_part", "inner_parts"), width=0)
+            self._canvas.create_rectangle(
+                0, 0, 0, 0, tags=("inner_rectangle_1", "inner_rectangle_part", "inner_parts"), width=0
+            )
             requires_recoloring = True
         if not self._canvas.find_withtag("inner_rectangle_2") and inner_corner_radius * 2 < height - (border_width * 2):
-            self._canvas.create_rectangle(0, 0, 0, 0, tags=("inner_rectangle_2", "inner_rectangle_part", "inner_parts"), width=0)
+            self._canvas.create_rectangle(
+                0, 0, 0, 0, tags=("inner_rectangle_2", "inner_rectangle_part", "inner_parts"), width=0
+            )
             requires_recoloring = True
-        elif self._canvas.find_withtag("inner_rectangle_2") and not inner_corner_radius * 2 < height - (border_width * 2):
+        elif self._canvas.find_withtag("inner_rectangle_2") and not inner_corner_radius * 2 < height - (
+            border_width * 2
+        ):
             self._canvas.delete("inner_rectangle_2")
-        self._canvas.coords("inner_rectangle_1", border_width + inner_corner_radius, border_width, width - border_width - inner_corner_radius, height - border_width)
-        self._canvas.coords("inner_rectangle_2", border_width, border_width + inner_corner_radius, width - border_width, height - inner_corner_radius - border_width)
+        self._canvas.coords(
+            "inner_rectangle_1",
+            border_width + inner_corner_radius,
+            border_width,
+            width - border_width - inner_corner_radius,
+            height - border_width,
+        )
+        self._canvas.coords(
+            "inner_rectangle_2",
+            border_width,
+            border_width + inner_corner_radius,
+            width - border_width,
+            height - inner_corner_radius - border_width,
+        )
         if requires_recoloring:
             self._canvas.tag_lower("inner_parts")
             self._canvas.tag_lower("border_parts")
@@ -136,7 +211,9 @@ class CustomDrawEngine:
 
     # -- circle_shapes rounded rect ------------------------------------------
 
-    def __draw_rounded_rect_with_border_circle_shapes(self, width, height, corner_radius, border_width, inner_corner_radius):
+    def __draw_rounded_rect_with_border_circle_shapes(
+        self, width, height, corner_radius, border_width, inner_corner_radius
+    ):
         requires_recoloring = False
         if border_width > 0:
             if corner_radius > 0:
@@ -173,7 +250,13 @@ class CustomDrawEngine:
             self._canvas.coords("inner_oval_4", bw, height - bw - icr2, bw + icr2, height - bw)
         else:
             self._canvas.delete("inner_oval_1", "inner_oval_2", "inner_oval_3", "inner_oval_4")
-        self._canvas.coords("inner_rectangle_1", border_width + inner_corner_radius, border_width, width - border_width - inner_corner_radius, height - border_width)
+        self._canvas.coords(
+            "inner_rectangle_1",
+            border_width + inner_corner_radius,
+            border_width,
+            width - border_width - inner_corner_radius,
+            height - border_width,
+        )
         if requires_recoloring:
             self._canvas.tag_lower("inner_parts")
             self._canvas.tag_lower("border_parts")
@@ -181,8 +264,12 @@ class CustomDrawEngine:
 
     # -- polygon progress bar ------------------------------------------------
 
-    def __draw_rounded_progress_bar_polygon(self, width, height, corner_radius, border_width, inner_corner_radius, pv1, pv2, orientation):
-        rc = self.__draw_rounded_rect_with_border_polygon_shapes(width, height, corner_radius, border_width, inner_corner_radius)
+    def __draw_rounded_progress_bar_polygon(
+        self, width, height, corner_radius, border_width, inner_corner_radius, pv1, pv2, orientation
+    ):
+        rc = self.__draw_rounded_rect_with_border_polygon_shapes(
+            width, height, corner_radius, border_width, inner_corner_radius
+        )
         if not self._canvas.find_withtag("progress_parts"):
             self._canvas.create_polygon((0, 0, 0, 0), tags=("progress_line_1", "progress_parts"), joinstyle=tk.ROUND)
             self._canvas.tag_raise("progress_parts", "inner_parts")
@@ -191,16 +278,40 @@ class CustomDrawEngine:
         ih = height - 2 * border_width - 2 * inner_corner_radius
         bic = border_width + inner_corner_radius
         if orientation == "w":
-            self._canvas.coords("progress_line_1", bic + iw * pv1, bic, bic + iw * pv2, bic, bic + iw * pv2, height - bic, bic + iw * pv1, height - bic)
+            self._canvas.coords(
+                "progress_line_1",
+                bic + iw * pv1,
+                bic,
+                bic + iw * pv2,
+                bic,
+                bic + iw * pv2,
+                height - bic,
+                bic + iw * pv1,
+                height - bic,
+            )
         elif orientation == "s":
-            self._canvas.coords("progress_line_1", bic, bic + ih * (1 - pv2), width - bic, bic + ih * (1 - pv2), width - bic, bic + ih * (1 - pv1), bic, bic + ih * (1 - pv1))
+            self._canvas.coords(
+                "progress_line_1",
+                bic,
+                bic + ih * (1 - pv2),
+                width - bic,
+                bic + ih * (1 - pv2),
+                width - bic,
+                bic + ih * (1 - pv1),
+                bic,
+                bic + ih * (1 - pv1),
+            )
         self._canvas.itemconfig("progress_line_1", width=inner_corner_radius * 2)
         return rc
 
     # -- circle_shapes progress bar ------------------------------------------
 
-    def __draw_rounded_progress_bar_circle(self, width, height, corner_radius, border_width, inner_corner_radius, pv1, pv2, orientation):
-        rc = self.__draw_rounded_rect_with_border_circle_shapes(width, height, corner_radius, border_width, inner_corner_radius)
+    def __draw_rounded_progress_bar_circle(
+        self, width, height, corner_radius, border_width, inner_corner_radius, pv1, pv2, orientation
+    ):
+        rc = self.__draw_rounded_rect_with_border_circle_shapes(
+            width, height, corner_radius, border_width, inner_corner_radius
+        )
         if not self._canvas.find_withtag("progress_rectangle_1"):
             self._canvas.create_rectangle(0, 0, 0, 0, tags=("progress_rectangle_1", "progress_parts"), width=0)
             rc = True
@@ -238,8 +349,12 @@ class CustomDrawEngine:
 
     # -- font_shapes progress bar (simplified) -------------------------------
 
-    def __draw_rounded_progress_bar_font(self, width, height, corner_radius, border_width, inner_corner_radius, pv1, pv2, orientation):
-        rc2 = self.__draw_rounded_rect_with_border_font_shapes(width, height, corner_radius, border_width, inner_corner_radius, ())
+    def __draw_rounded_progress_bar_font(
+        self, width, height, corner_radius, border_width, inner_corner_radius, pv1, pv2, orientation
+    ):
+        rc2 = self.__draw_rounded_rect_with_border_font_shapes(
+            width, height, corner_radius, border_width, inner_corner_radius, ()
+        )
         rc = False
         icr = inner_corner_radius
         bw = border_width
@@ -250,14 +365,31 @@ class CustomDrawEngine:
         if icr > 0:
             if not self._canvas.find_withtag("progress_oval_1_a"):
                 for i in range(1, 5):
-                    self._canvas.create_aa_circle(0, 0, 0, tags=(f"progress_oval_{i}_a", "progress_corner_part", "progress_parts"), anchor=tk.CENTER)
-                    self._canvas.create_aa_circle(0, 0, 0, tags=(f"progress_oval_{i}_b", "progress_corner_part", "progress_parts"), anchor=tk.CENTER, angle=180)
+                    self._canvas.create_aa_circle(
+                        0,
+                        0,
+                        0,
+                        tags=(f"progress_oval_{i}_a", "progress_corner_part", "progress_parts"),
+                        anchor=tk.CENTER,
+                    )
+                    self._canvas.create_aa_circle(
+                        0,
+                        0,
+                        0,
+                        tags=(f"progress_oval_{i}_b", "progress_corner_part", "progress_parts"),
+                        anchor=tk.CENTER,
+                        angle=180,
+                    )
                 rc = True
         if not self._canvas.find_withtag("progress_rectangle_1"):
-            self._canvas.create_rectangle(0, 0, 0, 0, tags=("progress_rectangle_1", "progress_rectangle_part", "progress_parts"), width=0)
+            self._canvas.create_rectangle(
+                0, 0, 0, 0, tags=("progress_rectangle_1", "progress_rectangle_part", "progress_parts"), width=0
+            )
             rc = True
         if not self._canvas.find_withtag("progress_rectangle_2") and icr * 2 < height - bw * 2:
-            self._canvas.create_rectangle(0, 0, 0, 0, tags=("progress_rectangle_2", "progress_rectangle_part", "progress_parts"), width=0)
+            self._canvas.create_rectangle(
+                0, 0, 0, 0, tags=("progress_rectangle_2", "progress_rectangle_part", "progress_parts"), width=0
+            )
             rc = True
 
         if orientation == "w":
@@ -273,7 +405,13 @@ class CustomDrawEngine:
                 self._canvas.coords("progress_oval_4_a", x1, height - bw - icr, icr)
                 self._canvas.coords("progress_oval_4_b", x1, height - bw - icr, icr)
             self._canvas.coords("progress_rectangle_1", x1, bw, x2, height - bw)
-            self._canvas.coords("progress_rectangle_2", bw + 2 * icr + (width - 2 * icr - 2 * bw) * pv1, bic, bw + 2 * icr + (width - 2 * icr - 2 * bw) * pv2, height - icr - bw)
+            self._canvas.coords(
+                "progress_rectangle_2",
+                bw + 2 * icr + (width - 2 * icr - 2 * bw) * pv1,
+                bic,
+                bw + 2 * icr + (width - 2 * icr - 2 * bw) * pv2,
+                height - icr - bw,
+            )
         elif orientation == "s":
             y1 = bic + ih * (1 - pv2)
             y2 = bic + ih * (1 - pv1)
@@ -293,7 +431,18 @@ class CustomDrawEngine:
 
     # -- main slider draw entry point ----------------------------------------
 
-    def draw_rounded_slider_with_border_and_2_button(self, width, height, corner_radius, border_width, button_length, button_corner_radius, slider_value, slider_2_value, orientation):
+    def draw_rounded_slider_with_border_and_2_button(
+        self,
+        width,
+        height,
+        corner_radius,
+        border_width,
+        button_length,
+        button_corner_radius,
+        slider_value,
+        slider_2_value,
+        orientation,
+    ):
         width = math.floor(width / 2) * 2
         height = math.floor(height / 2) * 2
         if corner_radius > width / 2 or corner_radius > height / 2:
@@ -307,11 +456,44 @@ class CustomDrawEngine:
         inner_corner_radius = corner_radius - border_width if corner_radius >= border_width else 0
 
         if self.preferred_drawing_method == "polygon_shapes":
-            return self.__draw_slider_polygon(width, height, corner_radius, border_width, inner_corner_radius, button_length, button_corner_radius, slider_value, slider_2_value, orientation)
+            return self.__draw_slider_polygon(
+                width,
+                height,
+                corner_radius,
+                border_width,
+                inner_corner_radius,
+                button_length,
+                button_corner_radius,
+                slider_value,
+                slider_2_value,
+                orientation,
+            )
         if self.preferred_drawing_method == "font_shapes":
-            return self.__draw_slider_font(width, height, corner_radius, border_width, inner_corner_radius, button_length, button_corner_radius, slider_value, slider_2_value, orientation)
+            return self.__draw_slider_font(
+                width,
+                height,
+                corner_radius,
+                border_width,
+                inner_corner_radius,
+                button_length,
+                button_corner_radius,
+                slider_value,
+                slider_2_value,
+                orientation,
+            )
         if self.preferred_drawing_method == "circle_shapes":
-            return self.__draw_slider_circle(width, height, corner_radius, border_width, inner_corner_radius, button_length, button_corner_radius, slider_value, slider_2_value, orientation)
+            return self.__draw_slider_circle(
+                width,
+                height,
+                corner_radius,
+                border_width,
+                inner_corner_radius,
+                button_length,
+                button_corner_radius,
+                slider_value,
+                slider_2_value,
+                orientation,
+            )
         return False
 
     # -- polygon slider buttons ----------------------------------------------
@@ -319,17 +501,25 @@ class CustomDrawEngine:
     def __draw_slider_polygon(self, width, height, cr, bw, icr, bl, bcr, sv, sv2, orient):
         rc = self.__draw_rounded_progress_bar_polygon(width, height, cr, bw, icr, sv, sv2, orient)
         if not self._canvas.find_withtag("slider_parts"):
-            self._canvas.create_polygon((0, 0, 0, 0), tags=("slider_line_1", "slider_parts", "slider_0_parts"), joinstyle=tk.ROUND)
-            self._canvas.create_polygon((0, 0, 0, 0), tags=("slider_2_line_1", "slider_parts", "slider_1_parts"), joinstyle=tk.ROUND)
+            self._canvas.create_polygon(
+                (0, 0, 0, 0), tags=("slider_line_1", "slider_parts", "slider_0_parts"), joinstyle=tk.ROUND
+            )
+            self._canvas.create_polygon(
+                (0, 0, 0, 0), tags=("slider_2_line_1", "slider_parts", "slider_1_parts"), joinstyle=tk.ROUND
+            )
             self._canvas.tag_raise("slider_parts")
             rc = True
         for val, tag in [(sv, "slider_line_1"), (sv2, "slider_2_line_1")]:
             if orient == "w":
                 xp = cr + (bl / 2) + (width - 2 * cr - bl) * val
-                self._canvas.coords(tag, xp - bl / 2, bcr, xp + bl / 2, bcr, xp + bl / 2, height - bcr, xp - bl / 2, height - bcr)
+                self._canvas.coords(
+                    tag, xp - bl / 2, bcr, xp + bl / 2, bcr, xp + bl / 2, height - bcr, xp - bl / 2, height - bcr
+                )
             elif orient == "s":
                 yp = cr + (bl / 2) + (height - 2 * cr - bl) * (1 - val)
-                self._canvas.coords(tag, bcr, yp - bl / 2, bcr, yp + bl / 2, width - bcr, yp + bl / 2, width - bcr, yp - bl / 2)
+                self._canvas.coords(
+                    tag, bcr, yp - bl / 2, bcr, yp + bl / 2, width - bcr, yp + bl / 2, width - bcr, yp - bl / 2
+                )
             self._canvas.itemconfig(tag, width=bcr * 2)
         return rc
 
@@ -340,9 +530,42 @@ class CustomDrawEngine:
         for part_tag, slider_prefix in [("slider_0_parts", "slider"), ("slider_1_parts", "slider_2")]:
             if not self._canvas.find_withtag(part_tag):
                 for i in range(1, 5):
-                    self._canvas.create_oval(0, 0, 0, 0, tags=(f"{slider_prefix}_oval_{i}" if slider_prefix == "slider" else f"slider_oval_2_{i}", "slider_parts", part_tag), width=0)
-                self._canvas.create_rectangle(0, 0, 0, 0, tags=(f"{slider_prefix}_rectangle_1" if slider_prefix == "slider" else "slider_rectangle_2_1", "slider_parts", part_tag), width=0)
-                self._canvas.create_rectangle(0, 0, 0, 0, tags=(f"{slider_prefix}_rectangle_2" if slider_prefix == "slider" else "slider_rectangle_2_2", "slider_parts", part_tag), width=0)
+                    self._canvas.create_oval(
+                        0,
+                        0,
+                        0,
+                        0,
+                        tags=(
+                            f"{slider_prefix}_oval_{i}" if slider_prefix == "slider" else f"slider_oval_2_{i}",
+                            "slider_parts",
+                            part_tag,
+                        ),
+                        width=0,
+                    )
+                self._canvas.create_rectangle(
+                    0,
+                    0,
+                    0,
+                    0,
+                    tags=(
+                        f"{slider_prefix}_rectangle_1" if slider_prefix == "slider" else "slider_rectangle_2_1",
+                        "slider_parts",
+                        part_tag,
+                    ),
+                    width=0,
+                )
+                self._canvas.create_rectangle(
+                    0,
+                    0,
+                    0,
+                    0,
+                    tags=(
+                        f"{slider_prefix}_rectangle_2" if slider_prefix == "slider" else "slider_rectangle_2_2",
+                        "slider_parts",
+                        part_tag,
+                    ),
+                    width=0,
+                )
                 rc = True
 
         for val, prefix in [(sv, "slider"), (sv2, "slider_2")]:
@@ -379,26 +602,35 @@ class CustomDrawEngine:
         # Create slider buttons for both handles
         for part_tag, prefix, val in [("slider_0_parts", "slider", sv), ("slider_1_parts", "slider_2", sv2)]:
             o1a = f"{prefix}_oval_1_a" if prefix == "slider" else "slider_oval_2_1_a"
-            o1b = f"{prefix}_oval_1_b" if prefix == "slider" else "slider_oval_2_1_b"
             if not self._canvas.find_withtag(o1a):
                 for i in range(1, 5):
                     ta = f"{prefix}_oval_{i}_a" if prefix == "slider" else f"slider_oval_2_{i}_a"
                     tb = f"{prefix}_oval_{i}_b" if prefix == "slider" else f"slider_oval_2_{i}_b"
-                    self._canvas.create_aa_circle(0, 0, 0, tags=(ta, "slider_corner_part", "slider_parts", part_tag), anchor=tk.CENTER)
-                    self._canvas.create_aa_circle(0, 0, 0, tags=(tb, "slider_corner_part", "slider_parts", part_tag), anchor=tk.CENTER, angle=180)
+                    self._canvas.create_aa_circle(
+                        0, 0, 0, tags=(ta, "slider_corner_part", "slider_parts", part_tag), anchor=tk.CENTER
+                    )
+                    self._canvas.create_aa_circle(
+                        0, 0, 0, tags=(tb, "slider_corner_part", "slider_parts", part_tag), anchor=tk.CENTER, angle=180
+                    )
                 rc = True
             r1 = f"{prefix}_rectangle_1" if prefix == "slider" else "slider_rectangle_2_1"
             r2 = f"{prefix}_rectangle_2" if prefix == "slider" else "slider_rectangle_2_2"
             if not self._canvas.find_withtag(r1) and bl > 0:
-                self._canvas.create_rectangle(0, 0, 0, 0, tags=(r1, "slider_rectangle_part", "slider_parts", part_tag), width=0)
+                self._canvas.create_rectangle(
+                    0, 0, 0, 0, tags=(r1, "slider_rectangle_part", "slider_parts", part_tag), width=0
+                )
                 rc = True
             if not self._canvas.find_withtag(r2) and height > 2 * bcr:
-                self._canvas.create_rectangle(0, 0, 0, 0, tags=(r2, "slider_rectangle_part", "slider_parts", part_tag), width=0)
+                self._canvas.create_rectangle(
+                    0, 0, 0, 0, tags=(r2, "slider_rectangle_part", "slider_parts", part_tag), width=0
+                )
                 rc = True
 
             if orient == "w":
                 xp = cr + (bl / 2) + (width - 2 * cr - bl) * val
-                for i, (dx, dy) in enumerate([(-(bl / 2), bcr), (bl / 2, bcr), (bl / 2, height - bcr), (-(bl / 2), height - bcr)], 1):
+                for i, (dx, dy) in enumerate(
+                    [(-(bl / 2), bcr), (bl / 2, bcr), (bl / 2, height - bcr), (-(bl / 2), height - bcr)], 1
+                ):
                     ta = f"{prefix}_oval_{i}_a" if prefix == "slider" else f"slider_oval_2_{i}_a"
                     tb = f"{prefix}_oval_{i}_b" if prefix == "slider" else f"slider_oval_2_{i}_b"
                     self._canvas.coords(ta, xp + dx, dy, bcr)
@@ -407,7 +639,9 @@ class CustomDrawEngine:
                 self._canvas.coords(r2, xp - bl / 2 - bcr, bcr, xp + bl / 2 + bcr, height - bcr)
             elif orient == "s":
                 yp = cr + (bl / 2) + (height - 2 * cr - bl) * (1 - val)
-                for i, (dx, dy) in enumerate([(bcr, -(bl / 2)), (bcr, bl / 2), (width - bcr, bl / 2), (width - bcr, -(bl / 2))], 1):
+                for i, (dx, dy) in enumerate(
+                    [(bcr, -(bl / 2)), (bcr, bl / 2), (width - bcr, bl / 2), (width - bcr, -(bl / 2))], 1
+                ):
                     ta = f"{prefix}_oval_{i}_a" if prefix == "slider" else f"slider_oval_2_{i}_a"
                     tb = f"{prefix}_oval_{i}_b" if prefix == "slider" else f"slider_oval_2_{i}_b"
                     self._canvas.coords(ta, dx, yp + dy, bcr)
@@ -445,6 +679,7 @@ class CTkRangeSlider(CTkBaseClass):
         to: int = 1,
         state: str = "normal",
         number_of_steps: int | None = None,
+        *,
         hover: bool = True,
         command: Callable[[float], None] | tuple[Callable[[float], None], Callable[[float], None]] | None = None,
         variables: tuple[tk.Variable, tk.Variable] | None = None,
@@ -459,25 +694,51 @@ class CTkRangeSlider(CTkBaseClass):
         super().__init__(master=master, bg_color=bg_color, width=width, height=height, **kwargs)
 
         self._border_color = self._check_color_type(border_color, transparency=True)
-        self._fg_color = ThemeManager.theme["CTkSlider"]["fg_color"] if fg_color is None else self._check_color_type(fg_color)
-        self._progress_color = ThemeManager.theme["CTkSlider"]["progress_color"] if progress_color is None else self._check_color_type(progress_color, transparency=True)
+        self._fg_color = (
+            ThemeManager.theme["CTkSlider"]["fg_color"] if fg_color is None else self._check_color_type(fg_color)
+        )
+        self._progress_color = (
+            ThemeManager.theme["CTkSlider"]["progress_color"]
+            if progress_color is None
+            else self._check_color_type(progress_color, transparency=True)
+        )
 
         if button_color is None:
             self._button_color_0 = ThemeManager.theme["CTkSlider"]["button_color"]
             self._button_color_1 = ThemeManager.theme["CTkSlider"]["button_color"]
-        elif isinstance(button_color, tuple) and len(button_color) == 2 and isinstance(button_color[0], tuple):
-            self._button_color_0 = ThemeManager.theme["CTkSlider"]["button_color"] if button_color[0] is None else self._check_color_type(button_color[0])
-            self._button_color_1 = ThemeManager.theme["CTkSlider"]["button_color"] if button_color[1] is None else self._check_color_type(button_color[1])
+        elif isinstance(button_color, tuple) and len(button_color) == 2 and isinstance(button_color[0], tuple):  # noqa: PLR2004  # noqa: PLR2004
+            self._button_color_0 = (
+                ThemeManager.theme["CTkSlider"]["button_color"]
+                if button_color[0] is None
+                else self._check_color_type(button_color[0])
+            )
+            self._button_color_1 = (
+                ThemeManager.theme["CTkSlider"]["button_color"]
+                if button_color[1] is None
+                else self._check_color_type(button_color[1])
+            )
         else:
             self._button_color_0 = self._check_color_type(button_color)
             self._button_color_1 = self._check_color_type(button_color)
 
-        self._button_hover_color = ThemeManager.theme["CTkSlider"]["button_hover_color"] if button_hover_color is None else self._check_color_type(button_hover_color)
+        self._button_hover_color = (
+            ThemeManager.theme["CTkSlider"]["button_hover_color"]
+            if button_hover_color is None
+            else self._check_color_type(button_hover_color)
+        )
 
-        self._corner_radius = ThemeManager.theme["CTkSlider"]["corner_radius"] if corner_radius is None else corner_radius
-        self._button_corner_radius = ThemeManager.theme["CTkSlider"]["button_corner_radius"] if button_corner_radius is None else button_corner_radius
+        self._corner_radius = (
+            ThemeManager.theme["CTkSlider"]["corner_radius"] if corner_radius is None else corner_radius
+        )
+        self._button_corner_radius = (
+            ThemeManager.theme["CTkSlider"]["button_corner_radius"]
+            if button_corner_radius is None
+            else button_corner_radius
+        )
         self._border_width = ThemeManager.theme["CTkSlider"]["border_width"] if border_width is None else border_width
-        self._button_length = ThemeManager.theme["CTkSlider"]["button_length"] if button_length is None else button_length
+        self._button_length = (
+            ThemeManager.theme["CTkSlider"]["button_length"] if button_length is None else button_length
+        )
         self._values: tuple[float, float] = (0.0, 1.0)
         self._orientation = orientation
         self._hover_states: tuple[bool, bool] = (False, False)
@@ -485,7 +746,10 @@ class CTkRangeSlider(CTkBaseClass):
         self._from_ = from_
         self._to = to
         self._number_of_steps = number_of_steps
-        self._output_values: tuple[float, float] = (self._from_ + (self._values[0] * (self._to - self._from_)), self._from_ + (self._values[1] * (self._to - self._from_)))
+        self._output_values: tuple[float, float] = (
+            self._from_ + (self._values[0] * (self._to - self._from_)),
+            self._from_ + (self._values[1] * (self._to - self._from_)),
+        )
         self._active_slider: bool = True
         self._corner_radius = max(self._corner_radius, self._button_corner_radius)
         self._command = command
@@ -496,7 +760,12 @@ class CTkRangeSlider(CTkBaseClass):
 
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
-        self._canvas = CTkCanvas(master=self, highlightthickness=0, width=self._apply_widget_scaling(self._desired_width), height=self._apply_widget_scaling(self._desired_height))
+        self._canvas = CTkCanvas(
+            master=self,
+            highlightthickness=0,
+            width=self._apply_widget_scaling(self._desired_width),
+            height=self._apply_widget_scaling(self._desired_height),
+        )
         self._canvas.grid(column=0, row=0, rowspan=1, columnspan=1, sticky="nswe")
         self._draw_engine = CustomDrawEngine(self._canvas)
         self._create_bindings()
@@ -524,12 +793,18 @@ class CTkRangeSlider(CTkBaseClass):
 
     def _set_scaling(self, *args: object, **kwargs: object) -> None:
         super()._set_scaling(*args, **kwargs)
-        self._canvas.configure(width=self._apply_widget_scaling(self._desired_width), height=self._apply_widget_scaling(self._desired_height))
+        self._canvas.configure(
+            width=self._apply_widget_scaling(self._desired_width),
+            height=self._apply_widget_scaling(self._desired_height),
+        )
         self._draw()
 
     def _set_dimensions(self, width: int | None = None, height: int | None = None) -> None:
         super()._set_dimensions(width, height)
-        self._canvas.configure(width=self._apply_widget_scaling(self._desired_width), height=self._apply_widget_scaling(self._desired_height))
+        self._canvas.configure(
+            width=self._apply_widget_scaling(self._desired_width),
+            height=self._apply_widget_scaling(self._desired_height),
+        )
         self._draw()
 
     def _destroy(self) -> None:
@@ -548,30 +823,59 @@ class CTkRangeSlider(CTkBaseClass):
             if sys.platform == "darwin" or sys.platform.startswith("win"):
                 self.configure(cursor="arrow")
 
-    def _draw(self, no_color_updates: bool = False) -> None:
+    def _draw(self, *, no_color_updates: bool = False) -> None:
         super()._draw(no_color_updates)
         orientation = "s" if self._orientation.lower() == "vertical" else "w"
         requires_recoloring = self._draw_engine.draw_rounded_slider_with_border_and_2_button(
-            self._apply_widget_scaling(self._current_width), self._apply_widget_scaling(self._current_height),
-            self._apply_widget_scaling(self._corner_radius), self._apply_widget_scaling(self._border_width),
-            self._apply_widget_scaling(self._button_length), self._apply_widget_scaling(self._button_corner_radius),
-            self._values[0], self._values[1], orientation,
+            self._apply_widget_scaling(self._current_width),
+            self._apply_widget_scaling(self._current_height),
+            self._apply_widget_scaling(self._corner_radius),
+            self._apply_widget_scaling(self._border_width),
+            self._apply_widget_scaling(self._button_length),
+            self._apply_widget_scaling(self._button_corner_radius),
+            self._values[0],
+            self._values[1],
+            orientation,
         )
         if no_color_updates is False or requires_recoloring:
             self._canvas.configure(bg=self._apply_appearance_mode(self._bg_color))
             if self._border_color == "transparent":
-                self._canvas.itemconfig("border_parts", fill=self._apply_appearance_mode(self._bg_color), outline=self._apply_appearance_mode(self._bg_color))
+                self._canvas.itemconfig(
+                    "border_parts",
+                    fill=self._apply_appearance_mode(self._bg_color),
+                    outline=self._apply_appearance_mode(self._bg_color),
+                )
             else:
-                self._canvas.itemconfig("border_parts", fill=self._apply_appearance_mode(self._border_color), outline=self._apply_appearance_mode(self._border_color))
-            self._canvas.itemconfig("inner_parts", fill=self._apply_appearance_mode(self._fg_color), outline=self._apply_appearance_mode(self._fg_color))
+                self._canvas.itemconfig(
+                    "border_parts",
+                    fill=self._apply_appearance_mode(self._border_color),
+                    outline=self._apply_appearance_mode(self._border_color),
+                )
+            self._canvas.itemconfig(
+                "inner_parts",
+                fill=self._apply_appearance_mode(self._fg_color),
+                outline=self._apply_appearance_mode(self._fg_color),
+            )
             if self._progress_color == "transparent":
-                self._canvas.itemconfig("progress_parts", fill=self._apply_appearance_mode(self._fg_color), outline=self._apply_appearance_mode(self._fg_color))
+                self._canvas.itemconfig(
+                    "progress_parts",
+                    fill=self._apply_appearance_mode(self._fg_color),
+                    outline=self._apply_appearance_mode(self._fg_color),
+                )
             else:
-                self._canvas.itemconfig("progress_parts", fill=self._apply_appearance_mode(self._progress_color), outline=self._apply_appearance_mode(self._progress_color))
+                self._canvas.itemconfig(
+                    "progress_parts",
+                    fill=self._apply_appearance_mode(self._progress_color),
+                    outline=self._apply_appearance_mode(self._progress_color),
+                )
             c0 = self._button_hover_color if self._hover_states[0] and self._hover else self._button_color_0
             c1 = self._button_hover_color if self._hover_states[1] and self._hover else self._button_color_1
-            self._canvas.itemconfig("slider_0_parts", fill=self._apply_appearance_mode(c0), outline=self._apply_appearance_mode(c0))
-            self._canvas.itemconfig("slider_1_parts", fill=self._apply_appearance_mode(c1), outline=self._apply_appearance_mode(c1))
+            self._canvas.itemconfig(
+                "slider_0_parts", fill=self._apply_appearance_mode(c0), outline=self._apply_appearance_mode(c0)
+            )
+            self._canvas.itemconfig(
+                "slider_1_parts", fill=self._apply_appearance_mode(c1), outline=self._apply_appearance_mode(c1)
+            )
 
     def _clicked(self, event: object = None) -> None:
         if self._state != "normal":
@@ -590,12 +894,19 @@ class CTkRangeSlider(CTkBaseClass):
             self._round_to_step_size(self._from_ + (self._values[0] * (self._to - self._from_))),
             self._round_to_step_size(self._from_ + (self._values[1] * (self._to - self._from_))),
         )
-        self._values = ((self._output_values[0] - self._from_) / (self._to - self._from_), (self._output_values[1] - self._from_) / (self._to - self._from_))
+        self._values = (
+            (self._output_values[0] - self._from_) / (self._to - self._from_),
+            (self._output_values[1] - self._from_) / (self._to - self._from_),
+        )
         self._draw(no_color_updates=False)
         if self._variables is not None:
             self._variable_callback_blocked = True
-            self._variables[0].set(round(self._output_values[0]) if isinstance(self._variables[0], tk.IntVar) else self._output_values[0])
-            self._variables[1].set(round(self._output_values[1]) if isinstance(self._variables[1], tk.IntVar) else self._output_values[1])
+            self._variables[0].set(
+                round(self._output_values[0]) if isinstance(self._variables[0], tk.IntVar) else self._output_values[0]
+            )
+            self._variables[1].set(
+                round(self._output_values[1]) if isinstance(self._variables[1], tk.IntVar) else self._output_values[1]
+            )
             self._variable_callback_blocked = False
         if self._command is not None:
             if isinstance(self._command, tuple):
@@ -622,13 +933,25 @@ class CTkRangeSlider(CTkBaseClass):
             self._hover_states = (False, True)
             self._active_slider = False
         if self._hover:
-            self._canvas.itemconfig(ht, fill=self._apply_appearance_mode(self._button_hover_color), outline=self._apply_appearance_mode(self._button_hover_color))
+            self._canvas.itemconfig(
+                ht,
+                fill=self._apply_appearance_mode(self._button_hover_color),
+                outline=self._apply_appearance_mode(self._button_hover_color),
+            )
         self._canvas.itemconfig(nt, fill=self._apply_appearance_mode(c), outline=self._apply_appearance_mode(c))
 
-    def _on_leave(self, event: object = None) -> None:
+    def _on_leave(self, _event: object = None) -> None:
         self._hover_states = (False, False)
-        self._canvas.itemconfig("slider_0_parts", fill=self._apply_appearance_mode(self._button_color_0), outline=self._apply_appearance_mode(self._button_color_0))
-        self._canvas.itemconfig("slider_1_parts", fill=self._apply_appearance_mode(self._button_color_1), outline=self._apply_appearance_mode(self._button_color_1))
+        self._canvas.itemconfig(
+            "slider_0_parts",
+            fill=self._apply_appearance_mode(self._button_color_0),
+            outline=self._apply_appearance_mode(self._button_color_0),
+        )
+        self._canvas.itemconfig(
+            "slider_1_parts",
+            fill=self._apply_appearance_mode(self._button_color_1),
+            outline=self._apply_appearance_mode(self._button_color_1),
+        )
 
     def _round_to_step_size(self, values):
         if self._number_of_steps is not None:
@@ -641,28 +964,35 @@ class CTkRangeSlider(CTkBaseClass):
     def get(self) -> tuple[float, float]:
         return self._output_values
 
-    def set(self, output_values: list[float], from_variable_callback: bool = False) -> None:
+    def set(self, output_values: list[float], *, from_variable_callback: bool = False) -> None:  # noqa: FBT001, FBT002
         if self._from_ < self._to:
             output_values = [max(min(x, self._to), self._from_) for x in output_values]
         else:
             output_values = [max(min(x, self._from_), self._to) for x in output_values]
         self._output_values = self._round_to_step_size(output_values)
         if (self._to - self._from_) != 0:
-            self._values = ((self._output_values[0] - self._from_) / (self._to - self._from_), (self._output_values[1] - self._from_) / (self._to - self._from_))
+            self._values = (
+                (self._output_values[0] - self._from_) / (self._to - self._from_),
+                (self._output_values[1] - self._from_) / (self._to - self._from_),
+            )
         else:
             self._values = (0.0, 1.0)
         self._draw(no_color_updates=False)
         if self._variables is not None and not from_variable_callback:
             self._variable_callback_blocked = True
-            self._variables[0].set(round(self._output_values[0]) if isinstance(self._variables[0], tk.IntVar) else self._output_values[0])
-            self._variables[1].set(round(self._output_values[1]) if isinstance(self._variables[1], tk.IntVar) else self._output_values[1])
+            self._variables[0].set(
+                round(self._output_values[0]) if isinstance(self._variables[0], tk.IntVar) else self._output_values[0]
+            )
+            self._variables[1].set(
+                round(self._output_values[1]) if isinstance(self._variables[1], tk.IntVar) else self._output_values[1]
+            )
             self._variable_callback_blocked = False
 
-    def _variable_callback(self, var_name: str, index: str, mode: str) -> None:
+    def _variable_callback(self, _var_name: str, _index: str, _mode: str) -> None:
         if not self._variable_callback_blocked:
             self.set([self._variables[0].get(), self._variables[1].get()], from_variable_callback=True)
 
-    def bind(self, sequence: str | None = None, command: Callable | None = None, add: str | bool = True) -> None:
+    def bind(self, sequence: str | None = None, command: Callable | None = None, *, add: str | bool = True) -> None:  # noqa: FBT001, FBT002
         if not (add == "+" or add is True):
             msg = "'add' argument can only be '+' or True to preserve internal callbacks"
             raise ValueError(msg)
@@ -675,7 +1005,7 @@ class CTkRangeSlider(CTkBaseClass):
         self._canvas.unbind(sequence, None)
         self._create_bindings(sequence=sequence)
 
-    def configure(self, require_redraw: bool = False, **kwargs: object) -> None:
+    def configure(self, *, require_redraw: bool = False, **kwargs: object) -> None:  # noqa: FBT001, FBT002
         if "state" in kwargs:
             self._state = kwargs.pop("state")
             self._set_cursor()
@@ -733,13 +1063,22 @@ class CTkRangeSlider(CTkBaseClass):
 
     def cget(self, attribute_name: str) -> object:
         attr_map = {
-            "corner_radius": self._corner_radius, "button_corner_radius": self._button_corner_radius,
-            "border_width": self._border_width, "button_length": self._button_length,
-            "fg_color": self._fg_color, "border_color": self._border_color,
-            "progress_color": self._progress_color, "button_color": self._button_color_0,
-            "button_hover_color": self._button_hover_color, "from_": self._from_,
-            "to": self._to, "state": self._state, "number_of_steps": self._number_of_steps,
-            "hover": self._hover, "command": self._command, "variables": self._variables,
+            "corner_radius": self._corner_radius,
+            "button_corner_radius": self._button_corner_radius,
+            "border_width": self._border_width,
+            "button_length": self._button_length,
+            "fg_color": self._fg_color,
+            "border_color": self._border_color,
+            "progress_color": self._progress_color,
+            "button_color": self._button_color_0,
+            "button_hover_color": self._button_hover_color,
+            "from_": self._from_,
+            "to": self._to,
+            "state": self._state,
+            "number_of_steps": self._number_of_steps,
+            "hover": self._hover,
+            "command": self._command,
+            "variables": self._variables,
             "orientation": self._orientation,
         }
         if attribute_name in attr_map:
