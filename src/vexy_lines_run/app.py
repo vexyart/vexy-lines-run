@@ -150,7 +150,8 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         self._style_previews: dict[str, customtkinter.CTkLabel] = {}
         self._style_raw_images: dict[str, Image.Image | None] = {"start": None, "end": None}
         _style_hint = "Drop lines here" if self._has_dnd else "Click Open Lines button"
-        self._style_default_text: dict[str, str] = {"start": _style_hint, "end": _style_hint}
+        self._style_preview_hint: dict[str, str] = {"start": _style_hint, "end": _style_hint}
+        self._style_default_text: dict[str, str] = {"start": "", "end": ""}
 
         self._image_paths: list[str] = []
         self._image_rows: list[customtkinter.CTkBaseClass] = []
@@ -500,7 +501,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         content.pack(fill="both", expand=True, padx=8, pady=(8, 4))
         content.grid_rowconfigure(0, weight=1)
         content.grid_columnconfigure(0, weight=1)
-        _style_hint = self._style_default_text[key]
+        _style_hint = self._style_preview_hint[key]
         preview = customtkinter.CTkLabel(content, text=_style_hint)
         preview.grid(row=0, column=0, sticky="nwe", padx=10, pady=(10, 8))
         self._set_label_image(preview, None, 300, 240, placeholder=_style_hint)
@@ -736,7 +737,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         except (KeyError, AttributeError):
             w, h = 300, 240
         self._set_label_image(
-            self._style_previews[key], self._style_raw_images.get(key), w, h, placeholder=self._style_default_text[key]
+            self._style_previews[key], self._style_raw_images.get(key), w, h, placeholder=self._style_preview_hint[key]
         )
 
     def _on_style_drop(self, event: tk.Event, key: str) -> None:
