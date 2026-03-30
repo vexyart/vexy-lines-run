@@ -1,0 +1,1278 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Desktop GUI for Vexy Lines style transfer">
+      
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-materialx-10.1.1">
+    
+    
+      
+        <title>GUI Technical Documentation - vexy-lines-run</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.b72b68c2.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.204eaadb.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="amber" data-md-color-accent="indigo" data-mx-topbar="glass">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="toc" type="checkbox" id="__toc" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <label class="md-overlay" for="__toc"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#gui-technical-documentation" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+<div class="vexy-top-nav" style="width: 100%;">
+  <script src="https://i.vexy.art/vl/webcode/vexy-lines-menu.js"></script>
+  <vexy-lines-menu></vexy-lines-menu>
+</div>
+
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="vexy-lines-run" class="md-header__button md-logo" aria-label="vexy-lines-run" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            vexy-lines-run
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              GUI Technical Documentation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="amber" data-md-color-accent="indigo"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="amber" data-md-color-accent="indigo"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10.25 2a8.25 8.25 0 0 1 6.34 13.53l5.69 5.69a.749.749 0 0 1-.326 1.275.75.75 0 0 1-.734-.215l-5.69-5.69A8.25 8.25 0 1 1 10.25 2M3.5 10.25a6.75 6.75 0 1 0 13.5 0 6.75 6.75 0 0 0-13.5 0"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10.25 2a8.25 8.25 0 0 1 6.34 13.53l5.69 5.69a.749.749 0 0 1-.326 1.275.75.75 0 0 1-.734-.215l-5.69-5.69A8.25 8.25 0 1 1 10.25 2M3.5 10.25a6.75 6.75 0 1 0 13.5 0 6.75 6.75 0 0 0-13.5 0"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0">
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="vexy-lines-run" class="md-nav__button md-logo" aria-label="vexy-lines-run" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    vexy-lines-run
+  </label>
+  
+  <ul class="md-nav__list">
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gui-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GUI Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Examples
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc">
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#widget-hierarchy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Widget Hierarchy
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Widget Hierarchy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#root-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Root Level
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Components
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Components">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-menu-bar-ctkmenubar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Menu Bar (CTkMenuBar)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-inputs-panel-inputs_tabview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Inputs Panel (inputs_tabview)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Inputs Panel (inputs_tabview)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lines-tab" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lines Tab
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#images-tab" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Images Tab
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#video-tab" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Video Tab
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-styles-panel-styles_tabview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Styles Panel (styles_tabview)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-outputs-section-bottom_frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Outputs Section (bottom_frame)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-widgets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom Widgets
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Custom Widgets">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ctkrangeslider" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CTkRangeSlider
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#window-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Window Management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Window Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#drag-and-drop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Drag and Drop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#window-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Window Lifecycle
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#state-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        State Management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="State Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#internal-state-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Internal State Variables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tkinter-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tkinter Variables
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ui-state-transitions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UI State Transitions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="UI State Transitions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tab-switching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tab Switching
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#format-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Format Changes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#audio-toggle-visibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Audio Toggle Visibility
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#responsive-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Responsive Layout
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Responsive Layout">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#handling-window-resizes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Handling Window Resizes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#path-truncation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Path Truncation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tooltips" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tooltips
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#threading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Threading
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-method-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Method Architecture
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Method Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#layout-building" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Layout Building
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tab-builders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tab Builders
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#video-range-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Video Range Management
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#image-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Image Management
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#file-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File Patterns
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Dependencies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#required" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optional
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#future-enhancements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Future Enhancements
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+<h1 id="gui-technical-documentation">GUI Technical Documentation<a class="headerlink" href="#gui-technical-documentation" title="Permanent link">&para;</a></h1>
+<p>This document describes the widget structure and architecture of the Vexy Lines Run GUI application.</p>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p>The Vexy Lines Run GUI is built on <strong>CustomTkinter</strong> (a modern CustomTkinter wrapper around tkinter) and follows a hierarchical widget structure. The main <code>App</code> class inherits from <code>customtkinter.CTk</code> with optional drag-and-drop support via <code>tkinterdnd2</code>.</p>
+<h2 id="widget-hierarchy">Widget Hierarchy<a class="headerlink" href="#widget-hierarchy" title="Permanent link">&para;</a></h2>
+<p><img alt="GUI Diagram" src="../images/gui-diag.svg" /></p>
+<h3 id="root-level">Root Level<a class="headerlink" href="#root-level" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>App (customtkinter.CTk)
+├── CTkMenuBar
+└── root (customtkinter.CTkFrame)
+    ├── inputs_tabview (CTkTabview)
+    │   ├── Lines Tab
+    │   │   ├── content_frame (CTkFrame)
+    │   │   │   ├── lines_list_frame (CTkScrollableFrame)
+    │   │   │   └── lines_preview_container (CTkFrame)
+    │   │   │       └── lines_preview_label (CTkLabel)
+    │   │   └── controls_frame (CTkFrame)
+    │   │       ├── add_lines_btn (CTkButton)
+    │   │       ├── rm_lines_btn (CTkButton)
+    │   │       └── clear_lines_btn (CTkButton)
+    │   ├── Images Tab
+    │   │   ├── content_frame (CTkFrame)
+    │   │   │   ├── images_list_frame (CTkScrollableFrame)
+    │   │   │   └── images_preview_container (CTkFrame)
+    │   │   │       └── images_preview_label (CTkLabel)
+    │   │   └── controls_frame (CTkFrame)
+    │   │       ├── add_images_btn (CTkButton)
+    │   │       ├── rm_image_btn (CTkButton)
+    │   │       └── clear_images_btn (CTkButton)
+    │   └── Video Tab
+    │       ├── previews_frame (CTkFrame)
+    │       │   ├── video_first_preview_container (CTkFrame)
+    │       │   │   └── video_first_preview (CTkLabel)
+    │       │   └── video_last_preview_container (CTkFrame)
+    │       │       └── video_last_preview (CTkLabel)
+    │       └── controls_frame (CTkFrame)
+    │           ├── range_row (CTkFrame)
+    │           │   ├── video_start_entry (CTkEntry)
+    │           │   ├── video_range_slider (CTkRangeSlider)
+    │           │   ├── video_count_label (CTkLabel)
+    │           │   └── video_end_entry (CTkEntry)
+    │           └── path_row (CTkFrame)
+    │               ├── open_video_btn (CTkButton)
+    │               ├── video_path_label (CTkLabel)
+    │               └── clear_video_btn (CTkButton)
+    ├── styles_tabview (CTkTabview)
+    │   ├── Style Tab (start)
+    │   │   ├── content_frame (CTkFrame)
+    │   │   │   └── _style_previews[&quot;start&quot;] (CTkLabel)
+    │   │   └── controls_frame (CTkFrame)
+    │   │       ├── open_style_btn (CTkButton)
+    │   │       ├── _style_labels[&quot;start&quot;] (CTkLabel)
+    │   │       └── clear_style_btn (CTkButton)
+    │   └── Style Tab (end)
+    │       ├── content_frame (CTkFrame)
+    │       │   └── _style_previews[&quot;end&quot;] (CTkLabel)
+    │       └── controls_frame (CTkFrame)
+    │           ├── open_style_btn (CTkButton)
+    │           ├── _style_labels[&quot;end&quot;] (CTkLabel)
+    │           └── clear_style_btn (CTkButton)
+    └── bottom_frame (CTkFrame)
+        └── controls_frame (CTkFrame)
+            ├── format_menu (CTkOptionMenu)
+            ├── size_menu (CTkOptionMenu)
+            ├── audio_toggle (CTkSwitch)
+            ├── progress_bar (CTkProgressBar)
+            └── convert_button (CTkButton)
+</code></pre></div>
+<h2 id="key-components">Key Components<a class="headerlink" href="#key-components" title="Permanent link">&para;</a></h2>
+<h3 id="1-menu-bar-ctkmenubar">1. Menu Bar (<code>CTkMenuBar</code>)<a class="headerlink" href="#1-menu-bar-ctkmenubar" title="Permanent link">&para;</a></h3>
+<p>The top-level menu provides access to all major functionality through cascading menus:</p>
+<ul>
+<li><strong>File</strong>: Add lines, export, stop, quit</li>
+<li><strong>Lines</strong>: Add/remove/clear line files</li>
+<li><strong>Image</strong>: Add/remove/clear images</li>
+<li><strong>Video</strong>: Add video, reset range, remove video</li>
+<li><strong>Style</strong>: Open start/end styles, reset styles</li>
+<li><strong>Export</strong>: Export settings (format, size, audio)</li>
+</ul>
+<p>Built using <code>CTkMenuBar</code> from <code>CTkMenuBarPlus</code> with <code>CustomDropdownMenu</code> for submenu support.</p>
+<h3 id="2-inputs-panel-inputs_tabview">2. Inputs Panel (<code>inputs_tabview</code>)<a class="headerlink" href="#2-inputs-panel-inputs_tabview" title="Permanent link">&para;</a></h3>
+<p>A three-tab tabview that switches between input modes:</p>
+<h4 id="lines-tab">Lines Tab<a class="headerlink" href="#lines-tab" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>List Frame</strong>: <code>CTkScrollableFrame</code> containing <code>CTkButton</code> widgets for each .lines file</li>
+<li><strong>Preview Container</strong>: Shows selected line file preview via <code>CTkLabel</code> with <code>CTkImage</code></li>
+<li><strong>Controls</strong>: Add, remove selected (−), and clear all (×) buttons</li>
+</ul>
+<h4 id="images-tab">Images Tab<a class="headerlink" href="#images-tab" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>List Frame</strong>: Similar to lines, but for image files</li>
+<li><strong>Preview Container</strong>: Shows selected image preview</li>
+<li><strong>Controls</strong>: Add, remove selected, and clear all buttons</li>
+</ul>
+<h4 id="video-tab">Video Tab<a class="headerlink" href="#video-tab" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Previews</strong>: Side-by-side first and last frame previews in the selected range</li>
+<li><strong>Range Controls</strong>:</li>
+<li><code>CTkEntry</code> widgets for start/end frame numbers</li>
+<li><code>CTkRangeSlider</code> (custom widget) for visual range selection</li>
+<li>Label showing frame count</li>
+<li><strong>Path Controls</strong>: Open video button, path label, clear button</li>
+</ul>
+<h3 id="3-styles-panel-styles_tabview">3. Styles Panel (<code>styles_tabview</code>)<a class="headerlink" href="#3-styles-panel-styles_tabview" title="Permanent link">&para;</a></h3>
+<p>Two-tab tabview for style interpolation:</p>
+<ul>
+<li><strong>Style Tab</strong>: Start style document</li>
+<li><strong>End Style Tab</strong>: End style document</li>
+</ul>
+<p>Each tab contains:
+- <strong>Preview</strong>: <code>CTkLabel</code> displaying the style's preview image
+- <strong>Controls</strong>: Open lines file button, truncated path label, clear button</p>
+<p>Disabled when in "Lines" input mode (lines already contain styles).</p>
+<h3 id="4-outputs-section-bottom_frame">4. Outputs Section (<code>bottom_frame</code>)<a class="headerlink" href="#4-outputs-section-bottom_frame" title="Permanent link">&para;</a></h3>
+<p>Export settings and controls:</p>
+<ul>
+<li><strong>Format Menu</strong>: <code>CTkOptionMenu</code> for selecting export format (SVG/PNG/JPG/MP4/LINES)</li>
+<li><strong>Size Menu</strong>: <code>CTkOptionMenu</code> for scaling (1x/2x/3x/4x, disabled for vector formats)</li>
+<li><strong>Audio Toggle</strong>: <code>CTkSwitch</code> for including/excluding audio in video exports (conditional visibility)</li>
+<li><strong>Progress Bar</strong>: <code>CTkProgressBar</code> showing export progress (hidden unless exporting)</li>
+<li><strong>Convert Button</strong>: <code>CTkButton</code> for starting/stopping export process</li>
+</ul>
+<h2 id="custom-widgets">Custom Widgets<a class="headerlink" href="#custom-widgets" title="Permanent link">&para;</a></h2>
+<h3 id="ctkrangeslider">CTkRangeSlider<a class="headerlink" href="#ctkrangeslider" title="Permanent link">&para;</a></h3>
+<p>A custom two-thumb range slider widget bundled in <code>widgets.py</code>. Built as a faithful port from the reference implementation.</p>
+<p><strong>Key Features:</strong>
+- Two draggable thumbs for selecting a range
+- Custom drawing engine with platform-specific optimizations
+- Supports horizontal and vertical orientations
+- Optional step quantization
+- Variable binding support (tk.IntVar/tk.DoubleVar)
+- Hover effects and theming integration</p>
+<p><strong>Implementation Details:</strong>
+- Inherits from <code>CTkBaseClass</code> for proper CustomTkinter integration
+- Uses <code>CTkCanvas</code> for custom drawing with rounded rectangles
+- Platform-specific drawing methods:
+  - macOS: <code>circle_shapes</code> or <code>font_shapes</code>
+  - Other: <code>polygon_shapes</code> or <code>font_shapes</code>
+- Handles mouse events for thumb dragging and click-to-set
+- Supports both <code>command</code> callback and variable bindings</p>
+<h2 id="window-management">Window Management<a class="headerlink" href="#window-management" title="Permanent link">&para;</a></h2>
+<h3 id="drag-and-drop">Drag and Drop<a class="headerlink" href="#drag-and-drop" title="Permanent link">&para;</a></h3>
+<p>Optional drag-and-drop support via <code>tkinterdnd2</code>:</p>
+<ul>
+<li><strong>Lines tab</strong>: Drops <code>.lines</code> files into list or preview</li>
+<li><strong>Images tab</strong>: Drops image files into list or preview</li>
+<li><strong>Video tab</strong>: Drops video files into preview area</li>
+<li><strong>Style tabs</strong>: Drops <code>.lines</code> files into preview area</li>
+</ul>
+<p>Registered on multiple widget instances (tab, container, label) for robust handling.</p>
+<h3 id="window-lifecycle">Window Lifecycle<a class="headerlink" href="#window-lifecycle" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Initialization</strong>: <code>__init__()</code> calls <code>_build_layout()</code>, register drop targets, bind events</li>
+<li><strong>Raise to Front</strong>: <code>_raise_window()</code> ensures window appears on top via <code>after()</code> scheduling</li>
+<li><strong>Resize Handling</strong>: <code>&lt;Configure&gt;</code> event triggers debounced <code>_resize_refresh()</code> for responsive layouts</li>
+</ul>
+<h2 id="state-management">State Management<a class="headerlink" href="#state-management" title="Permanent link">&para;</a></h2>
+<h3 id="internal-state-variables">Internal State Variables<a class="headerlink" href="#internal-state-variables" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>_style_paths</code>: Dict mapping "start"/"end" keys to file paths</li>
+<li><code>_style_labels</code>: Dict of path display labels</li>
+<li><code>_style_raw_images</code>: Dict of PIL Image objects for style previews</li>
+<li><code>_image_paths</code>: List of image file paths</li>
+<li><code>_selected_image_index</code>: Currently selected image index</li>
+<li><code>_lines_paths</code>: List of .lines file paths</li>
+<li><code>_selected_lines_index</code>: Currently selected lines index</li>
+<li><code>_video_path</code>: Current video file path</li>
+<li><code>_video_range</code>: Tuple of (start_frame, end_frame)</li>
+<li><code>_is_exporting</code>: Boolean flag for export state</li>
+<li><code>abort_event</code>: <code>threading.Event</code> for stopping export threads</li>
+</ul>
+<h3 id="tkinter-variables">Tkinter Variables<a class="headerlink" href="#tkinter-variables" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>format_var</code>: <code>tk.StringVar</code> for export format selection</li>
+<li><code>size_var</code>: <code>tk.StringVar</code> for export size selection</li>
+<li><code>audio_var</code>: <code>tk.BooleanVar</code> for audio toggle state</li>
+</ul>
+<h2 id="ui-state-transitions">UI State Transitions<a class="headerlink" href="#ui-state-transitions" title="Permanent link">&para;</a></h2>
+<h3 id="tab-switching">Tab Switching<a class="headerlink" href="#tab-switching" title="Permanent link">&para;</a></h3>
+<p>When switching between input tabs (<code>_on_inputs_tab_changed</code>):</p>
+<ol>
+<li>Update available export formats:</li>
+<li>Lines: SVG, PNG, JPG, LINES</li>
+<li>Images: SVG, PNG, JPG</li>
+<li>Video: MP4, PNG, JPG</li>
+<li>Disable/enable styles panel (disabled for Lines mode)</li>
+<li>Update audio toggle visibility</li>
+<li>Trigger size dropdown state update</li>
+</ol>
+<h3 id="format-changes">Format Changes<a class="headerlink" href="#format-changes" title="Permanent link">&para;</a></h3>
+<p>When export format changes (<code>_on_format_change</code>):</p>
+<ol>
+<li>Update size dropdown options:</li>
+<li>Vector formats (SVG, LINES): Disable size menu (show "—")</li>
+<li>Raster formats (PNG, JPG, MP4): Enable size menu (1x-4x)</li>
+<li>Update audio toggle visibility</li>
+</ol>
+<h3 id="audio-toggle-visibility">Audio Toggle Visibility<a class="headerlink" href="#audio-toggle-visibility" title="Permanent link">&para;</a></h3>
+<p>Audio toggle is only visible when:
+- Video tab is active
+- Video is loaded
+- Video has audio track
+- Export format is MP4
+- Full video range is selected (1 to total frames)</p>
+<h2 id="responsive-layout">Responsive Layout<a class="headerlink" href="#responsive-layout" title="Permanent link">&para;</a></h2>
+<h3 id="handling-window-resizes">Handling Window Resizes<a class="headerlink" href="#handling-window-resizes" title="Permanent link">&para;</a></h3>
+<ol>
+<li><code>&lt;Configure&gt;</code> event triggers debounced resize handler</li>
+<li><code>_resize_refresh()</code> updates all dynamic widths/heights</li>
+<li>Lists repack with new widths, path labels re-truncated</li>
+<li>All preview images redrawn to fit new container sizes</li>
+</ol>
+<h3 id="path-truncation">Path Truncation<a class="headerlink" href="#path-truncation" title="Permanent link">&para;</a></h3>
+<p>Long paths are truncated with leading "..." to fit available width:
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">truncate_start</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">max_chars</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">max_chars</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">text</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;...</span><span class="si">{</span><span class="n">text</span><span class="p">[</span><span class="o">-</span><span class="p">(</span><span class="n">max_chars</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">3</span><span class="p">):]</span><span class="si">}</span><span class="s2">&quot;</span>
+</code></pre></div></p>
+<p>Font-based calculation for pixel-accurate truncation based on widget width.</p>
+<h2 id="tooltips">Tooltips<a class="headerlink" href="#tooltips" title="Permanent link">&para;</a></h2>
+<p>Optional tooltips via <code>CTkToolTip</code> library:
+- Added to all interactive widgets for user guidance
+- Gracefully handles widgets that don't support direct binding
+- Configured with delay and positioning for better UX</p>
+<h2 id="threading">Threading<a class="headerlink" href="#threading" title="Permanent link">&para;</a></h2>
+<p>Export operations run in background threads:
+- <code>threading.Thread</code> spawns <code>process_export()</code> from <code>processing.py</code>
+- <code>abort_event</code> signals thread to stop
+- Callbacks use <code>app.after()</code> to update UI from main thread
+- Progress, completion, and error callbacks update UI safely</p>
+<h2 id="key-method-architecture">Key Method Architecture<a class="headerlink" href="#key-method-architecture" title="Permanent link">&para;</a></h2>
+<h3 id="layout-building">Layout Building<a class="headerlink" href="#layout-building" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>_build_layout()</code>: Top-level structure</li>
+<li><code>_build_menu_bar()</code>: Menu construction</li>
+<li><code>_build_inputs_panel()</code>: Tabview with three tabs</li>
+<li><code>_build_styles_panel()</code>: Style picker tabs</li>
+<li><code>_build_outputs_section()</code>: Export controls</li>
+</ul>
+<h3 id="tab-builders">Tab Builders<a class="headerlink" href="#tab-builders" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>_build_lines_tab()</code>: Lines-specific widgets</li>
+<li><code>_build_images_tab()</code>: Image-specific widgets</li>
+<li><code>_build_video_tab()</code>: Video-specific widgets</li>
+<li><code>_build_style_picker()</code>: Style picker widgets (reusable)</li>
+</ul>
+<h3 id="video-range-management">Video Range Management<a class="headerlink" href="#video-range-management" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>_set_video_range()</code>: Validates and sets range</li>
+<li><code>_on_video_slider_change()</code>: Handles slider input</li>
+<li><code>_on_video_entries_submit()</code>: Handles manual entry input</li>
+<li><code>_syncing_video_controls</code>: Prevents update loops</li>
+</ul>
+<h3 id="image-management">Image Management<a class="headerlink" href="#image-management" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>_set_label_image()</code>: Fits and sets label images</li>
+<li><code>fit_image_to_box()</code>: Aspect-ratio-preserving scaling</li>
+<li><code>_redraw_*_preview()</code>: Refresh specific previews</li>
+</ul>
+<h2 id="file-patterns">File Patterns<a class="headerlink" href="#file-patterns" title="Permanent link">&para;</a></h2>
+<p>Supported file extensions:
+- <strong>Lines</strong>: <code>.lines</code>
+- <strong>Images</strong>: <code>.png</code>, <code>.jpg</code>, <code>.jpeg</code>, <code>.gif</code>, <code>.bmp</code>, <code>.tiff</code>, <code>.webp</code>
+- <strong>Videos</strong>: <code>.mp4</code>, <code>.mov</code>, <code>.avi</code>, <code>.mkv</code>, <code>.webm</code></p>
+<h2 id="dependencies">Dependencies<a class="headerlink" href="#dependencies" title="Permanent link">&para;</a></h2>
+<h3 id="required">Required<a class="headerlink" href="#required" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>customtkinter</code>: Modern tkinter wrapper with dark mode</li>
+<li><code>CTkMenuBarPlus</code>: Enhanced menu bar with dropdowns</li>
+<li><code>PIL</code> (Pillow): Image processing</li>
+<li><code>cv2</code> (OpenCV): Video reading</li>
+<li><code>loguru</code>: Logging</li>
+</ul>
+<h3 id="optional">Optional<a class="headerlink" href="#optional" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>CTkToolTip</code>: Tooltip support</li>
+<li><code>tkinterdnd2</code>: Drag and drop support</li>
+<li><code>showinfm</code>: Reveal output in file manager (macOS)</li>
+</ul>
+<h2 id="future-enhancements">Future Enhancements<a class="headerlink" href="#future-enhancements" title="Permanent link">&para;</a></h2>
+<p>Potential areas for GUI improvement:
+1. Additional export formats (TIF, WEBP)
+2. Batch processing with progress details
+3. Custom theme configuration
+4. Preset management (save/load style combinations)
+5. Keyboard shortcuts for common operations
+6. Export queue for multiple jobs</p>
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+          <div class="md-top" data-md-component="top" hidden>
+  <div class="md-top__center">
+    <button type="button" class="md-top__button md-top__button--main" data-md-action="top">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+      <span>Back to top</span>
+    </button>
+    
+      
+      
+      <label class="md-top__button md-top__side md-top__side--nav" for="__drawer" >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2m0 14H9V6h11Z"/></svg>
+      </label>
+    
+    
+      
+      
+      <label class="md-top__button md-top__side md-top__side--toc" for="__toc" >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2m-5 14H4V6h11Z"/></svg>
+      </label>
+    
+  </div>
+</div>
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://jaywhj.github.io/mkdocs-materialx/" target="_blank" rel="noopener">
+      MaterialX
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.code.copy", "navigation.sections"], "search": "../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.e3ad5d0a.min.js"></script>
+      
+    
+  </body>
+</html>
