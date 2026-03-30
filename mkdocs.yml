@@ -1,18 +1,19 @@
 site_name: "vexy-lines-run"
 site_description: "Desktop GUI for Vexy Lines style transfer"
 theme:
+  custom_dir: overrides
   name: materialx
   features:
     - content.code.copy
     - navigation.sections
   palette:
     - scheme: slate
-      primary: deep purple
+      primary: amber
       toggle:
         icon: material/brightness-7
         name: Light mode
     - scheme: default
-      primary: deep purple
+      primary: amber
       toggle:
         icon: material/brightness-4
         name: Dark mode
