@@ -663,11 +663,11 @@
 <h2 id="running-vexy-lines-run">Running Vexy Lines Run<a class="headerlink" href="#running-vexy-lines-run" title="Permanent link">&para;</a></h2>
 <h3 id="macos">macOS<a class="headerlink" href="#macos" title="Permanent link">&para;</a></h3>
 <p>Open Terminal, paste, press Enter:</p>
-<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-LsSf<span class="w"> </span>https://astral.sh/uv/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/.local/bin/uvx&quot;</span><span class="w"> </span>--python<span class="w"> </span><span class="m">3</span>.12<span class="w"> </span>vexy-lines-run
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-LsSf<span class="w"> </span>https://astral.sh/uv/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/.local/bin/uvx&quot;</span><span class="w"> </span>--python<span class="w"> </span><span class="m">3</span>.12<span class="w"> </span>vexy-lines-run@latest
 </code></pre></div>
 <h3 id="windows">Windows<a class="headerlink" href="#windows" title="Permanent link">&para;</a></h3>
 <p>Open Command Prompt, paste, press Enter:</p>
-<div class="highlight"><pre><span></span><code>powershell -ExecutionPolicy ByPass -c <span class="s2">&quot;irm https://astral.sh/uv/install.ps1 | iex; $env:Path = \&quot;</span>$HOME\.local\bin;$HOME\AppData\Roaming\uv;$env:Path\<span class="s2">&quot;; uvx --python 3.12 vexy-lines-run&quot;</span>
+<div class="highlight"><pre><span></span><code>powershell -ExecutionPolicy ByPass -c <span class="s2">&quot;irm https://astral.sh/uv/install.ps1 | iex; $env:Path = \&quot;</span>$HOME\.local\bin;$HOME\AppData\Roaming\uv;$env:Path\<span class="s2">&quot;; uvx --python 3.12 vexy-lines-run@latest&quot;</span>
 </code></pre></div>
 <h3 id="from-python">From Python<a class="headerlink" href="#from-python" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">vexy_lines_run</span> <span class="kn">import</span> <span class="n">launch</span>
