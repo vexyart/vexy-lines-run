@@ -964,7 +964,7 @@ class CTkRangeSlider(CTkBaseClass):
     def get(self) -> tuple[float, float]:
         return self._output_values
 
-    def set(self, output_values: list[float], *, from_variable_callback: bool = False) -> None:  # noqa: FBT001, FBT002
+    def set(self, output_values: list[float], *, from_variable_callback: bool = False) -> None:
         if self._from_ < self._to:
             output_values = [max(min(x, self._to), self._from_) for x in output_values]
         else:
@@ -992,7 +992,7 @@ class CTkRangeSlider(CTkBaseClass):
         if not self._variable_callback_blocked:
             self.set([self._variables[0].get(), self._variables[1].get()], from_variable_callback=True)
 
-    def bind(self, sequence: str | None = None, command: Callable | None = None, *, add: str | bool = True) -> None:  # noqa: FBT001, FBT002
+    def bind(self, sequence: str | None = None, command: Callable | None = None, *, add: str | bool = True) -> None:
         if not (add == "+" or add is True):
             msg = "'add' argument can only be '+' or True to preserve internal callbacks"
             raise ValueError(msg)
@@ -1005,7 +1005,7 @@ class CTkRangeSlider(CTkBaseClass):
         self._canvas.unbind(sequence, None)
         self._create_bindings(sequence=sequence)
 
-    def configure(self, *, require_redraw: bool = False, **kwargs: object) -> None:  # noqa: FBT001, FBT002
+    def configure(self, *, require_redraw: bool = False, **kwargs: object) -> None:
         if "state" in kwargs:
             self._state = kwargs.pop("state")
             self._set_cursor()

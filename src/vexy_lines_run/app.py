@@ -902,6 +902,8 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
             if not (0 <= idx < len(self._image_paths)):
                 idx = 0
                 self._selected_image_index = 0
+            # Reset before attempting open so stale images never survive a suppressed failure
+            self._images_raw_image = None
             with contextlib.suppress(OSError, ValueError):
                 self._images_raw_image = Image.open(self._image_paths[idx]).convert("RGB")
         self._redraw_images_preview()
@@ -1042,9 +1044,9 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         mp4 = self.format_var.get() == "MP4"
         full = self._video_total_frames > 0 and self._video_range == (1, self._video_total_frames)
         if vid and loaded and self._video_has_audio and mp4 and full:
-            self.audio_toggle.grid()
+            self.audio_toggle.pack(side="left", padx=(0, 8), pady=10)
         else:
-            self.audio_toggle.grid_remove()
+            self.audio_toggle.pack_forget()
 
     def _get_default_export_dir(self) -> str:
         m = self.inputs_tabview.get().lower()

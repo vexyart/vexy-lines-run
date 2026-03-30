@@ -26,7 +26,7 @@ import tempfile
 import threading
 from collections.abc import Callable
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 import cv2  # type: ignore[import-untyped]
 from loguru import logger
@@ -45,9 +45,6 @@ from vexy_lines_api.video import (
     probe,
     process_video_with_style,
 )
-
-if TYPE_CHECKING:
-    pass
 
 __all__ = ["process_export"]
 
@@ -193,18 +190,34 @@ def _process_lines(
                 finally:
                     tmp_path.unlink(missing_ok=True)
     else:
-        for idx, path in enumerate(input_paths):
-            if abort_event and abort_event.is_set():
-                raise Exception("Export aborted by user")
-            _report_progress(on_progress, idx, total, f"Exporting {Path(path).name}")
-            if fmt == "LINES":
-                shutil.copy2(path, out_dir / Path(path).name)
-            else:
-                with contextlib.suppress(Exception):
-                    doc = parse_lines(path)
-                    img_bytes = doc.preview_image_data
-                    if img_bytes:
-                        _save_image_bytes(img_bytes, out_dir / f"{Path(path).stem}.{fmt.lower()}", fmt, multiplier)
+        with MCPClient() as client:
+            for idx, path in enumerate(input_paths):
+                if abort_event and abort_event.is_set():
+                    raise Exception("Export aborted by user")
+                _report_progress(on_progress, idx, total, f"Exporting {Path(path).name}")
+                stem = Path(path).stem
+                if fmt == "LINES":
+                    shutil.copy2(path, out_dir / Path(path).name)
+                else:
+                    try:
+                        client.open_document(path)
+                        client.render()
+                        if fmt == "SVG":
+                            client.export_svg(str(out_dir / f"{stem}.svg"))
+                        elif fmt == "PNG":
+                            dest = out_dir / f"{stem}.png"
+                            client.export_png(str(dest))
+                            if multiplier > 1:
+                                file_bytes = dest.read_bytes()
+                                _save_image_bytes(file_bytes, dest, fmt, multiplier)
+                        elif fmt == "JPG":
+                            dest = out_dir / f"{stem}.jpg"
+                            client.export_jpeg(str(dest))
+                            if multiplier > 1:
+                                file_bytes = dest.read_bytes()
+                                _save_image_bytes(file_bytes, dest, fmt, multiplier)
+                    except Exception:
+                        logger.opt(exception=True).warning("MCP export failed for {}", path)
 
     _report_progress(on_progress, total, total, "Done")
 

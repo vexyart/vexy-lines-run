@@ -3,7 +3,7 @@
 
 from __future__ import annotations
 
-from pathlib import Path
+import threading
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -256,3 +256,185 @@ class TestProcessExportDispatch:
         error_cb.assert_called_once()
         assert "Unknown mode" in error_cb.call_args[0][0]
         complete_cb.assert_not_called()
+
+
+# ---------------------------------------------------------------------------
+# _process_lines — no-style path (MCPClient-based export)
+# ---------------------------------------------------------------------------
+
+
+class TestProcessLinesNoStyle:
+    """Tests for the no-style branch of _process_lines that uses MCPClient."""
+
+    def _make_client_mock(self, mock_mcp_cls: MagicMock) -> MagicMock:
+        mock_client = MagicMock()
+        mock_mcp_cls.return_value.__enter__ = MagicMock(return_value=mock_client)
+        mock_mcp_cls.return_value.__exit__ = MagicMock(return_value=False)
+        return mock_client
+
+    @patch("vexy_lines_run.processing.MCPClient")
+    def test_svg_export_uses_mcp_engine(self, mock_mcp_cls, tmp_path):
+        from vexy_lines_run.processing import _process_lines
+
+        mock_client = self._make_client_mock(mock_mcp_cls)
+
+        inp = tmp_path / "input"
+        inp.mkdir()
+        test_file = inp / "test.lines"
+        test_file.write_text("<doc/>")
+        out = tmp_path / "output"
+
+        _process_lines(
+            input_paths=[str(test_file)],
+            style_path=None,
+            end_style_path=None,
+            output_path=str(out),
+            fmt="SVG",
+            size="1x",
+            on_progress=None,
+        )
+
+        mock_client.open_document.assert_called_once_with(str(test_file))
+        mock_client.render.assert_called_once()
+        mock_client.export_svg.assert_called_once()
+
+    @patch("vexy_lines_run.processing.MCPClient")
+    def test_png_export_uses_mcp_engine(self, mock_mcp_cls, tmp_path):
+        from vexy_lines_run.processing import _process_lines
+
+        mock_client = self._make_client_mock(mock_mcp_cls)
+
+        inp = tmp_path / "input"
+        inp.mkdir()
+        test_file = inp / "art.lines"
+        test_file.write_text("<doc/>")
+        out = tmp_path / "output"
+        out.mkdir()
+        # export_png writes a file that _save_image_bytes may try to read;
+        # make it a no-op by having the mock write nothing (dest won't exist).
+        # We just verify the call was made.
+
+        _process_lines(
+            input_paths=[str(test_file)],
+            style_path=None,
+            end_style_path=None,
+            output_path=str(out),
+            fmt="PNG",
+            size="1x",
+            on_progress=None,
+        )
+
+        mock_client.open_document.assert_called_once_with(str(test_file))
+        mock_client.render.assert_called_once()
+        mock_client.export_png.assert_called_once()
+
+    @patch("vexy_lines_run.processing.MCPClient")
+    def test_jpg_export_uses_mcp_engine(self, mock_mcp_cls, tmp_path):
+        from vexy_lines_run.processing import _process_lines
+
+        mock_client = self._make_client_mock(mock_mcp_cls)
+
+        inp = tmp_path / "input"
+        inp.mkdir()
+        test_file = inp / "art.lines"
+        test_file.write_text("<doc/>")
+        out = tmp_path / "output"
+        out.mkdir()
+
+        _process_lines(
+            input_paths=[str(test_file)],
+            style_path=None,
+            end_style_path=None,
+            output_path=str(out),
+            fmt="JPG",
+            size="1x",
+            on_progress=None,
+        )
+
+        mock_client.open_document.assert_called_once_with(str(test_file))
+        mock_client.render.assert_called_once()
+        mock_client.export_jpeg.assert_called_once()
+
+    @patch("vexy_lines_run.processing.shutil")
+    @patch("vexy_lines_run.processing.MCPClient")
+    def test_lines_format_copies_file(self, mock_mcp_cls, mock_shutil, tmp_path):
+        from vexy_lines_run.processing import _process_lines
+
+        mock_client = self._make_client_mock(mock_mcp_cls)
+
+        inp = tmp_path / "input"
+        inp.mkdir()
+        test_file = inp / "art.lines"
+        test_file.write_text("<doc/>")
+        out = tmp_path / "output"
+
+        _process_lines(
+            input_paths=[str(test_file)],
+            style_path=None,
+            end_style_path=None,
+            output_path=str(out),
+            fmt="LINES",
+            size="1x",
+            on_progress=None,
+        )
+
+        mock_shutil.copy2.assert_called_once()
+        mock_client.open_document.assert_not_called()
+        mock_client.render.assert_not_called()
+
+    @patch("vexy_lines_run.processing.MCPClient")
+    def test_mcp_failure_logs_warning_and_continues(self, mock_mcp_cls, tmp_path):
+        from vexy_lines_run.processing import _process_lines
+
+        mock_client = self._make_client_mock(mock_mcp_cls)
+
+        # First call raises, second call succeeds
+        mock_client.open_document.side_effect = [RuntimeError("connection refused"), None]
+
+        inp = tmp_path / "input"
+        inp.mkdir()
+        file1 = inp / "first.lines"
+        file1.write_text("<doc/>")
+        file2 = inp / "second.lines"
+        file2.write_text("<doc/>")
+        out = tmp_path / "output"
+
+        # Should not raise — failures are caught and logged as warnings
+        _process_lines(
+            input_paths=[str(file1), str(file2)],
+            style_path=None,
+            end_style_path=None,
+            output_path=str(out),
+            fmt="SVG",
+            size="1x",
+            on_progress=None,
+        )
+
+        assert mock_client.open_document.call_count == 2
+
+    @patch("vexy_lines_run.processing.MCPClient")
+    def test_abort_event_stops_processing(self, mock_mcp_cls, tmp_path):
+        from vexy_lines_run.processing import _process_lines
+
+        self._make_client_mock(mock_mcp_cls)
+
+        inp = tmp_path / "input"
+        inp.mkdir()
+        test_file = inp / "art.lines"
+        test_file.write_text("<doc/>")
+        out = tmp_path / "output"
+
+        abort = threading.Event()
+        abort.set()
+
+        with pytest.raises(Exception, match="aborted"):
+            _process_lines(
+                input_paths=[str(test_file)],
+                style_path=None,
+                end_style_path=None,
+                output_path=str(out),
+                fmt="SVG",
+                size="1x",
+                abort_event=abort,
+                on_progress=None,
+            )
