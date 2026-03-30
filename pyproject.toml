@@ -49,6 +49,7 @@ dependencies = [
     "svglab>=0.1.0",
     "opencv-python>=4.8.0",
     "CTkMenuBarPlus>=0.1.0",
+    "show-in-file-manager>=1.1.4",
 ]
 
 [[project.authors]]
