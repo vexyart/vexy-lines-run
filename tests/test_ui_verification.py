@@ -44,7 +44,7 @@ class TestExportButtonColors:
         content = app_path.read_text()
 
         # Find where button is reconfigured to red during export (in _do_export before _run_export)
-        red_pattern = r'def _do_export.*?\n.*?convert_button\.configure\(text="Stop", fg_color="#([0-9A-Fa-f]+)".*command=self\._stop_export'
+        red_pattern = r'def _do_export.*?\n.*?convert_button\.configure\(.*?\n?.*?text="Stop[^\"]*?".*?\n?.*?fg_color="#([0-9A-Fa-f]+)".*command=self\._stop_export'
         match = re.search(red_pattern, content, re.DOTALL)
         assert match is not None, "Could not find button reconfiguration with Stop text and red fg_color in _do_export"
         assert match.group(1).upper() == "D32F2F", f"Stop button fg_color is #{match.group(1)}, expected #D32F2F"
@@ -55,7 +55,7 @@ class TestExportButtonColors:
         content = app_path.read_text()
 
         # Find hover color in Stop button configuration (in _do_export)
-        hover_pattern = r'def _do_export.*?\n.*?convert_button\.configure\(text="Stop".*hover_color="#([0-9A-Fa-f]+)".*command=self\._stop_export'
+        hover_pattern = r'def _do_export.*?\n.*?convert_button\.configure\(.*?\n?.*?text="Stop[^\"]*?".*?\n?.*?hover_color="#([0-9A-Fa-f]+)".*command=self\._stop_export'
         match = re.search(hover_pattern, content, re.DOTALL)
         assert match is not None, (
             "Could not find button reconfiguration with Stop text and red hover_color in _do_export"
@@ -165,7 +165,7 @@ class TestButtonLabels:
         content = app_path.read_text()
 
         # Check for text in configure call during export
-        configure_stop_pattern = r'configure\(text="Stop"'
+        configure_stop_pattern = r'configure\(.*?\n?.*?text="Stop'
         match = re.search(configure_stop_pattern, content)
         assert match is not None, "Could not find 'Stop' button text configuration"
 
@@ -280,7 +280,7 @@ class TestExportButtonStateChanges:
         content = app_path.read_text()
 
         # Find _do_export method
-        do_export_pattern = r'def _do_export.*?self\.convert_button\.configure\(text="Stop"'
+        do_export_pattern = r'def _do_export.*?self\.convert_button\.configure\(.*?\n?.*?text="Stop'
         match = re.search(do_export_pattern, content, re.DOTALL)
         assert match is not None, "Could not find button configure with 'Stop' text in _do_export"
 

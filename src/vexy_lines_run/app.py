@@ -6,24 +6,21 @@ from __future__ import annotations
 import base64
 import contextlib
 import io
+import re
 import threading
 import tkinter as tk
 import tkinter.font as tkfont
 import xml.etree.ElementTree as ET
+import zlib
 from pathlib import Path
-from typing import TYPE_CHECKING
 from tkinter import filedialog, messagebox
 
 import cv2
 from loguru import logger
 from PIL import Image
 
-from vexy_lines import extract_preview_image
 from vexy_lines_run.processing import process_export
 from vexy_lines_run.widgets import CTkRangeSlider
-
-if TYPE_CHECKING:
-    from typing import Any
 
 _CTK_MISSING = "customtkinter is required for the GUI. Install with: pip install customtkinter"
 _MENUBAR_MISSING = "CTkMenuBarPlus is required for the GUI. Install with: pip install CTkMenuBarPlus"
@@ -68,13 +65,12 @@ def truncate_start(text: str, max_chars: int = 60) -> str:
 
 
 def extract_preview_from_lines(filepath: str) -> bytes | None:
-    """Extract the embedded preview image from a .lines file."""
+    """Extract the embedded preview or source image from a .lines file."""
     try:
-        # Try to parse the file to get preview_image_data directly
-        from vexy_lines import parse
+        from vexy_lines import parse  # noqa: PLC0415
 
         doc = parse(filepath)
-        return doc.preview_image_data
+        return doc.preview_image_data or doc.source_image_data
     except Exception:
         with contextlib.suppress(Exception):
             tree = ET.parse(str(filepath))  # noqa: S314
@@ -82,6 +78,14 @@ def extract_preview_from_lines(filepath: str) -> bytes | None:
             pd = root.find("PreviewDoc")
             if pd is not None and pd.text:
                 return base64.b64decode(pd.text.strip())
+            # Fallback to SourcePict if PreviewDoc is missing
+            sp = root.find("SourcePict")
+            if sp is not None:
+                img_data = sp.find("ImageData")
+                if img_data is not None and img_data.text:
+                    raw = base64.b64decode(img_data.text.strip())
+                    return zlib.decompress(raw[4:])
+
     return None
 
 
@@ -100,9 +104,14 @@ def extract_frame(video_path: str, frame_number: int = 1) -> Image.Image | None:
 
 
 def fit_image_to_box(image: Image.Image, width: int, height: int) -> Image.Image:
-    """Scale image to fit inside box while preserving aspect ratio."""
-    fitted = image.copy()
-    fitted.thumbnail((max(1, width), max(1, height)), Image.Resampling.LANCZOS)
+    """Scale image to fit inside box while preserving aspect ratio (scales up and down)."""
+    img_w, img_h = image.size
+    # Calculate scale to fit while preserving aspect ratio
+    ratio = min(width / img_w, height / img_h)
+    new_w = max(1, int(img_w * ratio))
+    new_h = max(1, int(img_h * ratio))
+
+    fitted = image.resize((new_w, new_h), Image.Resampling.LANCZOS)
     if fitted.mode == "RGBA":
         white = Image.new("RGBA", fitted.size, (255, 255, 255, 255))
         fitted = Image.alpha_composite(white, fitted)
@@ -189,17 +198,19 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         self.focus_force()
 
     def add_ctk_tooltip(self, widget: tk.Widget, message: str) -> None:
-        """Add a tooltip to a widget if library is available."""
+        """Add a tooltip to a widget if library is available. Handles CTk widgets that don't support bind."""
         if CTkToolTip is None:
             return
-        CTkToolTip(widget, message=message, delay=0.2, follow=True, x_offset=20, y_offset=10, alpha=0.95)
+        with contextlib.suppress(NotImplementedError, tk.TclError):
+            # Some CTk widgets (like CTkTabview) don't support direct binding
+            CTkToolTip(widget, message=message, delay=0.2, follow=True, x_offset=20, y_offset=10, alpha=0.95)
 
     def _build_layout(self) -> None:
         self._build_menu_bar()
         root = customtkinter.CTkFrame(self, fg_color="transparent")
         root.pack(fill="both", expand=True, padx=12, pady=12)
-        root.grid_columnconfigure(0, weight=3)
-        root.grid_columnconfigure(1, weight=1)
+        root.grid_columnconfigure(0, weight=2, uniform="a")
+        root.grid_columnconfigure(1, weight=1, uniform="a")
         root.grid_rowconfigure(0, weight=1)
         root.grid_rowconfigure(1, weight=0)
         self._build_inputs_panel(root)
@@ -317,7 +328,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         self.lines_preview_container.grid_columnconfigure(0, weight=1)
 
         self.lines_preview_label = customtkinter.CTkLabel(self.lines_preview_container, text="Drop lines here")
-        self.lines_preview_label.grid(row=0, column=0, sticky="nsew")
+        self.lines_preview_label.grid(row=0, column=0, sticky="nwe")
         self.add_ctk_tooltip(self.lines_preview_label, "Preview of the selected line file")
         self._update_lines_preview()
         self._refresh_lines_list()
@@ -352,7 +363,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         self.images_preview_container.grid_columnconfigure(0, weight=1)
 
         self.images_preview_label = customtkinter.CTkLabel(self.images_preview_container, text="Drop images here")
-        self.images_preview_label.grid(row=0, column=0, sticky="nsew")
+        self.images_preview_label.grid(row=0, column=0, sticky="nwe")
         self.add_ctk_tooltip(self.images_preview_label, "Preview of the selected image")
         self._update_images_preview()
         self._refresh_image_list()
@@ -384,7 +395,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         self.video_first_preview_container.grid_columnconfigure(0, weight=1)
 
         self.video_first_preview = customtkinter.CTkLabel(self.video_first_preview_container, text="")
-        self.video_first_preview.grid(row=0, column=0, sticky="nsew")
+        self.video_first_preview.grid(row=0, column=0, sticky="nwe")
         self.add_ctk_tooltip(self.video_first_preview, "Preview of the first frame in range")
 
         self.video_last_preview_container = customtkinter.CTkFrame(previews, fg_color="transparent")
@@ -394,7 +405,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         self.video_last_preview_container.grid_columnconfigure(0, weight=1)
 
         self.video_last_preview = customtkinter.CTkLabel(self.video_last_preview_container, text="")
-        self.video_last_preview.grid(row=0, column=0, sticky="nsew")
+        self.video_last_preview.grid(row=0, column=0, sticky="nwe")
         self.add_ctk_tooltip(self.video_last_preview, "Preview of the last frame in range")
         self._update_video_previews()
         self.video_first_preview.configure(text="")
@@ -450,7 +461,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         content.grid_rowconfigure(0, weight=1)
         content.grid_columnconfigure(0, weight=1)
         preview = customtkinter.CTkLabel(content, text="Drop lines here")
-        preview.grid(row=0, column=0, sticky="nsew", padx=10, pady=(10, 8))
+        preview.grid(row=0, column=0, sticky="nwe", padx=10, pady=(10, 8))
         self._set_label_image(preview, None, 300, 240, placeholder="Drop lines here")
         self._style_previews[key] = preview
         self.add_ctk_tooltip(preview, f"Preview of the {key} style document")
@@ -568,8 +579,6 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         if not data:
             return []
         if "{" in data:
-            import re
-
             return re.findall(r"\{(.+?)\}", data)
         return data.split()
 
@@ -583,6 +592,12 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
     ) -> None:
         if image is None:
             label.configure(image=None, text=placeholder)
+            # CustomTkinter bug: configure(image=None) unsets label._image but doesn't
+            # pass image="" to the underlying tkinter.Label, so the tk widget keeps
+            # a reference to the PhotoImage. If it gets garbage collected, tk throws
+            # TclError: image "pyimageN" doesn't exist when it tries to redraw.
+            if hasattr(label, "_label"):
+                label._label.configure(image="")
             label._image = None
             return
 
@@ -748,16 +763,17 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
             self._lines_rows.append(placeholder)
             return
         for i, p in enumerate(self._lines_paths):
-            row = customtkinter.CTkLabel(
+            row = customtkinter.CTkButton(
                 self.lines_list_frame,
                 text=self._truncate_start_for_width(p, wpx),
                 anchor="w",
-                padx=8,
                 corner_radius=6,
                 fg_color=("#e9e9e9", "#2a2a2a"),
+                text_color=("black", "white"),
+                hover_color=("#d0d0d0", "#3a3a3a"),
+                command=lambda idx=i: self._select_lines_row(idx),
             )
             row.pack(fill="x", padx=2, pady=2)
-            row.bind("<Button-1>", lambda _e, idx=i: self._select_lines_row(idx))
             self._lines_rows.append(row)
         self._update_lines_row_styles()
 
@@ -769,9 +785,10 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
 
     def _update_lines_row_styles(self) -> None:
         for idx, row in enumerate(self._lines_rows):
-            row.configure(
-                fg_color=("#3B8ED0", "#1F6AA5") if idx == self._selected_lines_index else ("#e9e9e9", "#2a2a2a")
-            )
+            if idx == self._selected_lines_index:
+                row.configure(fg_color=("#3B8ED0", "#1F6AA5"), hover_color=("#2974A5", "#144C78"))
+            else:
+                row.configure(fg_color=("#e9e9e9", "#2a2a2a"), hover_color=("#d0d0d0", "#3a3a3a"))
 
     def _update_lines_preview(self) -> None:
         if not self._lines_paths:
@@ -850,16 +867,17 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
             self._image_rows.append(placeholder)
             return
         for i, p in enumerate(self._image_paths):
-            row = customtkinter.CTkLabel(
+            row = customtkinter.CTkButton(
                 self.images_list_frame,
                 text=self._truncate_start_for_width(p, wpx),
                 anchor="w",
-                padx=8,
                 corner_radius=6,
                 fg_color=("#e9e9e9", "#2a2a2a"),
+                text_color=("black", "white"),
+                hover_color=("#d0d0d0", "#3a3a3a"),
+                command=lambda idx=i: self._select_image_row(idx),
             )
             row.pack(fill="x", padx=2, pady=2)
-            row.bind("<Button-1>", lambda _e, idx=i: self._select_image_row(idx))
             self._image_rows.append(row)
         self._update_image_row_styles()
 
@@ -871,9 +889,10 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
 
     def _update_image_row_styles(self) -> None:
         for idx, row in enumerate(self._image_rows):
-            row.configure(
-                fg_color=("#3B8ED0", "#1F6AA5") if idx == self._selected_image_index else ("#e9e9e9", "#2a2a2a")
-            )
+            if idx == self._selected_image_index:
+                row.configure(fg_color=("#3B8ED0", "#1F6AA5"), hover_color=("#2974A5", "#144C78"))
+            else:
+                row.configure(fg_color=("#e9e9e9", "#2a2a2a"), hover_color=("#d0d0d0", "#3a3a3a"))
 
     def _update_images_preview(self) -> None:
         if not self._image_paths:
@@ -1063,7 +1082,9 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         self.progress_bar.pack(side="left", fill="x", expand=True, padx=(10, 10), pady=10)
         self.progress_bar.set(0)
 
-        self.convert_button.configure(text="Stop", fg_color="#D32F2F", hover_color="#B71C1C", command=self._stop_export)
+        self.convert_button.configure(
+            text="Stop \u25a0", fg_color="#D32F2F", hover_color="#B71C1C", command=self._stop_export
+        )
         self.convert_button.pack(side="right", padx=(0, 10), pady=10)
 
         self._run_export()
@@ -1104,7 +1125,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         if total > 0:
             self.progress_bar.set(current / total)
         if not self.abort_event.is_set():
-            self.convert_button.configure(text=f"Stop ({current}/{total})")
+            self.convert_button.configure(text=f"Stop \u25a0 ({current}/{total})")
         logger.debug("Export progress: {}/{} - {}", current, total, message)
 
     def _on_export_complete(self, message: str) -> None:
@@ -1174,6 +1195,10 @@ def main() -> None:
     """Entry point for the Vexy Lines Run application."""
     app = App()
     app.mainloop()
+
+
+def launch() -> None:
+    main()
 
 
 if __name__ == "__main__":

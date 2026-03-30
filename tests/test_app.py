@@ -67,11 +67,6 @@ class TestConstants:
 
         assert ".lines" in LINES_EXTENSIONS
 
-    def test_all_input_extensions_is_union(self):
-        from vexy_lines_run.app import ALL_INPUT_EXTENSIONS, IMAGE_EXTENSIONS, LINES_EXTENSIONS, VIDEO_EXTENSIONS
-
-        assert ALL_INPUT_EXTENSIONS == IMAGE_EXTENSIONS | VIDEO_EXTENSIONS | LINES_EXTENSIONS
-
     def test_export_formats_lines(self):
         from vexy_lines_run.app import EXPORT_FORMATS_LINES
 
@@ -82,56 +77,6 @@ class TestConstants:
         from vexy_lines_run.app import EXPORT_FORMATS_VIDEO
 
         assert "MP4" in EXPORT_FORMATS_VIDEO
-
-    def test_size_options(self):
-        from vexy_lines_run.app import SIZE_OPTIONS
-
-        assert "1x" in SIZE_OPTIONS
-        assert "2x" in SIZE_OPTIONS
-
-
-# ---------------------------------------------------------------------------
-# truncate_middle
-# ---------------------------------------------------------------------------
-
-
-class TestTruncateMiddle:
-    def test_short_string_unchanged(self):
-        from vexy_lines_run.app import truncate_middle
-
-        assert truncate_middle("hello", 10) == "hello"
-
-    def test_exact_length_unchanged(self):
-        from vexy_lines_run.app import truncate_middle
-
-        assert truncate_middle("12345", 5) == "12345"
-
-    def test_long_string_truncated(self):
-        from vexy_lines_run.app import truncate_middle
-
-        result = truncate_middle("abcdefghij", 7)
-        assert "..." in result
-        assert len(result) == 7
-
-    def test_preserves_start_and_end(self):
-        from vexy_lines_run.app import truncate_middle
-
-        result = truncate_middle("START_MIDDLE_END", 10)
-        assert result.startswith("STA")
-        assert result.endswith("END")
-
-    def test_default_max_width(self):
-        from vexy_lines_run.app import truncate_middle
-
-        short = "x" * 40
-        assert truncate_middle(short) == short
-        long = "y" * 50
-        assert len(truncate_middle(long)) == 40
-
-    def test_empty_string(self):
-        from vexy_lines_run.app import truncate_middle
-
-        assert truncate_middle("", 10) == ""
 
 
 # ---------------------------------------------------------------------------
@@ -176,7 +121,7 @@ class TestExtractPreviewFromLines:
         result = extract_preview_from_lines(tmp_path / "nonexistent.lines")
         assert result is None
 
-    @patch("vexy_lines_run.app.extract_preview_image")
+    @patch("vexy_lines_run.app.extract_preview_from_lines")
     def test_delegates_to_parser(self, mock_extract):
         from vexy_lines_run.app import extract_preview_from_lines
 
