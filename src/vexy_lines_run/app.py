@@ -146,12 +146,12 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         self._style_default_text: dict[str, str] = {"start": "Drop lines here", "end": "Drop lines here"}
 
         self._image_paths: list[str] = []
-        self._image_rows: list[customtkinter.CTkLabel] = []
+        self._image_rows: list[customtkinter.CTkBaseClass] = []
         self._selected_image_index: int | None = None
         self._images_raw_image: Image.Image | None = None
 
         self._lines_paths: list[str] = []
-        self._lines_rows: list[customtkinter.CTkLabel] = []
+        self._lines_rows: list[customtkinter.CTkBaseClass] = []
         self._selected_lines_index: int | None = None
         self._lines_raw_image: Image.Image | None = None
 
@@ -181,6 +181,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
 
         self.abort_event = threading.Event()
         self._is_exporting = False
+        self._export_preview_image: Image.Image | None = None
 
         self._build_layout()
         self._register_drop_targets()
@@ -213,9 +214,43 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         root.grid_columnconfigure(1, weight=1, uniform="a")
         root.grid_rowconfigure(0, weight=1)
         root.grid_rowconfigure(1, weight=0)
-        self._build_inputs_panel(root)
-        self._build_styles_panel(root)
+
+        self.content_frame = customtkinter.CTkFrame(root, fg_color="transparent")
+        self.content_frame.grid(row=0, column=0, columnspan=2, sticky="nsew")
+        self.content_frame.grid_columnconfigure(0, weight=2, uniform="a")
+        self.content_frame.grid_columnconfigure(1, weight=1, uniform="a")
+        self.content_frame.grid_rowconfigure(0, weight=1)
+
+        self.preview_frame = customtkinter.CTkFrame(root, fg_color="transparent")
+        self.preview_label = customtkinter.CTkLabel(self.preview_frame, text="")
+        self.preview_label.pack(fill="both", expand=True)
+
+        self._build_inputs_panel(self.content_frame)
+        self._build_styles_panel(self.content_frame)
         self._build_outputs_section(root)
+
+    def _show_export_preview(self) -> None:
+        self.content_frame.grid_remove()
+        self.preview_frame.grid(row=0, column=0, columnspan=2, sticky="nsew")
+
+    def _hide_export_preview(self) -> None:
+        self.preview_frame.grid_remove()
+        self.content_frame.grid(row=0, column=0, columnspan=2, sticky="nsew")
+        self._export_preview_image = None
+
+    def _on_export_preview(self, preview_bytes: bytes) -> None:
+        try:
+            self._export_preview_image = Image.open(io.BytesIO(preview_bytes))
+        except Exception:
+            return
+        self._redraw_export_preview()
+
+    def _redraw_export_preview(self) -> None:
+        if self._export_preview_image is None:
+            return
+        w = max(10, self.preview_frame.winfo_width())
+        h = max(10, self.preview_frame.winfo_height())
+        self._set_label_image(self.preview_label, self._export_preview_image, w, h)
 
     def _build_menu_bar(self) -> None:
         menu_bar = CTkMenuBar(self)
@@ -302,7 +337,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
     def _build_inputs_panel(self, parent: customtkinter.CTkFrame) -> None:
         self.inputs_tabview = customtkinter.CTkTabview(parent)
         self.inputs_tabview.grid(row=0, column=0, sticky="nsew", padx=(0, 6), pady=(0, 10))
-        self.add_ctk_tooltip(self.inputs_tabview, "Switch between input modes")
+
         lines_tab = self.inputs_tabview.add("Lines")
         images_tab = self.inputs_tabview.add("Images")
         video_tab = self.inputs_tabview.add("Video")
@@ -319,7 +354,6 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         content.grid_rowconfigure(0, weight=1)
         self.lines_list_frame = customtkinter.CTkScrollableFrame(content)
         self.lines_list_frame.grid(row=0, column=0, sticky="nsew", padx=(10, 5), pady=(10, 8))
-        self.add_ctk_tooltip(self.lines_list_frame, "Drop .lines files here")
 
         self.lines_preview_container = customtkinter.CTkFrame(content, fg_color="transparent")
         self.lines_preview_container.grid(row=0, column=1, sticky="nsew", padx=(5, 10), pady=(10, 8))
@@ -329,7 +363,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
 
         self.lines_preview_label = customtkinter.CTkLabel(self.lines_preview_container, text="Drop lines here")
         self.lines_preview_label.grid(row=0, column=0, sticky="nwe")
-        self.add_ctk_tooltip(self.lines_preview_label, "Preview of the selected line file")
+
         self._update_lines_preview()
         self._refresh_lines_list()
         controls = customtkinter.CTkFrame(tab)
@@ -354,7 +388,6 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         content.grid_rowconfigure(0, weight=1)
         self.images_list_frame = customtkinter.CTkScrollableFrame(content)
         self.images_list_frame.grid(row=0, column=0, sticky="nsew", padx=(10, 5), pady=(10, 8))
-        self.add_ctk_tooltip(self.images_list_frame, "Drop image files here")
 
         self.images_preview_container = customtkinter.CTkFrame(content, fg_color="transparent")
         self.images_preview_container.grid(row=0, column=1, sticky="nsew", padx=(5, 10), pady=(10, 8))
@@ -364,7 +397,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
 
         self.images_preview_label = customtkinter.CTkLabel(self.images_preview_container, text="Drop images here")
         self.images_preview_label.grid(row=0, column=0, sticky="nwe")
-        self.add_ctk_tooltip(self.images_preview_label, "Preview of the selected image")
+
         self._update_images_preview()
         self._refresh_image_list()
         controls = customtkinter.CTkFrame(tab)
@@ -396,7 +429,6 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
 
         self.video_first_preview = customtkinter.CTkLabel(self.video_first_preview_container, text="")
         self.video_first_preview.grid(row=0, column=0, sticky="nwe")
-        self.add_ctk_tooltip(self.video_first_preview, "Preview of the first frame in range")
 
         self.video_last_preview_container = customtkinter.CTkFrame(previews, fg_color="transparent")
         self.video_last_preview_container.grid(row=0, column=1, sticky="nsew", padx=(5, 10), pady=(10, 8))
@@ -406,7 +438,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
 
         self.video_last_preview = customtkinter.CTkLabel(self.video_last_preview_container, text="")
         self.video_last_preview.grid(row=0, column=0, sticky="nwe")
-        self.add_ctk_tooltip(self.video_last_preview, "Preview of the last frame in range")
+
         self._update_video_previews()
         self.video_first_preview.configure(text="")
         self.video_last_preview.configure(text="")
@@ -451,7 +483,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
     def _build_styles_panel(self, parent: customtkinter.CTkFrame) -> None:
         self.styles_tabview = customtkinter.CTkTabview(parent)
         self.styles_tabview.grid(row=0, column=1, sticky="nsew", padx=(6, 0), pady=(0, 10))
-        self.add_ctk_tooltip(self.styles_tabview, "Set start and end styles for interpolation")
+
         self._build_style_picker(self.styles_tabview.add("Style"), "start")
         self._build_style_picker(self.styles_tabview.add("End Style"), "end")
 
@@ -464,7 +496,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         preview.grid(row=0, column=0, sticky="nwe", padx=10, pady=(10, 8))
         self._set_label_image(preview, None, 300, 240, placeholder="Drop lines here")
         self._style_previews[key] = preview
-        self.add_ctk_tooltip(preview, f"Preview of the {key} style document")
+
         controls = customtkinter.CTkFrame(tab)
         controls.pack(fill="x", expand=False, side="bottom", padx=8, pady=(0, 8))
         open_style_btn = customtkinter.CTkButton(
@@ -635,6 +667,8 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         self._redraw_video_previews()
         self._set_style_preview_image("start")
         self._set_style_preview_image("end")
+        if self._is_exporting:
+            self._redraw_export_preview()
 
     def _retruncate_labels(self) -> None:
         if self._video_path:
@@ -1088,6 +1122,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
 
         self._is_exporting = True
         self.abort_event.clear()
+        self._show_export_preview()
 
         self.convert_button.pack_forget()
         self.progress_bar.pack(side="left", fill="x", expand=True, padx=(10, 10), pady=10)
@@ -1124,6 +1159,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
                 "frame_range": self._video_range if mode == "video" else None,
                 "abort_event": self.abort_event,
                 "on_progress": lambda c, t, m: self.after(0, self._on_export_progress, c, t, m),
+                "on_preview": lambda b: self.after(0, self._on_export_preview, b),
                 "on_complete": lambda m: self.after(0, self._on_export_complete, m),
                 "on_error": lambda e: self.after(0, self._on_export_error, e),
             },
@@ -1141,6 +1177,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
 
     def _on_export_complete(self, message: str) -> None:
         self._is_exporting = False
+        self._hide_export_preview()
         self.progress_bar.pack_forget()
         self.convert_button.configure(
             text="Export \u25b6", fg_color="#2E7D32", hover_color="#1B5E20", command=self._do_export, state="normal"
@@ -1148,7 +1185,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         logger.info("Export finished: {}", message)
         if self._output_path:
             try:
-                from showinfm import show_in_file_manager  # noqa: PLC0415
+                from showinfm.showinfm import show_in_file_manager  # noqa: PLC0415
 
                 show_in_file_manager(self._output_path)
             except Exception:
@@ -1156,6 +1193,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
 
     def _on_export_error(self, error: str) -> None:
         self._is_exporting = False
+        self._hide_export_preview()
         self.progress_bar.pack_forget()
         self.convert_button.configure(
             text="Export \u25b6", fg_color="#2E7D32", hover_color="#1B5E20", command=self._do_export, state="normal"

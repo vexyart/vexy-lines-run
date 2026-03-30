@@ -5,12 +5,13 @@ Dispatches export jobs for three input modes (lines, images, video) and
 calls into the MCP style engine from ``vexy_lines_api``.
 
 All heavy work runs on a background thread started by
-:meth:`~vexy_lines_run.app.App._on_export`.  Three callbacks communicate
+:meth:`~vexy_lines_run.app.App._on_export`.  Four callbacks communicate
 results back to the GUI thread:
 
 - ``on_progress(current, total, message)`` — integer progress counters
 - ``on_complete(message)`` — called once on success
 - ``on_error(message)`` — called once on failure
+- ``on_preview(data)`` — PNG-encoded bytes of the latest rendered output
 
 Callbacks are always invoked via ``root.after(0, ...)`` in the App layer, so
 they are safe to call from the worker thread without extra locking.
@@ -69,6 +70,7 @@ def process_export(
     on_progress: Callable[[int, int, str], None] | None = None,
     on_complete: Callable[[str], None] | None = None,
     on_error: Callable[[str], None] | None = None,
+    on_preview: Callable[[bytes], None] | None = None,
 ) -> None:
     """Dispatch an export job."""
     try:
@@ -83,6 +85,7 @@ def process_export(
                 relative_style=relative_style,
                 abort_event=abort_event,
                 on_progress=on_progress,
+                on_preview=on_preview,
             )
         elif mode == "images":
             _process_images(
@@ -95,6 +98,7 @@ def process_export(
                 relative_style=relative_style,
                 abort_event=abort_event,
                 on_progress=on_progress,
+                on_preview=on_preview,
             )
         elif mode == "video":
             _process_video(
@@ -109,6 +113,7 @@ def process_export(
                 relative_style=relative_style,
                 abort_event=abort_event,
                 on_progress=on_progress,
+                on_preview=on_preview,
             )
         else:
             _report_error(on_error, f"Unknown mode: {mode}")
@@ -139,6 +144,7 @@ def _process_lines(
     relative_style: bool = False,
     abort_event: threading.Event | None = None,
     on_progress: Callable[[int, int, str], None] | None,
+    on_preview: Callable[[bytes], None] | None = None,
 ) -> None:
     """Process .lines file exports."""
     total = len(input_paths)
@@ -159,6 +165,13 @@ def _process_lines(
             if fmt == "LINES":
                 _report_progress(on_progress, idx, total, f"Copying {Path(path).name}")
                 shutil.copy2(path, out_dir / Path(path).name)
+                try:
+                    doc = parse_lines(path)
+                    preview_data = doc.preview_image_data or doc.source_image_data
+                    if preview_data:
+                        _report_preview(on_preview, preview_data)
+                except Exception:
+                    pass
                 continue
 
             if style is not None:
@@ -184,6 +197,11 @@ def _process_lines(
                     tmp_path = Path(tmp.name)
                 try:
                     svg_text = apply_style(client, current_style, str(tmp_path), relative=relative_style)
+                    w, h = _estimate_svg_dimensions(svg_text)
+                    pil_img = svg_to_pil(svg_text, w, h)
+                    preview_buf = io.BytesIO()
+                    pil_img.save(preview_buf, format="PNG")
+                    _report_preview(on_preview, preview_buf.getvalue())
                     if fmt == "SVG":
                         (out_dir / f"{stem}.svg").write_text(svg_text, encoding="utf-8")
                     elif fmt in ("PNG", "JPG"):
@@ -200,12 +218,14 @@ def _process_lines(
                     elif fmt == "PNG":
                         dest = out_dir / f"{stem}.png"
                         client.export_png(str(dest))
+                        _report_preview(on_preview, dest.read_bytes())
                         if multiplier > 1:
                             file_bytes = dest.read_bytes()
                             _save_image_bytes(file_bytes, dest, fmt, multiplier)
                     elif fmt == "JPG":
                         dest = out_dir / f"{stem}.jpg"
                         client.export_jpeg(str(dest))
+                        _report_preview(on_preview, dest.read_bytes())
                         if multiplier > 1:
                             file_bytes = dest.read_bytes()
                             _save_image_bytes(file_bytes, dest, fmt, multiplier)
@@ -226,6 +246,7 @@ def _process_images(
     relative_style: bool = False,
     abort_event: threading.Event | None = None,
     on_progress: Callable[[int, int, str], None] | None,
+    on_preview: Callable[[bytes], None] | None = None,
 ) -> None:
     """Process raster image exports."""
     total = len(input_paths)
@@ -251,16 +272,21 @@ def _process_images(
                         current_style = interpolate_style(style, end_style, idx / (total - 1))
 
                     res = apply_style(client, current_style, path, relative=relative_style)
+                    final_svg = res if isinstance(res, str) else res.decode()
+                    w, h = _estimate_svg_dimensions(final_svg)
+                    pil_img = svg_to_pil(final_svg, w, h)
+                    preview_buf = io.BytesIO()
+                    pil_img.save(preview_buf, format="PNG")
+                    _report_preview(on_preview, preview_buf.getvalue())
 
                     if fmt == "SVG":
-                        final_svg = res if isinstance(res, str) else res.decode()
                         (out_dir / f"{stem}.svg").write_text(final_svg, encoding="utf-8")
                     else:
-                        svg_str = res if isinstance(res, str) else res.decode()
-                        _save_svg_as_image(svg_str, out_dir / f"{stem}.{fmt.lower()}", fmt, multiplier)
+                        _save_svg_as_image(final_svg, out_dir / f"{stem}.{fmt.lower()}", fmt, multiplier)
                 except Exception:
                     logger.opt(exception=True).warning("Style application failed for {}", path)
                     img_data = Path(path).read_bytes()
+                    _report_preview(on_preview, img_data)
                     _save_image_bytes(img_data, out_dir / f"{stem}.{fmt.lower()}", fmt, multiplier)
     else:
         for idx, path in enumerate(input_paths):
@@ -268,6 +294,7 @@ def _process_images(
                 raise Exception("Export aborted by user")
             _report_progress(on_progress, idx, total, f"Exporting {Path(path).name}")
             img_data = Path(path).read_bytes()
+            _report_preview(on_preview, img_data)
             _save_image_bytes(img_data, out_dir / f"{Path(path).stem}.{fmt.lower()}", fmt, multiplier)
 
     _report_progress(on_progress, total, total, "Done")
@@ -286,6 +313,7 @@ def _process_video(
     relative_style: bool = False,
     abort_event: threading.Event | None = None,
     on_progress: Callable[[int, int, str], None] | None,
+    on_preview: Callable[[bytes], None] | None = None,
 ) -> None:
     """Dispatch video processing."""
     if fmt == "MP4":
@@ -300,6 +328,7 @@ def _process_video(
             relative_style=relative_style,
             abort_event=abort_event,
             on_progress=on_progress,
+            on_preview=on_preview,
         )
     else:
         _process_video_to_frames(
@@ -313,6 +342,7 @@ def _process_video(
             relative_style=relative_style,
             abort_event=abort_event,
             on_progress=on_progress,
+            on_preview=on_preview,
         )
 
 
@@ -328,6 +358,7 @@ def _process_video_to_mp4(
     relative_style: bool = False,
     abort_event: threading.Event | None = None,
     on_progress: Callable[[int, int, str], None] | None,
+    on_preview: Callable[[bytes], None] | None = None,
 ) -> None:
     """Full video-to-video processing."""
     info = probe(input_path)
@@ -344,6 +375,11 @@ def _process_video_to_mp4(
     def _on_frame(current: int, _total: int) -> None:
         _report_progress(on_progress, current, total, "Processing video...")
 
+    def _on_frame_image(pil_image: Any) -> None:
+        buf = io.BytesIO()
+        pil_image.save(buf, format="PNG")
+        _report_preview(on_preview, buf.getvalue())
+
     process_video_with_style(
         input_path=input_path,
         output_path=output_path,
@@ -356,6 +392,7 @@ def _process_video_to_mp4(
         relative=relative_style,
         abort_event=abort_event,
         on_progress=_on_frame,
+        on_frame_image=_on_frame_image if on_preview else None,
     )
 
 
@@ -371,6 +408,7 @@ def _process_video_to_frames(
     relative_style: bool = False,
     abort_event: threading.Event | None = None,
     on_progress: Callable[[int, int, str], None] | None,
+    on_preview: Callable[[bytes], None] | None = None,
 ) -> None:
     """Extract styled video frames."""
     info = probe(input_path)
@@ -404,6 +442,8 @@ def _process_video_to_frames(
                 # Encode frame to PNG bytes
                 _, buf = cv2.imencode(".png", frame)
                 frame_bytes: bytes = buf.tobytes()
+                if style is None:
+                    _report_preview(on_preview, frame_bytes)
 
                 if style is not None:
                     try:
@@ -418,6 +458,15 @@ def _process_video_to_frames(
                         try:
                             res = apply_style(client, current_style, str(tmp_path), relative=relative_style)
                             frame_bytes = res if isinstance(res, bytes) else res.encode()
+                            try:
+                                svg_str = frame_bytes.decode() if isinstance(frame_bytes, bytes) else frame_bytes
+                                fw, fh = _estimate_svg_dimensions(svg_str)
+                                preview_img = svg_to_pil(svg_str, fw, fh)
+                                pbuf = io.BytesIO()
+                                preview_img.save(pbuf, format="PNG")
+                                _report_preview(on_preview, pbuf.getvalue())
+                            except Exception:
+                                pass
                         finally:
                             tmp_path.unlink(missing_ok=True)
                     except Exception:
@@ -525,3 +574,10 @@ def _report_error(callback: Callable[[str], None] | None, message: str) -> None:
     if callback is not None:
         with contextlib.suppress(Exception):
             callback(message)
+
+
+def _report_preview(callback: Callable[[bytes], None] | None, data: bytes) -> None:
+    """Report preview image."""
+    if callback is not None:
+        with contextlib.suppress(Exception):
+            callback(data)
