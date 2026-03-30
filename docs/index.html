@@ -324,6 +324,39 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#on-macos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        On macOS
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#on-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        On Windows
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#from-python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        From Python
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#next-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -526,6 +559,39 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#on-macos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        On macOS
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#on-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        On Windows
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#from-python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        From Python
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#next-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -566,10 +632,15 @@
 <p>Select a primary style from any <code>.lines</code> file. Optionally select an end style -- the two interpolate linearly across the input sequence for smooth transitions.</p>
 <p>Export runs on a background thread. The progress bar updates live. The UI stays responsive.</p>
 <h2 id="quick-start">Quick start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>vexy-lines-run
-vexy-lines-gui
+<h2 id="on-macos">On macOS<a class="headerlink" href="#on-macos" title="Permanent link">&para;</a></h2>
+<p>Open Terminal app from /Applications/Utilities/ then paste this line and press Enter: </p>
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-LsSf<span class="w"> </span>https://astral.sh/uv/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/.local/bin:</span><span class="nv">$PATH</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>uvx<span class="w"> </span>--python<span class="w"> </span><span class="m">3</span>.12<span class="w"> </span>vexy-lines-run
 </code></pre></div>
-<p>Or from Python:</p>
+<h2 id="on-windows">On Windows<a class="headerlink" href="#on-windows" title="Permanent link">&para;</a></h2>
+<p>Open Command Prompt from Start menu, then paste this line and press Enter: </p>
+<div class="highlight"><pre><span></span><code>powershell -ExecutionPolicy ByPass -c <span class="s2">&quot;irm https://astral.sh/uv/install.ps1 | iex; $env:Path = \&quot;</span>$HOME\.local\bin;$HOME\AppData\Roaming\uv;$env:Path\<span class="s2">&quot;; uvx --python 3.12 vexy-lines-run&quot;</span>
+</code></pre></div>
+<h2 id="from-python">From Python<a class="headerlink" href="#from-python" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">vexy_lines_run</span><span class="w"> </span><span class="kn">import</span> <span class="n">launch</span>
 <span class="n">launch</span><span class="p">()</span>
 </code></pre></div>

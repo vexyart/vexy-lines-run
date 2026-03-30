@@ -11,7 +11,7 @@
 name = "vexy-lines-run"
 description = "GUI desktop application for Vexy Lines style transfer"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.11,<3.14"
 keywords = [
     "vexy-lines",
     "vector-art",

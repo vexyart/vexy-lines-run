@@ -23,12 +23,24 @@ Export runs on a background thread. The progress bar updates live. The UI stays 
 
 ## Quick start
 
-```bash
-pip install vexy-lines-run
-vexy-lines-gui
+
+## On macOS
+
+Open Terminal app from /Applications/Utilities/ then paste this line and press Enter: 
+
+```sh
+curl -LsSf https://astral.sh/uv/install.sh | sh && export PATH="$HOME/.local/bin:$PATH" && uvx --python 3.12 vexy-lines-run
 ```
 
-Or from Python:
+## On Windows
+
+Open Command Prompt from Start menu, then paste this line and press Enter: 
+
+```bat
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex; $env:Path = \"$HOME\.local\bin;$HOME\AppData\Roaming\uv;$env:Path\"; uvx --python 3.12 vexy-lines-run"
+```
+
+## From Python
 
 ```python
 from vexy_lines_run import launch
