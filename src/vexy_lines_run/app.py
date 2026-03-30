@@ -143,11 +143,14 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         self.geometry("1024x768")
         self.minsize(960, 480)
 
+        self._has_dnd: bool = bool(getattr(self, "TkdndVersion", None))
+
         self._style_paths: dict[str, str | None] = {"start": None, "end": None}
         self._style_labels: dict[str, customtkinter.CTkLabel] = {}
         self._style_previews: dict[str, customtkinter.CTkLabel] = {}
         self._style_raw_images: dict[str, Image.Image | None] = {"start": None, "end": None}
-        self._style_default_text: dict[str, str] = {"start": "Drop lines here", "end": "Drop lines here"}
+        _style_hint = "Drop lines here" if self._has_dnd else "Click Open Lines button"
+        self._style_default_text: dict[str, str] = {"start": _style_hint, "end": _style_hint}
 
         self._image_paths: list[str] = []
         self._image_rows: list[customtkinter.CTkBaseClass] = []
@@ -365,7 +368,8 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         self.lines_preview_container.grid_rowconfigure(0, weight=1)
         self.lines_preview_container.grid_columnconfigure(0, weight=1)
 
-        self.lines_preview_label = customtkinter.CTkLabel(self.lines_preview_container, text="Drop lines here")
+        _lines_hint = "Drop lines here" if self._has_dnd else "Click Add Lines button"
+        self.lines_preview_label = customtkinter.CTkLabel(self.lines_preview_container, text=_lines_hint)
         self.lines_preview_label.grid(row=0, column=0, sticky="nwe")
 
         self._update_lines_preview()
@@ -399,7 +403,8 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         self.images_preview_container.grid_rowconfigure(0, weight=1)
         self.images_preview_container.grid_columnconfigure(0, weight=1)
 
-        self.images_preview_label = customtkinter.CTkLabel(self.images_preview_container, text="Drop images here")
+        _images_hint = "Drop images here" if self._has_dnd else "Click Add Images button"
+        self.images_preview_label = customtkinter.CTkLabel(self.images_preview_container, text=_images_hint)
         self.images_preview_label.grid(row=0, column=0, sticky="nwe")
 
         self._update_images_preview()
@@ -431,7 +436,8 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         self.video_first_preview_container.grid_rowconfigure(0, weight=1)
         self.video_first_preview_container.grid_columnconfigure(0, weight=1)
 
-        self.video_first_preview = customtkinter.CTkLabel(self.video_first_preview_container, text="")
+        _video_hint = "Drop video here" if self._has_dnd else "Click Open Video button"
+        self.video_first_preview = customtkinter.CTkLabel(self.video_first_preview_container, text=_video_hint)
         self.video_first_preview.grid(row=0, column=0, sticky="nwe")
 
         self.video_last_preview_container = customtkinter.CTkFrame(previews, fg_color="transparent")
@@ -444,8 +450,6 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         self.video_last_preview.grid(row=0, column=0, sticky="nwe")
 
         self._update_video_previews()
-        self.video_first_preview.configure(text="")
-        self.video_last_preview.configure(text="")
         controls = customtkinter.CTkFrame(tab)
         controls.pack(fill="x", expand=False, side="bottom", padx=8, pady=(0, 8))
         range_row = customtkinter.CTkFrame(controls, fg_color="transparent")
@@ -496,9 +500,10 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         content.pack(fill="both", expand=True, padx=8, pady=(8, 4))
         content.grid_rowconfigure(0, weight=1)
         content.grid_columnconfigure(0, weight=1)
-        preview = customtkinter.CTkLabel(content, text="Drop lines here")
+        _style_hint = self._style_default_text[key]
+        preview = customtkinter.CTkLabel(content, text=_style_hint)
         preview.grid(row=0, column=0, sticky="nwe", padx=10, pady=(10, 8))
-        self._set_label_image(preview, None, 300, 240, placeholder="Drop lines here")
+        self._set_label_image(preview, None, 300, 240, placeholder=_style_hint)
         self._style_previews[key] = preview
 
         controls = customtkinter.CTkFrame(tab)
@@ -731,7 +736,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         except (KeyError, AttributeError):
             w, h = 300, 240
         self._set_label_image(
-            self._style_previews[key], self._style_raw_images.get(key), w, h, placeholder="Drop lines here"
+            self._style_previews[key], self._style_raw_images.get(key), w, h, placeholder=self._style_default_text[key]
         )
 
     def _on_style_drop(self, event: tk.Event, key: str) -> None:
@@ -791,9 +796,10 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         self._lines_rows.clear()
         wpx = max(10, self.lines_list_frame.winfo_width() - 24)
         if not self._lines_paths:
+            _lines_hint = "Drop lines here" if self._has_dnd else "Click Add Lines button"
             placeholder = customtkinter.CTkLabel(
                 self.lines_list_frame,
-                text="Drop lines here",
+                text=_lines_hint,
                 font=(self._font.actual("family"), 12, "italic"),
                 text_color=("#888888", "#777777"),
             )
@@ -845,7 +851,8 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
     def _redraw_lines_preview(self) -> None:
         w = max(10, self.lines_preview_container.winfo_width())
         h = max(10, self.lines_preview_container.winfo_height())
-        self._set_label_image(self.lines_preview_label, self._lines_raw_image, w, h, placeholder="Drop lines here")
+        _lines_hint = "Drop lines here" if self._has_dnd else "Click Add Lines button"
+        self._set_label_image(self.lines_preview_label, self._lines_raw_image, w, h, placeholder=_lines_hint)
 
     def _on_lines_drop(self, event: tk.Event) -> None:
         if data := getattr(event, "data", ""):
@@ -895,9 +902,10 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         self._image_rows.clear()
         wpx = max(10, self.images_list_frame.winfo_width() - 24)
         if not self._image_paths:
+            _images_hint = "Drop images here" if self._has_dnd else "Click Add Images button"
             placeholder = customtkinter.CTkLabel(
                 self.images_list_frame,
-                text="Drop images here",
+                text=_images_hint,
                 font=(self._font.actual("family"), 12, "italic"),
                 text_color=("#888888", "#777777"),
             )
@@ -949,7 +957,8 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
     def _redraw_images_preview(self) -> None:
         w = max(10, self.images_preview_container.winfo_width())
         h = max(10, self.images_preview_container.winfo_height())
-        self._set_label_image(self.images_preview_label, self._images_raw_image, w, h, placeholder="Drop images here")
+        _images_hint = "Drop images here" if self._has_dnd else "Click Add Images button"
+        self._set_label_image(self.images_preview_label, self._images_raw_image, w, h, placeholder=_images_hint)
 
     def _on_images_drop(self, event: tk.Event) -> None:
         if data := getattr(event, "data", ""):
@@ -1062,9 +1071,10 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         self._redraw_video_previews()
 
     def _redraw_video_previews(self) -> None:
+        _video_hint = "Drop video here" if self._has_dnd else "Click Open Video button"
         w1 = max(10, self.video_first_preview_container.winfo_width())
         h1 = max(10, self.video_first_preview_container.winfo_height())
-        self._set_label_image(self.video_first_preview, self._video_first_raw_image, w1, h1)
+        self._set_label_image(self.video_first_preview, self._video_first_raw_image, w1, h1, placeholder=_video_hint)
 
         w2 = max(10, self.video_last_preview_container.winfo_width())
         h2 = max(10, self.video_last_preview_container.winfo_height())
