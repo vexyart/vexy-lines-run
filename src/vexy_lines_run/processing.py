@@ -18,11 +18,12 @@ they are safe to call from the worker thread without extra locking.
 
 from __future__ import annotations
 
+import contextlib
 import io
 import re
 import shutil
 import tempfile
-import time
+import threading
 from collections.abc import Callable
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
@@ -32,7 +33,6 @@ from loguru import logger
 from PIL import Image
 
 from vexy_lines import parse as parse_lines
-from vexy_lines.parse import LinesDocument
 from vexy_lines_api import (
     MCPClient,
     apply_style,
@@ -43,7 +43,6 @@ from vexy_lines_api import (
 from vexy_lines_api.video import (
     _svg_to_pil,
     probe,
-    process_video,
     process_video_with_style,
 )
 
@@ -69,31 +68,12 @@ def process_export(
     audio: bool = True,
     frame_range: tuple[int, int] | None = None,
     relative_style: bool = False,
+    abort_event: threading.Event | None = None,
     on_progress: Callable[[int, int, str], None] | None = None,
     on_complete: Callable[[str], None] | None = None,
     on_error: Callable[[str], None] | None = None,
 ) -> None:
-    """Dispatch an export job.
-
-    Called from a background thread by :class:`~vexy_lines_run.app.App`.
-
-    Args:
-        mode: One of ``"lines"``, ``"images"``, ``"video"``.
-        input_paths: Paths to input files.
-        style_path: Path to the style ``.lines`` file, or ``None``.
-        end_style_path: Path to the end-style ``.lines`` file, or ``None``.
-        output_path: Output file or directory path.
-        fmt: Export format (``"SVG"``, ``"PNG"``, ``"JPG"``, ``"MP4"``,
-            ``"LINES"``).
-        size: Size multiplier string (``"1x"``, ``"2x"``).
-        audio: Whether to include audio (video mode only).
-        frame_range: Optional ``(start, end)`` frame indices for video.
-        relative_style: Scale spatial fill parameters to match the target
-            image/frame dimensions.  Default ``False`` (absolute mode).
-        on_progress: Progress callback ``(fraction, message)``.
-        on_complete: Success callback ``(message)``.
-        on_error: Error callback ``(error_message)``.
-    """
+    """Dispatch an export job."""
     try:
         if mode == "lines":
             _process_lines(
@@ -104,6 +84,7 @@ def process_export(
                 fmt=fmt,
                 size=size,
                 relative_style=relative_style,
+                abort_event=abort_event,
                 on_progress=on_progress,
             )
         elif mode == "images":
@@ -115,6 +96,7 @@ def process_export(
                 fmt=fmt,
                 size=size,
                 relative_style=relative_style,
+                abort_event=abort_event,
                 on_progress=on_progress,
             )
         elif mode == "video":
@@ -128,6 +110,7 @@ def process_export(
                 audio=audio,
                 frame_range=frame_range,
                 relative_style=relative_style,
+                abort_event=abort_event,
                 on_progress=on_progress,
             )
         else:
@@ -136,8 +119,11 @@ def process_export(
 
         _report_complete(on_complete, f"Export complete ({fmt})")
     except Exception as exc:
-        logger.opt(exception=True).error("Export failed")
-        _report_error(on_error, str(exc))
+        if str(exc) == "Export aborted by user":
+            _report_error(on_error, str(exc))
+        else:
+            logger.opt(exception=True).error("Export failed")
+            _report_error(on_error, str(exc))
 
 
 # ---------------------------------------------------------------------------
@@ -154,6 +140,7 @@ def _process_lines(
     fmt: str,
     size: str,
     relative_style: bool = False,
+    abort_event: threading.Event | None = None,
     on_progress: Callable[[int, int, str], None] | None,
 ) -> None:
     """Process .lines file exports."""
@@ -162,38 +149,62 @@ def _process_lines(
     out_dir.mkdir(parents=True, exist_ok=True)
     multiplier = _parse_size_multiplier(size)
 
-    for idx, path in enumerate(input_paths):
-        _report_progress(on_progress, idx, total, f"Processing {Path(path).name}")
+    style = _load_style(style_path) if style_path else None
+    end_style = _load_style(end_style_path) if end_style_path else None
 
-        if fmt == "LINES":
-            # Copy the .lines file directly
-            shutil.copy2(path, out_dir / Path(path).name)
-            continue
+    if style is not None:
+        with MCPClient() as client:
+            for idx, path in enumerate(input_paths):
+                if abort_event and abort_event.is_set():
+                    raise Exception("Export aborted by user")
 
-        # Extract preview or source image bytes from the parsed document
-        try:
-            doc = parse_lines(path)
-        except Exception:
-            logger.opt(exception=True).warning("Could not parse {}", path)
-            continue
-        img_bytes: bytes | None = doc.source_image_data
-        if img_bytes is None:
-            img_bytes = doc.preview_image_data
+                _report_progress(on_progress, idx, total, f"Processing {Path(path).name}")
 
-        if img_bytes is None:
-            logger.warning("No image data in {}", path)
-            continue
+                if fmt == "LINES":
+                    shutil.copy2(path, out_dir / Path(path).name)
+                    continue
 
-        # Apply style if provided
-        if style_path is not None:
-            img_bytes = _apply_style_to_bytes(img_bytes, style_path, end_style_path, relative=relative_style)
+                try:
+                    doc = parse_lines(path)
+                except Exception:
+                    logger.opt(exception=True).warning("Could not parse {}", path)
+                    continue
 
-        stem = Path(path).stem
-        if fmt in ("PNG", "JPG"):
-            _save_image_bytes(img_bytes, out_dir / f"{stem}.{fmt.lower()}", fmt, multiplier)
-        elif fmt == "SVG":
-            # SVG bytes written directly
-            (out_dir / f"{stem}.svg").write_bytes(img_bytes if isinstance(img_bytes, bytes) else img_bytes.encode())
+                img_bytes: bytes | None = doc.source_image_data or doc.preview_image_data
+                if img_bytes is None:
+                    logger.warning("No image data in {}", path)
+                    continue
+
+                current_style = style
+                if end_style is not None and styles_compatible(style, end_style) and total > 1:
+                    current_style = interpolate_style(style, end_style, idx / (total - 1))
+
+                stem = Path(path).stem
+                with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as tmp:
+                    tmp.write(img_bytes)
+                    tmp_path = Path(tmp.name)
+                try:
+                    res: str | bytes = apply_style(client, current_style, str(tmp_path), relative=relative_style)
+                    final_bytes = res if isinstance(res, bytes) else res.encode()
+                    if fmt in ("PNG", "JPG"):
+                        _save_image_bytes(final_bytes, out_dir / f"{stem}.{fmt.lower()}", fmt, multiplier)
+                    elif fmt == "SVG":
+                        (out_dir / f"{stem}.svg").write_bytes(final_bytes)
+                finally:
+                    tmp_path.unlink(missing_ok=True)
+    else:
+        for idx, path in enumerate(input_paths):
+            if abort_event and abort_event.is_set():
+                raise Exception("Export aborted by user")
+            _report_progress(on_progress, idx, total, f"Exporting {Path(path).name}")
+            if fmt == "LINES":
+                shutil.copy2(path, out_dir / Path(path).name)
+            else:
+                with contextlib.suppress(Exception):
+                    doc = parse_lines(path)
+                    img_bytes = doc.preview_image_data
+                    if img_bytes:
+                        _save_image_bytes(img_bytes, out_dir / f"{Path(path).stem}.{fmt.lower()}", fmt, multiplier)
 
     _report_progress(on_progress, total, total, "Done")
 
@@ -207,50 +218,51 @@ def _process_images(
     fmt: str,
     size: str,
     relative_style: bool = False,
+    abort_event: threading.Event | None = None,
     on_progress: Callable[[int, int, str], None] | None,
 ) -> None:
-    """Process raster image exports via the MCP style engine."""
+    """Process raster image exports."""
     total = len(input_paths)
     out_dir = Path(output_path)
     out_dir.mkdir(parents=True, exist_ok=True)
     multiplier = _parse_size_multiplier(size)
 
-    # Load styles once
     style = _load_style(style_path) if style_path else None
     end_style = _load_style(end_style_path) if end_style_path else None
 
-    for idx, path in enumerate(input_paths):
-        _report_progress(on_progress, idx, total, f"Styling {Path(path).name}")
+    if style is not None:
+        with MCPClient() as client:
+            for idx, path in enumerate(input_paths):
+                if abort_event and abort_event.is_set():
+                    raise Exception("Export aborted by user")
 
-        stem = Path(path).stem
+                _report_progress(on_progress, idx, total, f"Styling {Path(path).name}")
 
-        if style is not None:
-            try:
-                current_style = style
-                if end_style is not None and styles_compatible(style, end_style) and total > 1:
-                    t = idx / (total - 1)
-                    current_style = interpolate_style(style, end_style, t)
+                stem = Path(path).stem
+                try:
+                    current_style = style
+                    if end_style is not None and styles_compatible(style, end_style) and total > 1:
+                        current_style = interpolate_style(style, end_style, idx / (total - 1))
 
-                with MCPClient() as client:
-                    svg_string = apply_style(
-                        client,
-                        current_style,
-                        path,
-                        relative=relative_style,
-                    )
+                    res = apply_style(client, current_style, path, relative=relative_style)
 
-                if fmt == "SVG":
-                    (out_dir / f"{stem}.svg").write_text(svg_string, encoding="utf-8")
-                else:
-                    _save_svg_as_image(svg_string, out_dir / f"{stem}.{fmt.lower()}", fmt, multiplier)
-                continue
-            except Exception:
-                logger.opt(exception=True).warning("Style application failed for {}", path)
-
-        # No style — just copy the image with optional resize
-        img_data = Path(path).read_bytes()
-        ext = fmt.lower()
-        _save_image_bytes(img_data, out_dir / f"{stem}.{ext}", fmt, multiplier)
+                    if fmt == "SVG":
+                        final_svg = res if isinstance(res, str) else res.decode()
+                        (out_dir / f"{stem}.svg").write_text(final_svg, encoding="utf-8")
+                    else:
+                        svg_str = res if isinstance(res, str) else res.decode()
+                        _save_svg_as_image(svg_str, out_dir / f"{stem}.{fmt.lower()}", fmt, multiplier)
+                except Exception:
+                    logger.opt(exception=True).warning("Style application failed for {}", path)
+                    img_data = Path(path).read_bytes()
+                    _save_image_bytes(img_data, out_dir / f"{stem}.{fmt.lower()}", fmt, multiplier)
+    else:
+        for idx, path in enumerate(input_paths):
+            if abort_event and abort_event.is_set():
+                raise Exception("Export aborted by user")
+            _report_progress(on_progress, idx, total, f"Exporting {Path(path).name}")
+            img_data = Path(path).read_bytes()
+            _save_image_bytes(img_data, out_dir / f"{Path(path).stem}.{fmt.lower()}", fmt, multiplier)
 
     _report_progress(on_progress, total, total, "Done")
 
@@ -266,9 +278,10 @@ def _process_video(
     audio: bool,
     frame_range: tuple[int, int] | None,
     relative_style: bool = False,
+    abort_event: threading.Event | None = None,
     on_progress: Callable[[int, int, str], None] | None,
 ) -> None:
-    """Dispatch video processing to the appropriate handler."""
+    """Dispatch video processing."""
     if fmt == "MP4":
         _process_video_to_mp4(
             input_path=input_path,
@@ -279,6 +292,7 @@ def _process_video(
             audio=audio,
             frame_range=frame_range,
             relative_style=relative_style,
+            abort_event=abort_event,
             on_progress=on_progress,
         )
     else:
@@ -291,6 +305,7 @@ def _process_video(
             size=size,
             frame_range=frame_range,
             relative_style=relative_style,
+            abort_event=abort_event,
             on_progress=on_progress,
         )
 
@@ -305,9 +320,10 @@ def _process_video_to_mp4(
     audio: bool,
     frame_range: tuple[int, int] | None,
     relative_style: bool = False,
+    abort_event: threading.Event | None = None,
     on_progress: Callable[[int, int, str], None] | None,
 ) -> None:
-    """Full video-to-video processing via the style engine."""
+    """Full video-to-video processing."""
     info = probe(input_path)
     style = _load_style(style_path) if style_path else None
     end_style = _load_style(end_style_path) if end_style_path else None
@@ -327,6 +343,7 @@ def _process_video_to_mp4(
         include_audio=audio,
         size_multiplier=_parse_size_multiplier(size),
         relative=relative_style,
+        abort_event=abort_event,
     )
 
 
@@ -340,9 +357,10 @@ def _process_video_to_frames(
     size: str,
     frame_range: tuple[int, int] | None,
     relative_style: bool = False,
+    abort_event: threading.Event | None = None,
     on_progress: Callable[[int, int, str], None] | None,
 ) -> None:
-    """Extract styled video frames as individual image files."""
+    """Extract styled video frames."""
     info = probe(input_path)
     out_dir = Path(output_path)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -356,34 +374,46 @@ def _process_video_to_frames(
     total = max(end - start, 1)
 
     cap = cv2.VideoCapture(input_path)
-    cap.set(cv2.CAP_PROP_POS_FRAMES, start)
+    try:
+        cap.set(cv2.CAP_PROP_POS_FRAMES, start)
 
-    for i in range(total):
-        ret, frame = cap.read()
-        if not ret:
-            break
+        with MCPClient() as client:
+            for i in range(total):
+                if abort_event and abort_event.is_set():
+                    raise Exception("Export aborted by user")
 
-        _report_progress(on_progress, i, total, f"Frame {start + i}")
+                ret, frame = cap.read()
+                if not ret:
+                    break
 
-        # Encode frame to PNG bytes
-        _, buf = cv2.imencode(".png", frame)
-        frame_bytes: bytes = buf.tobytes()
+                _report_progress(on_progress, i, total, f"Frame {start + i}")
 
-        if style is not None:
-            try:
-                with MCPClient() as client:
-                    t = i / total if total > 1 else 0.0
-                    current_style = style
-                    if end_style is not None and styles_compatible(style, end_style):
-                        current_style = interpolate_style(style, end_style, t)
-                    frame_bytes = apply_style(client, frame_bytes, current_style, relative=relative_style)
-            except Exception:
-                logger.opt(exception=True).debug("Style failed on frame {}", start + i)
+                # Encode frame to PNG bytes
+                _, buf = cv2.imencode(".png", frame)
+                frame_bytes: bytes = buf.tobytes()
 
-        ext = fmt.lower()
-        _save_image_bytes(frame_bytes, out_dir / f"frame_{start + i:06d}.{ext}", fmt, multiplier)
+                if style is not None:
+                    try:
+                        t = i / total if total > 1 else 0.0
+                        current_style = style
+                        if end_style is not None and styles_compatible(style, end_style):
+                            current_style = interpolate_style(style, end_style, t)
 
-    cap.release()
+                        with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp:
+                            tmp.write(frame_bytes)
+                            tmp_path = Path(tmp.name)
+                        try:
+                            res = apply_style(client, current_style, str(tmp_path), relative=relative_style)
+                            frame_bytes = res if isinstance(res, bytes) else res.encode()
+                        finally:
+                            tmp_path.unlink(missing_ok=True)
+                    except Exception:
+                        logger.opt(exception=True).debug("Style failed on frame {}", start + i)
+
+                ext = fmt.lower()
+                _save_image_bytes(frame_bytes, out_dir / f"frame_{start + i:06d}.{ext}", fmt, multiplier)
+    finally:
+        cap.release()
     _report_progress(on_progress, total, total, "Done")
 
 
@@ -393,14 +423,7 @@ def _process_video_to_frames(
 
 
 def _parse_size_multiplier(size: str) -> int:
-    """Parse a size string like ``"1x"`` or ``"2x"`` into an integer multiplier.
-
-    Args:
-        size: Size string.
-
-    Returns:
-        Integer multiplier (defaults to 1 for unrecognised input).
-    """
+    """Parse size string."""
     m = re.match(r"(\d+)x", size)
     if m:
         return int(m.group(1))
@@ -408,20 +431,10 @@ def _parse_size_multiplier(size: str) -> int:
 
 
 def _estimate_svg_dimensions(svg_string: str) -> tuple[int, int]:
-    """Extract width and height from an SVG string's ``viewBox`` or attributes.
-
-    Args:
-        svg_string: Raw SVG markup.
-
-    Returns:
-        ``(width, height)`` tuple; defaults to ``(800, 600)`` if parsing fails.
-    """
-    # Try viewBox first
+    """Extract SVG dimensions."""
     vb = re.search(r'viewBox=["\'][\d.]+\s+[\d.]+\s+([\d.]+)\s+([\d.]+)', svg_string)
     if vb:
         return int(float(vb.group(1))), int(float(vb.group(2)))
-
-    # Fall back to width/height attributes
     w_match = re.search(r'width=["\'](\d+)', svg_string)
     h_match = re.search(r'height=["\'](\d+)', svg_string)
     w = int(w_match.group(1)) if w_match else 800
@@ -435,23 +448,14 @@ def _save_image_bytes(
     fmt: str,
     multiplier: int = 1,
 ) -> None:
-    """Save raw image bytes (PNG/JPG/SVG) to *dest*, optionally scaling.
-
-    Args:
-        data: Raw image bytes.
-        dest: Destination file path.
-        fmt: Format hint (``"PNG"``, ``"JPG"``, ``"SVG"``).
-        multiplier: Integer scale factor applied to raster output.
-    """
+    """Save raw image bytes."""
     if fmt == "SVG":
         dest.write_bytes(data)
         return
-
     img = Image.open(io.BytesIO(data))
     if multiplier > 1:
         new_size = (img.width * multiplier, img.height * multiplier)
-        img = img.resize(new_size, Image.LANCZOS)
-
+        img = img.resize(new_size, Image.Resampling.LANCZOS)
     pil_fmt = "JPEG" if fmt == "JPG" else fmt
     img.save(str(dest), format=pil_fmt)
 
@@ -462,18 +466,7 @@ def _save_svg_as_image(
     fmt: str,
     multiplier: int = 1,
 ) -> None:
-    """Rasterise SVG data and save as a raster image.
-
-    Attempts to use ``resvg-py`` first, falling back to ``svglab`` if
-    available.
-
-    Args:
-        svg_data: SVG string or bytes.
-        dest: Output path.
-        fmt: Target raster format (``"PNG"`` or ``"JPG"``).
-        multiplier: Scale factor.
-    """
-
+    """Rasterise SVG."""
     svg_str = svg_data if isinstance(svg_data, str) else svg_data.decode()
     w, h = _estimate_svg_dimensions(svg_str)
     img = _svg_to_pil(svg_str, w * multiplier, h * multiplier)
@@ -482,66 +475,12 @@ def _save_svg_as_image(
 
 
 def _load_style(path: str) -> Any:
-    """Load a :class:`~vexy_lines_api.Style` from a ``.lines`` file.
-
-    Args:
-        path: Filesystem path to the ``.lines`` file.
-
-    Returns:
-        A ``Style`` object, or ``None`` on failure.
-    """
+    """Load Style."""
     try:
         return extract_style(path)
     except Exception:
         logger.opt(exception=True).warning("Could not load style from {}", path)
         return None
-
-
-def _apply_style_to_bytes(
-    img_bytes: bytes,
-    style_path: str,
-    end_style_path: str | None,
-    *,
-    relative: bool = False,
-) -> str | bytes:
-    """Apply a style to raw image bytes via a temp file, returning SVG string.
-
-    Writes the image bytes to a temp file, applies the style via MCP, and
-    returns the SVG result.  Falls back to the original bytes on failure.
-
-    Args:
-        img_bytes: Source image data (JPEG or PNG).
-        style_path: Path to the primary style ``.lines`` file.
-        end_style_path: Optional path to the end-style ``.lines`` file.
-        relative: Scale spatial fill parameters to match target dimensions.
-
-    Returns:
-        SVG string on success, or the original bytes on failure.
-    """
-    try:
-        style = _load_style(style_path)
-        if style is None:
-            return img_bytes
-
-        current_style = style
-        if end_style_path:
-            end_style = _load_style(end_style_path)
-            if end_style is not None and styles_compatible(style, end_style):
-                current_style = interpolate_style(style, end_style, 0.5)
-
-        # Write bytes to a temp file so apply_style can use the path
-        with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as tmp:
-            tmp.write(img_bytes)
-            tmp_path = Path(tmp.name)
-
-        try:
-            with MCPClient() as client:
-                return apply_style(client, current_style, str(tmp_path), relative=relative)
-        finally:
-            tmp_path.unlink(missing_ok=True)
-    except Exception:
-        logger.opt(exception=True).warning("Style application failed")
-        return img_bytes
 
 
 # ---------------------------------------------------------------------------
@@ -555,44 +494,21 @@ def _report_progress(
     total: int,
     message: str,
 ) -> None:
-    """Safely invoke the progress callback.
-
-    Args:
-        callback: The progress function, or ``None``.
-        current: Current item index (0-based).
-        total: Total number of items.
-        message: Human-readable status string.
-    """
+    """Report progress."""
     if callback is not None:
-        try:
+        with contextlib.suppress(Exception):
             callback(current, total, message)
-        except Exception:
-            logger.opt(exception=True).debug("Progress callback failed")
 
 
 def _report_complete(callback: Callable[[str], None] | None, message: str) -> None:
-    """Safely invoke the completion callback.
-
-    Args:
-        callback: The completion function, or ``None``.
-        message: Human-readable success message.
-    """
+    """Report completion."""
     if callback is not None:
-        try:
+        with contextlib.suppress(Exception):
             callback(message)
-        except Exception:
-            logger.opt(exception=True).debug("Complete callback failed")
 
 
 def _report_error(callback: Callable[[str], None] | None, message: str) -> None:
-    """Safely invoke the error callback.
-
-    Args:
-        callback: The error function, or ``None``.
-        message: Human-readable error description.
-    """
+    """Report error."""
     if callback is not None:
-        try:
+        with contextlib.suppress(Exception):
             callback(message)
-        except Exception:
-            logger.opt(exception=True).debug("Error callback failed")
