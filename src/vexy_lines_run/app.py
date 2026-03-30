@@ -140,7 +140,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
                 self.TkdndVersion = None
 
         self.title("Vexy Lines Run")
-        self.geometry("1024x768")
+        self.geometry("1152x648")
         self.minsize(960, 480)
 
         self._has_dnd: bool = bool(getattr(self, "TkdndVersion", None))
