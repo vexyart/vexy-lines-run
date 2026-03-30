@@ -9,6 +9,9 @@ Drop images in. Pick a style. Get vector art out.
 
 **vexy-lines-run** is a desktop batch GUI for [Vexy Lines](https://vexy.art) style transfer. Feed it images, `.lines` documents, or video. Choose an artistic style. Export as SVG, PNG, JPG, or MP4. Built on CustomTkinter — runs on macOS, Windows, and Linux.
 
+- [On Github](https://github.com/vexyart/vexy-lines-run)
+- [On PyPI](https://pypi.org/project/vexy-lines-run/)
+
 ## Three tabs, one workflow
 
 | Tab | Input | What happens |
