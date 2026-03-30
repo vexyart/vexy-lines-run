@@ -42,7 +42,7 @@ except ImportError:
 
 try:
     from tkinterdnd2 import DND_FILES, TkinterDnD
-except ImportError:
+except (ImportError, RuntimeError):
     TkinterDnD = None  # type: ignore[assignment,misc]
     DND_FILES = None
 
@@ -133,7 +133,11 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
     def __init__(self) -> None:
         super().__init__()
         if TkinterDnD is not None:
-            self.TkdndVersion = TkinterDnD._require(self)
+            try:
+                self.TkdndVersion = TkinterDnD._require(self)
+            except RuntimeError:
+                logger.warning("tkdnd library unavailable (Tcl version mismatch) — drag-and-drop disabled")
+                self.TkdndVersion = None
 
         self.title("Vexy Lines Run")
         self.geometry("1024x768")
@@ -575,7 +579,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         self.after(300, self._poll_active_tab)
 
     def _register_drop_targets(self) -> None:
-        if TkinterDnD is None or DND_FILES is None:
+        if TkinterDnD is None or DND_FILES is None or not getattr(self, "TkdndVersion", None):
             return
         for tab_name, widgets, handler in [
             ("Lines", [self.lines_list_frame, self.lines_preview_label], self._on_lines_drop),
