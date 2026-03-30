@@ -11,7 +11,7 @@
 name = "vexy-lines-run"
 description = "GUI desktop application for Vexy Lines style transfer"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 keywords = [
     "vexy-lines",
     "vector-art",
@@ -25,7 +25,6 @@ dynamic = ["version"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
@@ -38,25 +37,17 @@ classifiers = [
 ]
 
 dependencies = [
-    "vexy-lines-apy>=0.1.0",
+    "vexy-lines-py>=1.0.2",
+    "vexy-lines-apy>=1.0.1",
     "loguru>=0.7.2",
     "customtkinter>=5.2.0",
-    "Pillow>=10.0.0",
-]
-
-[project.optional-dependencies]
-dnd = ["tkinterdnd2>=0.4.0"]
-video = [
-    "av>=12.0.0",
+    "Pillow>=12.1.0",
+    "tkinterdnd2>=0.4.0",
+    "av>=17.0.0",
     "resvg-py>=0.2.0",
     "svglab>=0.1.0",
     "opencv-python>=4.8.0",
-]
-menus = ["CTkMenuBarPlus>=0.1.0"]
-all = [
-    "vexy-lines-run[dnd]",
-    "vexy-lines-run[video]",
-    "vexy-lines-run[menus]",
+    "CTkMenuBarPlus>=0.1.0",
 ]
 
 [[project.authors]]
@@ -72,10 +63,10 @@ Issues = "https://github.com/vexyart/vexy-lines/issues"
 Source = "https://github.com/vexyart/vexy-lines/tree/main/vexy-lines-run"
 
 [project.scripts]
-vexy-lines-gui = "vexy_lines_run.__main__:main"
+vexy-lines-run = "vexy_lines_run.__main__:main"
 
 [project.gui-scripts]
-vexy-lines-gui = "vexy_lines_run.__main__:main"
+vexy-lines-run = "vexy_lines_run.__main__:main"
 
 # -----------------------------------------------------------------------------
 # BUILD SYSTEM
@@ -131,7 +122,7 @@ lint = ["ruff check src/vexy_lines_run tests", "ruff format --check --respect-gi
 fmt = ["ruff format --respect-gitignore src/vexy_lines_run tests", "ruff check --fix src/vexy_lines_run tests"]
 
 [[tool.hatch.envs.all.matrix]]
-python = ["3.10", "3.11", "3.12", "3.13"]
+python = ["3.11", "3.12", "3.13"]
 
 [tool.hatch.envs.lint]
 detached = true
@@ -180,7 +171,7 @@ parallel = true
 # MYPY
 # -----------------------------------------------------------------------------
 [tool.mypy]
-python_version = "3.10"
+python_version = "3.11"
 strict = true
 warn_return_any = true
 warn_unused_configs = true
@@ -230,7 +221,7 @@ testpaths = ["tests"]
 # RUFF
 # -----------------------------------------------------------------------------
 [tool.ruff]
-target-version = "py310"
+target-version = "py311"
 line-length = 120
 
 [tool.ruff.lint]
