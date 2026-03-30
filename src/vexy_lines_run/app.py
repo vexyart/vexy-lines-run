@@ -68,7 +68,7 @@ class App(AppLayoutMixin, AppHandlersMixin, *_BASE_CLASSES, metaclass=_AppMeta):
         self._style_labels: dict[str, customtkinter.CTkLabel] = {}
         self._style_previews: dict[str, customtkinter.CTkLabel] = {}
         self._style_raw_images: dict[str, Image.Image | None] = {"start": None, "end": None}
-        _style_hint = "Drop lines here" if self._has_dnd else "Click: Open Lines"
+        _style_hint = "Drop Vexy Lines document here\nto use as style" if self._has_dnd else "Click: Open Lines\nto use a Vexy Lines document as style"
         self._style_preview_hint: dict[str, str] = {"start": _style_hint, "end": _style_hint}
         self._style_default_text: dict[str, str] = {"start": "", "end": ""}
 

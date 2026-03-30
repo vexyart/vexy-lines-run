@@ -74,50 +74,63 @@ class AppLayoutMixin:
         menu_font = file_btn.cget("font")
 
         file_menu = CustomDropdownMenu(widget=file_btn, font=menu_font)
-        file_menu.add_option("Add Lines\u2026", command=self._menu_add_lines, font=menu_font)
-        file_menu.add_separator()
-        file_menu.add_option("Export \u25b6", command=self._do_export, font=menu_font)
+        file_menu.add_option("Export\u2026", command=self._do_export, accelerator="CmdOrCtrl+E", font=menu_font)
         file_menu.add_option("Stop", command=self._stop_export, font=menu_font)
         file_menu.add_separator()
         file_menu.add_option("Quit", command=self.destroy, accelerator="CmdOrCtrl+Q", font=menu_font)
 
         lines_btn = menu_bar.add_cascade("Lines", font=menu_font)
         lines_menu = CustomDropdownMenu(widget=lines_btn, font=menu_font)
-        lines_menu.add_option("Add Lines\u2026", command=self._menu_add_lines, font=menu_font)
+        lines_menu.add_option(
+            "Add Lines\u2026", command=self._menu_add_lines, accelerator="CmdOrCtrl+2", font=menu_font
+        )
         lines_menu.add_option("Remove Selected", command=self._remove_selected_lines, font=menu_font)
         lines_menu.add_option("Remove All Lines", command=self._clear_all_lines, font=menu_font)
 
         image_btn = menu_bar.add_cascade("Image", font=menu_font)
         image_menu = CustomDropdownMenu(widget=image_btn, font=menu_font)
-        image_menu.add_option("Add Images\u2026", command=self._menu_add_images, font=menu_font)
+        image_menu.add_option(
+            "Add Images\u2026", command=self._menu_add_images, accelerator="CmdOrCtrl+1", font=menu_font
+        )
         image_menu.add_option("Remove Selected", command=self._remove_selected_image, font=menu_font)
         image_menu.add_option("Remove All Images", command=self._clear_all_images, font=menu_font)
 
         video_btn = menu_bar.add_cascade("Video", font=menu_font)
         video_menu = CustomDropdownMenu(widget=video_btn, font=menu_font)
-        video_menu.add_option("Add Video\u2026", command=self._menu_add_video, font=menu_font)
+        video_menu.add_option(
+            "Add Video\u2026", command=self._menu_add_video, accelerator="CmdOrCtrl+3", font=menu_font
+        )
         video_menu.add_option("Reset Range", command=self._reset_video_range, font=menu_font)
         video_menu.add_option("Remove Video", command=self._clear_video, font=menu_font)
 
         style_btn = menu_bar.add_cascade("Style", font=menu_font)
         style_menu = CustomDropdownMenu(widget=style_btn, font=menu_font)
-        style_menu.add_option("Open Style\u2026", command=lambda: self._choose_style_file("start"), font=menu_font)
-        style_menu.add_option("Open End Style\u2026", command=lambda: self._choose_style_file("end"), font=menu_font)
+        style_menu.add_option(
+            "Open Style\u2026",
+            command=lambda: self._choose_style_file("start"),
+            accelerator="CmdOrCtrl+4",
+            font=menu_font,
+        )
+        style_menu.add_option(
+            "Open End Style\u2026",
+            command=lambda: self._choose_style_file("end"),
+            accelerator="CmdOrCtrl+5",
+            font=menu_font,
+        )
         style_menu.add_option("Reset Styles", command=self._clear_all_styles, font=menu_font)
 
         export_btn = menu_bar.add_cascade("Export", font=menu_font)
         export_menu = CustomDropdownMenu(widget=export_btn, font=menu_font)
-        export_menu.add_option("Export \u25b6", command=self._do_export, font=menu_font)
+        export_menu.add_option("Export\u2026", command=self._do_export, font=menu_font)
         export_menu.add_option("Stop", command=self._stop_export, font=menu_font)
         export_menu.add_separator()
-        export_menu.add_option("Location\u2026", command=self._choose_output_path, font=menu_font)
-        fmt_sub = export_menu.add_submenu("Format", font=menu_font)
+        fmt_sub = export_menu.add_submenu("Format\u2004\u203a", font=menu_font)
         for fmt in ("SVG", "PNG", "JPG", "MP4", "LINES"):
             fmt_sub.add_option(fmt, command=lambda f=fmt: self._set_format(f), font=menu_font)
-        size_sub = export_menu.add_submenu("Size", font=menu_font)
+        size_sub = export_menu.add_submenu("Size\u2004\u203a", font=menu_font)
         for sz in ("1x", "2x", "3x", "4x"):
             size_sub.add_option(sz, command=lambda s=sz: self._set_size(s), font=menu_font)
-        audio_sub = export_menu.add_submenu("Audio", font=menu_font)
+        audio_sub = export_menu.add_submenu("Audio\u2004\u203a", font=menu_font)
         audio_sub.add_option("On", command=lambda: self.audio_var.set(True), font=menu_font)
         audio_sub.add_option("Off", command=lambda: self.audio_var.set(False), font=menu_font)
 
@@ -163,7 +176,7 @@ class AppLayoutMixin:
         self.lines_preview_container.grid_rowconfigure(0, weight=1)
         self.lines_preview_container.grid_columnconfigure(0, weight=1)
 
-        _lines_hint = "Drop lines here" if self._has_dnd else "Click: Add Lines"
+        _lines_hint = "Drop Vexy Lines documents here\nto export them as SVG, images or video" if self._has_dnd else "Click: Add Lines\nto export Vexy Lines documents as SVG, images or video"
         self.lines_preview_label = customtkinter.CTkLabel(self.lines_preview_container, text=_lines_hint)
         self.lines_preview_label.grid(row=0, column=0, sticky="nwe")
 
@@ -198,7 +211,7 @@ class AppLayoutMixin:
         self.images_preview_container.grid_rowconfigure(0, weight=1)
         self.images_preview_container.grid_columnconfigure(0, weight=1)
 
-        _images_hint = "Drop images here" if self._has_dnd else "Click: Add Images"
+        _images_hint = "Drop images here\nto apply a Vexy Lines style to them" if self._has_dnd else "Click: Add Images\nto apply a Vexy Lines style to images"
         self.images_preview_label = customtkinter.CTkLabel(self.images_preview_container, text=_images_hint)
         self.images_preview_label.grid(row=0, column=0, sticky="nwe")
 
@@ -231,7 +244,7 @@ class AppLayoutMixin:
         self.video_first_preview_container.grid_rowconfigure(0, weight=1)
         self.video_first_preview_container.grid_columnconfigure(0, weight=1)
 
-        _video_hint = "Drop video here" if self._has_dnd else "Click: Open Video"
+        _video_hint = "Drop video here\nto apply a Vexy Lines style to it" if self._has_dnd else "Click: Open Video\nto apply a Vexy Lines style to a video"
         self.video_first_preview = customtkinter.CTkLabel(self.video_first_preview_container, text=_video_hint)
         self.video_first_preview.grid(row=0, column=0, sticky="nwe")
 

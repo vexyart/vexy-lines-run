@@ -158,7 +158,7 @@ class AppHandlersMixin:
         self._lines_rows.clear()
         wpx = max(10, self.lines_list_frame.winfo_width() - 24)
         if not self._lines_paths:
-            _lines_hint = "Drop lines here" if self._has_dnd else "Click: Add Lines"
+            _lines_hint = "Drop Vexy Lines documents here\nto export them as SVG, images or video" if self._has_dnd else "Click: Add Lines\nto export Vexy Lines documents as SVG, images or video"
             placeholder = customtkinter.CTkLabel(
                 self.lines_list_frame,
                 text=_lines_hint,
@@ -213,7 +213,7 @@ class AppHandlersMixin:
     def _redraw_lines_preview(self) -> None:
         w = max(10, self.lines_preview_container.winfo_width())
         h = max(10, self.lines_preview_container.winfo_height())
-        _lines_hint = "Drop lines here" if self._has_dnd else "Click: Add Lines"
+        _lines_hint = "Drop Vexy Lines documents here\nto export them as SVG, images or video" if self._has_dnd else "Click: Add Lines\nto export Vexy Lines documents as SVG, images or video"
         self._set_label_image(self.lines_preview_label, self._lines_raw_image, w, h, placeholder=_lines_hint)
 
     def _on_lines_drop(self, event: tk.Event) -> None:
@@ -266,7 +266,7 @@ class AppHandlersMixin:
         self._image_rows.clear()
         wpx = max(10, self.images_list_frame.winfo_width() - 24)
         if not self._image_paths:
-            _images_hint = "Drop images here" if self._has_dnd else "Click: Add Images"
+            _images_hint = "Drop images here\nto apply a Vexy Lines style to them" if self._has_dnd else "Click: Add Images\nto apply a Vexy Lines style to images"
             placeholder = customtkinter.CTkLabel(
                 self.images_list_frame,
                 text=_images_hint,
@@ -321,7 +321,7 @@ class AppHandlersMixin:
     def _redraw_images_preview(self) -> None:
         w = max(10, self.images_preview_container.winfo_width())
         h = max(10, self.images_preview_container.winfo_height())
-        _images_hint = "Drop images here" if self._has_dnd else "Click: Add Images"
+        _images_hint = "Drop images here\nto apply a Vexy Lines style to them" if self._has_dnd else "Click: Add Images\nto apply a Vexy Lines style to images"
         self._set_label_image(self.images_preview_label, self._images_raw_image, w, h, placeholder=_images_hint)
 
     def _on_images_drop(self, event: tk.Event) -> None:
@@ -439,7 +439,7 @@ class AppHandlersMixin:
         self._redraw_video_previews()
 
     def _redraw_video_previews(self) -> None:
-        _video_hint = "Drop video here" if self._has_dnd else "Click: Open Video"
+        _video_hint = "Drop video here\nto apply a Vexy Lines style to it" if self._has_dnd else "Click: Open Video\nto apply a Vexy Lines style to a video"
         w1 = max(10, self.video_first_preview_container.winfo_width())
         h1 = max(10, self.video_first_preview_container.winfo_height())
         self._set_label_image(self.video_first_preview, self._video_first_raw_image, w1, h1, placeholder=_video_hint)
