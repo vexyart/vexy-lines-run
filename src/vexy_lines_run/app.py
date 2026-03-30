@@ -149,7 +149,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         self._style_labels: dict[str, customtkinter.CTkLabel] = {}
         self._style_previews: dict[str, customtkinter.CTkLabel] = {}
         self._style_raw_images: dict[str, Image.Image | None] = {"start": None, "end": None}
-        _style_hint = "Drop lines here" if self._has_dnd else "Click Open Lines button"
+        _style_hint = "Drop lines here" if self._has_dnd else "Click: Open Lines"
         self._style_preview_hint: dict[str, str] = {"start": _style_hint, "end": _style_hint}
         self._style_default_text: dict[str, str] = {"start": "", "end": ""}
 
@@ -369,7 +369,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         self.lines_preview_container.grid_rowconfigure(0, weight=1)
         self.lines_preview_container.grid_columnconfigure(0, weight=1)
 
-        _lines_hint = "Drop lines here" if self._has_dnd else "Click Add Lines button"
+        _lines_hint = "Drop lines here" if self._has_dnd else "Click: Add Lines"
         self.lines_preview_label = customtkinter.CTkLabel(self.lines_preview_container, text=_lines_hint)
         self.lines_preview_label.grid(row=0, column=0, sticky="nwe")
 
@@ -404,7 +404,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         self.images_preview_container.grid_rowconfigure(0, weight=1)
         self.images_preview_container.grid_columnconfigure(0, weight=1)
 
-        _images_hint = "Drop images here" if self._has_dnd else "Click Add Images button"
+        _images_hint = "Drop images here" if self._has_dnd else "Click: Add Images"
         self.images_preview_label = customtkinter.CTkLabel(self.images_preview_container, text=_images_hint)
         self.images_preview_label.grid(row=0, column=0, sticky="nwe")
 
@@ -437,7 +437,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         self.video_first_preview_container.grid_rowconfigure(0, weight=1)
         self.video_first_preview_container.grid_columnconfigure(0, weight=1)
 
-        _video_hint = "Drop video here" if self._has_dnd else "Click Open Video button"
+        _video_hint = "Drop video here" if self._has_dnd else "Click: Open Video"
         self.video_first_preview = customtkinter.CTkLabel(self.video_first_preview_container, text=_video_hint)
         self.video_first_preview.grid(row=0, column=0, sticky="nwe")
 
@@ -797,7 +797,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         self._lines_rows.clear()
         wpx = max(10, self.lines_list_frame.winfo_width() - 24)
         if not self._lines_paths:
-            _lines_hint = "Drop lines here" if self._has_dnd else "Click Add Lines button"
+            _lines_hint = "Drop lines here" if self._has_dnd else "Click: Add Lines"
             placeholder = customtkinter.CTkLabel(
                 self.lines_list_frame,
                 text=_lines_hint,
@@ -852,7 +852,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
     def _redraw_lines_preview(self) -> None:
         w = max(10, self.lines_preview_container.winfo_width())
         h = max(10, self.lines_preview_container.winfo_height())
-        _lines_hint = "Drop lines here" if self._has_dnd else "Click Add Lines button"
+        _lines_hint = "Drop lines here" if self._has_dnd else "Click: Add Lines"
         self._set_label_image(self.lines_preview_label, self._lines_raw_image, w, h, placeholder=_lines_hint)
 
     def _on_lines_drop(self, event: tk.Event) -> None:
@@ -903,7 +903,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         self._image_rows.clear()
         wpx = max(10, self.images_list_frame.winfo_width() - 24)
         if not self._image_paths:
-            _images_hint = "Drop images here" if self._has_dnd else "Click Add Images button"
+            _images_hint = "Drop images here" if self._has_dnd else "Click: Add Images"
             placeholder = customtkinter.CTkLabel(
                 self.images_list_frame,
                 text=_images_hint,
@@ -958,7 +958,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
     def _redraw_images_preview(self) -> None:
         w = max(10, self.images_preview_container.winfo_width())
         h = max(10, self.images_preview_container.winfo_height())
-        _images_hint = "Drop images here" if self._has_dnd else "Click Add Images button"
+        _images_hint = "Drop images here" if self._has_dnd else "Click: Add Images"
         self._set_label_image(self.images_preview_label, self._images_raw_image, w, h, placeholder=_images_hint)
 
     def _on_images_drop(self, event: tk.Event) -> None:
@@ -1072,7 +1072,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         self._redraw_video_previews()
 
     def _redraw_video_previews(self) -> None:
-        _video_hint = "Drop video here" if self._has_dnd else "Click Open Video button"
+        _video_hint = "Drop video here" if self._has_dnd else "Click: Open Video"
         w1 = max(10, self.video_first_preview_container.winfo_width())
         h1 = max(10, self.video_first_preview_container.winfo_height())
         self._set_label_image(self.video_first_preview, self._video_first_raw_image, w1, h1, placeholder=_video_hint)
