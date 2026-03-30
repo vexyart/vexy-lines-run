@@ -412,10 +412,10 @@
     <ul class="md-nav__list" data-md-component="toc">
       
         <li class="md-nav__item">
-  <a href="#launch-the-gui" class="md-nav__link">
+  <a href="#launch" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Launch the GUI
+        Launch
       
     </span>
   </a>
@@ -423,10 +423,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#typical-workflow-style-transfer-on-images" class="md-nav__link">
+  <a href="#style-transfer-on-a-batch-of-photos" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Typical workflow: style transfer on images
+        Style transfer on a batch of photos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#re-export-lines-files-with-a-different-style" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Re-export .lines files with a different style
       
     </span>
   </a>
@@ -453,13 +464,30 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Video processing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#frame-range-tips" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frame range tips
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
-  <a href="#probe-video-metadata" class="md-nav__link">
+  <a href="#drag-and-drop-workflow" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Probe video metadata
+        Drag-and-drop workflow
       
     </span>
   </a>
@@ -467,10 +495,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#drag-and-drop" class="md-nav__link">
+  <a href="#probe-video-metadata-from-python" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Drag-and-drop
+        Probe video metadata from Python
       
     </span>
   </a>
@@ -482,6 +510,17 @@
     <span class="md-ellipsis">
       
         Use the range slider widget standalone
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#run-the-processing-pipeline-from-python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Run the processing pipeline from Python
       
     </span>
   </a>
@@ -550,10 +589,10 @@
     <ul class="md-nav__list" data-md-component="toc">
       
         <li class="md-nav__item">
-  <a href="#launch-the-gui" class="md-nav__link">
+  <a href="#launch" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Launch the GUI
+        Launch
       
     </span>
   </a>
@@ -561,10 +600,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#typical-workflow-style-transfer-on-images" class="md-nav__link">
+  <a href="#style-transfer-on-a-batch-of-photos" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Typical workflow: style transfer on images
+        Style transfer on a batch of photos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#re-export-lines-files-with-a-different-style" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Re-export .lines files with a different style
       
     </span>
   </a>
@@ -591,13 +641,30 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Video processing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#frame-range-tips" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frame range tips
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
-  <a href="#probe-video-metadata" class="md-nav__link">
+  <a href="#drag-and-drop-workflow" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Probe video metadata
+        Drag-and-drop workflow
       
     </span>
   </a>
@@ -605,10 +672,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#drag-and-drop" class="md-nav__link">
+  <a href="#probe-video-metadata-from-python" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Drag-and-drop
+        Probe video metadata from Python
       
     </span>
   </a>
@@ -620,6 +687,17 @@
     <span class="md-ellipsis">
       
         Use the range slider widget standalone
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#run-the-processing-pipeline-from-python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Run the processing pipeline from Python
       
     </span>
   </a>
@@ -642,73 +720,172 @@
                   
 
 <h1 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h1>
-<h2 id="launch-the-gui">Launch the GUI<a class="headerlink" href="#launch-the-gui" title="Permanent link">&para;</a></h2>
-<p>From the terminal:</p>
+<h2 id="launch">Launch<a class="headerlink" href="#launch" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code>vexy-lines-gui
 </code></pre></div>
-<p>From Python:</p>
+<p>Or from Python:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">vexy_lines_run</span><span class="w"> </span><span class="kn">import</span> <span class="n">launch</span>
 <span class="n">launch</span><span class="p">()</span>
 </code></pre></div>
-<p>As a module:</p>
+<p>Or as a module:</p>
 <div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>vexy_lines_run
 </code></pre></div>
-<h2 id="typical-workflow-style-transfer-on-images">Typical workflow: style transfer on images<a class="headerlink" href="#typical-workflow-style-transfer-on-images" title="Permanent link">&para;</a></h2>
+<h2 id="style-transfer-on-a-batch-of-photos">Style transfer on a batch of photos<a class="headerlink" href="#style-transfer-on-a-batch-of-photos" title="Permanent link">&para;</a></h2>
+<p>You have 20 portrait photos. You want them all rendered as halftone vector art.</p>
+<p><img alt="Images tab with bear photos and a halftone cat style loaded" src="../images/images-mode.png" /></p>
 <ol>
-<li>Launch the GUI</li>
 <li>Switch to the <strong>Images</strong> tab</li>
-<li>Click "Add Files" and select your photos</li>
-<li>Click "Select Style" and pick a <code>.lines</code> file</li>
-<li>Choose output format (SVG, PNG, or JPG)</li>
-<li>Click "Export"</li>
-<li>Watch the progress bar -- the UI stays responsive</li>
+<li>Click <strong>Add Images...</strong> and select all 20 photos (PNG, JPG, WEBP — any raster format works)</li>
+<li>Click <strong>Open Lines...</strong> in the Style panel and pick a <code>.lines</code> file with the halftone look you want</li>
+<li>The style preview appears immediately — check it's the right one</li>
+<li>Choose <strong>SVG</strong> for vector output, or <strong>PNG</strong>/<strong>JPG</strong> with a size multiplier (2x doubles the resolution)</li>
+<li>Click <strong>Export ▶</strong> and choose an output folder</li>
+<li>The progress bar fills as each photo is processed: "Stop ■ (7/20)"</li>
+<li>Done. Twenty styled images in the output folder, named after the originals</li>
 </ol>
-<h2 id="style-interpolation-across-a-sequence">Style interpolation across a sequence<a class="headerlink" href="#style-interpolation-across-a-sequence" title="Permanent link">&para;</a></h2>
+<p>If one photo fails (corrupt file, MCP timeout), the app logs a warning and moves on. The other 19 still export.</p>
+<h2 id="re-export-lines-files-with-a-different-style">Re-export .lines files with a different style<a class="headerlink" href="#re-export-lines-files-with-a-different-style" title="Permanent link">&para;</a></h2>
+<p>You have a collection of <code>.lines</code> documents and want to apply a completely different artistic style to all of them.</p>
+<p><img alt="Lines tab with nine .lines files loaded" src="../images/lines-mode.png" /></p>
 <ol>
-<li>Load a sequence of images (e.g. video frames exported as JPGs)</li>
-<li>Select a primary style (the starting look)</li>
-<li>Select an end style (the finishing look)</li>
-<li>Export -- the first image gets 100% primary, the last gets 100% end, everything in between blends smoothly</li>
+<li>Switch to the <strong>Lines</strong> tab</li>
+<li>Drag your <code>.lines</code> files onto the file list (or use <strong>Add Lines...</strong>)</li>
+<li>In the Style panel, load the new style you want to apply</li>
+<li>Pick your output format — SVG for vectors, PNG/JPG for rasters</li>
+<li>Click <strong>Export ▶</strong></li>
 </ol>
+<p>Each file's embedded source image gets restyled with the new fill structure. The original <code>.lines</code> files are untouched.</p>
+<p><strong>Without a style selected</strong>, export works differently: the app opens each <code>.lines</code> file in Vexy Lines via MCP, renders it with its own fills, and exports the result. This is useful for batch-converting <code>.lines</code> files to SVG/PNG/JPG.</p>
+<p><strong>With format set to LINES</strong>, files are simply copied to the output folder. No MCP, no rendering — just a file copy.</p>
+<h2 id="style-interpolation-across-a-sequence">Style interpolation across a sequence<a class="headerlink" href="#style-interpolation-across-a-sequence" title="Permanent link">&para;</a></h2>
+<p>Load 60 frames from an animation. Set a "clean lines" primary style and a "chaotic scribble" end style. Frame 1 gets pure clean lines, frame 60 gets pure scribble, and everything in between blends proportionally.</p>
+<ol>
+<li>Load your frames in the <strong>Images</strong> tab (JPGs named <code>frame_001.jpg</code> through <code>frame_060.jpg</code>)</li>
+<li>Click <strong>Open Lines...</strong> and pick the clean lines style</li>
+<li>Switch to the <strong>End Style</strong> tab and pick the scribble style</li>
+<li>Export as PNG at 2x</li>
+</ol>
+<p>The blend factor <code>t</code> for frame <code>i</code> of <code>N</code> total frames is <code>i / (N - 1)</code>. Both styles must be structurally compatible — same number of groups, layers, and fills with matching fill types.</p>
 <h2 id="video-processing">Video processing<a class="headerlink" href="#video-processing" title="Permanent link">&para;</a></h2>
+<p>Turn a 5-second bear clip into vector art, frame by frame.</p>
+<p><img alt="Video tab showing first and last frames of a bear video, with a range slider set to 5 frames" src="../images/video-mode.png" /></p>
 <ol>
 <li>Install the video extra: <code>pip install "vexy-lines-run[video]"</code></li>
 <li>Switch to the <strong>Video</strong> tab</li>
-<li>Load a video file</li>
-<li>Select a style</li>
-<li>Optionally set start/end frame range with the dual-handle slider</li>
-<li>Toggle audio passthrough</li>
-<li>Click "Export" -- each frame is decoded, styled, and re-encoded</li>
+<li>Click <strong>Open Video...</strong> and load <code>bear.mp4</code></li>
+<li>The first and last frames appear as previews. The range slider shows 1 to total frames.</li>
+<li>Narrow the range with the slider handles or type exact frame numbers in the entry fields</li>
+<li>Load a style in the Style panel</li>
+<li>Choose output format:</li>
+<li><strong>MP4</strong> — re-encoded video with styled frames. Audio toggle appears if the source has audio and the full range is selected.</li>
+<li><strong>PNG</strong> or <strong>JPG</strong> — exports individual frame images named <code>frame_000001.png</code>, <code>frame_000002.png</code>, etc.</li>
+<li>Click <strong>Export ▶</strong></li>
 </ol>
-<h2 id="probe-video-metadata">Probe video metadata<a class="headerlink" href="#probe-video-metadata" title="Permanent link">&para;</a></h2>
+<p>For MP4, you pick a save filename. For image frames, you pick a folder.</p>
+<h3 id="frame-range-tips">Frame range tips<a class="headerlink" href="#frame-range-tips" title="Permanent link">&para;</a></h3>
+<ul>
+<li>The range is 1-indexed (first frame is 1, not 0)</li>
+<li>Slider handles and text entries stay in sync — change either one</li>
+<li>The "frames" label between them shows the count (e.g. "5 frames")</li>
+<li>Previews update when you change the range, showing the actual first and last frames</li>
+<li>Audio passthrough only works with full-range MP4 — partial ranges drop audio to avoid timing mismatch</li>
+</ul>
+<h2 id="drag-and-drop-workflow">Drag-and-drop workflow<a class="headerlink" href="#drag-and-drop-workflow" title="Permanent link">&para;</a></h2>
+<p>With the <code>[dnd]</code> extra installed, you can skip file dialogs entirely:</p>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;vexy-lines-run[dnd]&quot;</span>
+</code></pre></div>
+<ul>
+<li>Drag <code>.lines</code> files onto the <strong>Lines</strong> tab list or preview area</li>
+<li>Drag photos onto the <strong>Images</strong> tab list or preview area</li>
+<li>Drag a video onto the <strong>Video</strong> tab preview areas or path label</li>
+<li>Drag a <code>.lines</code> file onto the <strong>Style</strong> panel to load it as primary style</li>
+<li>Drag a <code>.lines</code> file onto the <strong>End Style</strong> panel to load it as end style</li>
+</ul>
+<p>The app filters by extension. Dropping a PNG on the Lines tab does nothing. Dropping a duplicate file is silently ignored.</p>
+<h2 id="probe-video-metadata-from-python">Probe video metadata from Python<a class="headerlink" href="#probe-video-metadata-from-python" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">vexy_lines_run.video</span><span class="w"> </span><span class="kn">import</span> <span class="n">probe</span>
 
 <span class="n">info</span> <span class="o">=</span> <span class="n">probe</span><span class="p">(</span><span class="s2">&quot;clip.mp4&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Resolution: </span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">width</span><span class="si">}</span><span class="s2">x</span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">height</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;FPS: </span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">fps</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Frames: </span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">total_frames</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Duration: </span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">duration</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">s&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Audio: </span><span class="si">{</span><span class="s1">&#39;yes&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">info</span><span class="o">.</span><span class="n">has_audio</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;no&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;FPS:        </span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">fps</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Frames:     </span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">total_frames</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Duration:   </span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">duration</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">s&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Audio:      </span><span class="si">{</span><span class="s1">&#39;yes&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">info</span><span class="o">.</span><span class="n">has_audio</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;no&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
-<h2 id="drag-and-drop">Drag-and-drop<a class="headerlink" href="#drag-and-drop" title="Permanent link">&para;</a></h2>
-<p>Install the <code>[dnd]</code> extra:</p>
-<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;vexy-lines-run[dnd]&quot;</span>
-</code></pre></div>
-<p>Now drop files directly onto the input list in any tab. The app filters by file type based on the active tab.</p>
+<p><code>probe()</code> reads metadata without decoding frames — it returns instantly even for large files.</p>
 <h2 id="use-the-range-slider-widget-standalone">Use the range slider widget standalone<a class="headerlink" href="#use-the-range-slider-widget-standalone" title="Permanent link">&para;</a></h2>
+<p>The dual-handle range slider is a reusable CustomTkinter widget. Use it in your own apps:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">customtkinter</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ctk</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">vexy_lines_run.widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">CTkRangeSlider</span>
 
 <span class="n">root</span> <span class="o">=</span> <span class="n">ctk</span><span class="o">.</span><span class="n">CTk</span><span class="p">()</span>
 <span class="n">root</span><span class="o">.</span><span class="n">geometry</span><span class="p">(</span><span class="s2">&quot;400x100&quot;</span><span class="p">)</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">on_range_change</span><span class="p">(</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Selected range: </span><span class="si">{</span><span class="n">low</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">high</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">on_change</span><span class="p">(</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Range: </span><span class="si">{</span><span class="n">low</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2"> – </span><span class="si">{</span><span class="n">high</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<span class="n">slider</span> <span class="o">=</span> <span class="n">CTkRangeSlider</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">from_</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="n">on_range_change</span><span class="p">)</span>
+<span class="n">slider</span> <span class="o">=</span> <span class="n">CTkRangeSlider</span><span class="p">(</span>
+    <span class="n">root</span><span class="p">,</span>
+    <span class="n">from_</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">to</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+    <span class="n">number_of_steps</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>  <span class="c1"># integer steps</span>
+    <span class="n">command</span><span class="o">=</span><span class="n">on_change</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="n">slider</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">padx</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
 
 <span class="n">root</span><span class="o">.</span><span class="n">mainloop</span><span class="p">()</span>
+</code></pre></div>
+<p>The slider supports horizontal and vertical orientations, variable binding (<code>tk.IntVar</code> / <code>tk.DoubleVar</code>), step quantization, hover highlighting, and full CustomTkinter theming (dark/light mode, custom colors).</p>
+<h2 id="run-the-processing-pipeline-from-python">Run the processing pipeline from Python<a class="headerlink" href="#run-the-processing-pipeline-from-python" title="Permanent link">&para;</a></h2>
+<p>For scripting or automation, call the processing module directly:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">vexy_lines_run.processing</span><span class="w"> </span><span class="kn">import</span> <span class="n">process_export</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">on_progress</span><span class="p">(</span><span class="n">current</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">current</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">total</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">on_complete</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Done: </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">on_error</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">process_export</span><span class="p">(</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;images&quot;</span><span class="p">,</span>
+    <span class="n">input_paths</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;photo1.jpg&quot;</span><span class="p">,</span> <span class="s2">&quot;photo2.jpg&quot;</span><span class="p">,</span> <span class="s2">&quot;photo3.jpg&quot;</span><span class="p">],</span>
+    <span class="n">style_path</span><span class="o">=</span><span class="s2">&quot;halftone.lines&quot;</span><span class="p">,</span>
+    <span class="n">end_style_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">output_path</span><span class="o">=</span><span class="s2">&quot;./output&quot;</span><span class="p">,</span>
+    <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;SVG&quot;</span><span class="p">,</span>
+    <span class="n">size</span><span class="o">=</span><span class="s2">&quot;1x&quot;</span><span class="p">,</span>
+    <span class="n">on_progress</span><span class="o">=</span><span class="n">on_progress</span><span class="p">,</span>
+    <span class="n">on_complete</span><span class="o">=</span><span class="n">on_complete</span><span class="p">,</span>
+    <span class="n">on_error</span><span class="o">=</span><span class="n">on_error</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>This runs synchronously on the calling thread. To run in the background (like the GUI does), wrap it in a <code>threading.Thread</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">abort</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
+<span class="n">thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span>
+    <span class="n">target</span><span class="o">=</span><span class="n">process_export</span><span class="p">,</span>
+    <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;images&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;input_paths&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;photo1.jpg&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;style_path&quot;</span><span class="p">:</span> <span class="s2">&quot;style.lines&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;end_style_path&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;output_path&quot;</span><span class="p">:</span> <span class="s2">&quot;./output&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;fmt&quot;</span><span class="p">:</span> <span class="s2">&quot;PNG&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="s2">&quot;2x&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;abort_event&quot;</span><span class="p">:</span> <span class="n">abort</span><span class="p">,</span>
+        <span class="s2">&quot;on_progress&quot;</span><span class="p">:</span> <span class="n">on_progress</span><span class="p">,</span>
+        <span class="s2">&quot;on_complete&quot;</span><span class="p">:</span> <span class="n">on_complete</span><span class="p">,</span>
+        <span class="s2">&quot;on_error&quot;</span><span class="p">:</span> <span class="n">on_error</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="n">daemon</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="c1"># To cancel:</span>
+<span class="n">abort</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
 </code></pre></div>
 
 

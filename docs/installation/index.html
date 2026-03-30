@@ -331,10 +331,10 @@
     <ul class="md-nav__list" data-md-component="toc">
       
         <li class="md-nav__item">
-  <a href="#requirements" class="md-nav__link">
+  <a href="#what-you-need" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Requirements
+        What you need
       
     </span>
   </a>
@@ -342,10 +342,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#install-from-pypi" class="md-nav__link">
+  <a href="#install" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Install from PyPI
+        Install
       
     </span>
   </a>
@@ -386,10 +386,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#verify-the-install" class="md-nav__link">
+  <a href="#verify" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Verify the install
+        Verify
       
     </span>
   </a>
@@ -404,6 +404,45 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Platform notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#macos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        macOS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Windows
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linux" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Linux
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -561,10 +600,10 @@
     <ul class="md-nav__list" data-md-component="toc">
       
         <li class="md-nav__item">
-  <a href="#requirements" class="md-nav__link">
+  <a href="#what-you-need" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Requirements
+        What you need
       
     </span>
   </a>
@@ -572,10 +611,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#install-from-pypi" class="md-nav__link">
+  <a href="#install" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Install from PyPI
+        Install
       
     </span>
   </a>
@@ -616,10 +655,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#verify-the-install" class="md-nav__link">
+  <a href="#verify" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Verify the install
+        Verify
       
     </span>
   </a>
@@ -634,6 +673,45 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Platform notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#macos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        macOS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Windows
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linux" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Linux
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -664,19 +742,20 @@
                   
 
 <h1 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h1>
-<h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h2>
+<h2 id="what-you-need">What you need<a class="headerlink" href="#what-you-need" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Python 3.11 or newer</li>
-<li>Tk/Tcl (ships with most Python installs; on Linux, install <code>python3-tk</code>)</li>
-<li>The <a href="https://vexy.art">Vexy Lines</a> desktop app for style transfer via MCP</li>
+<li><strong>Python 3.11+</strong> (3.12 recommended)</li>
+<li><strong>Tk/Tcl</strong> — ships with most Python installs. On Linux, install <code>python3-tk</code> from your package manager.</li>
+<li><strong><a href="https://vexy.art">Vexy Lines</a></strong> desktop app — the style engine runs as an MCP server inside the app on <code>localhost:47384</code>. Without it, the GUI launches but can't export anything that requires style transfer.</li>
 </ul>
-<h2 id="install-from-pypi">Install from PyPI<a class="headerlink" href="#install-from-pypi" title="Permanent link">&para;</a></h2>
+<h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>vexy-lines-run
 </code></pre></div>
-<p>Or with <code>uv</code>:</p>
+<p>With uv (faster):</p>
 <div class="highlight"><pre><span></span><code>uv<span class="w"> </span>add<span class="w"> </span>vexy-lines-run
 </code></pre></div>
 <h2 id="optional-extras">Optional extras<a class="headerlink" href="#optional-extras" title="Permanent link">&para;</a></h2>
+<p>The base install handles <code>.lines</code> files and images. Extras unlock more:</p>
 <table>
 <thead>
 <tr>
@@ -688,17 +767,17 @@
 <tbody>
 <tr>
 <td><code>dnd</code></td>
-<td>Drag-and-drop file support</td>
+<td>Drag-and-drop files onto the app</td>
 <td><code>pip install "vexy-lines-run[dnd]"</code></td>
 </tr>
 <tr>
 <td><code>video</code></td>
-<td>Video processing (PyAV, OpenCV, resvg, svglab)</td>
+<td>Video processing — PyAV, OpenCV, resvg, svglab</td>
 <td><code>pip install "vexy-lines-run[video]"</code></td>
 </tr>
 <tr>
 <td><code>menus</code></td>
-<td>Native menu bar</td>
+<td>Native menu bar (CTkMenuBarPlus)</td>
 <td><code>pip install "vexy-lines-run[menus]"</code></td>
 </tr>
 <tr>
@@ -708,56 +787,72 @@
 </tr>
 </tbody>
 </table>
+<p>Without <code>[dnd]</code>, you use file dialogs instead of drag-and-drop. Without <code>[video]</code>, the Video tab still appears but can't load anything. Without <code>[menus]</code>, you use the in-panel buttons — nothing is lost, just a different workflow.</p>
 <h2 id="runtime-dependencies">Runtime dependencies<a class="headerlink" href="#runtime-dependencies" title="Permanent link">&para;</a></h2>
+<p>These install automatically with the base package:</p>
 <table>
 <thead>
 <tr>
 <th>Package</th>
-<th>Why</th>
+<th>Purpose</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>vexy-lines-apy</code></td>
-<td>MCP client and style engine</td>
+<td>MCP client and style engine bindings</td>
 </tr>
 <tr>
 <td><code>customtkinter</code></td>
-<td>Modern-looking Tk widgets</td>
+<td>Modern Tk widgets with dark mode</td>
 </tr>
 <tr>
 <td><code>Pillow</code></td>
-<td>Image loading and thumbnail generation</td>
+<td>Image loading, thumbnails, format conversion</td>
 </tr>
 <tr>
 <td><code>loguru</code></td>
-<td>Structured debug logging</td>
+<td>Debug logging (not shown to users)</td>
 </tr>
 </tbody>
 </table>
 <h2 id="launch">Launch<a class="headerlink" href="#launch" title="Permanent link">&para;</a></h2>
-<p>Three ways to start the GUI:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># Installed script</span>
+<p>Three ways:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Installed console script</span>
 vexy-lines-gui
 
 <span class="c1"># Module entry point</span>
 python<span class="w"> </span>-m<span class="w"> </span>vexy_lines_run
-
-<span class="c1"># From Python</span>
-from<span class="w"> </span>vexy_lines_run<span class="w"> </span>import<span class="w"> </span>launch
-launch<span class="o">()</span>
 </code></pre></div>
-<h2 id="verify-the-install">Verify the install<a class="headerlink" href="#verify-the-install" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="c1"># From Python</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">vexy_lines_run</span><span class="w"> </span><span class="kn">import</span> <span class="n">launch</span>
+<span class="n">launch</span><span class="p">()</span>
+</code></pre></div>
+<p>All three do the same thing: create an <code>App</code> instance and call <code>mainloop()</code>.</p>
+<h2 id="verify">Verify<a class="headerlink" href="#verify" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code>vexy-lines-gui<span class="w"> </span>--help
 </code></pre></div>
-<p>Or:</p>
+<p>Or from Python:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">vexy_lines_run</span><span class="w"> </span><span class="kn">import</span> <span class="n">App</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;vexy-lines-run is ready&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="platform-notes">Platform notes<a class="headerlink" href="#platform-notes" title="Permanent link">&para;</a></h2>
-<p><strong>macOS</strong>: Works out of the box. Drag-and-drop requires the <code>[dnd]</code> extra.</p>
-<p><strong>Windows</strong>: Works out of the box. Drag-and-drop requires the <code>[dnd]</code> extra.</p>
-<p><strong>Linux</strong>: Install <code>python3-tk</code> from your package manager if Tk is not bundled with your Python install. Drag-and-drop requires <code>[dnd]</code> plus <code>tkdnd</code> system library.</p>
+<h3 id="macos">macOS<a class="headerlink" href="#macos" title="Permanent link">&para;</a></h3>
+<p>Works out of the box. Tk ships with the Python.org and Homebrew installers. Drag-and-drop requires the <code>[dnd]</code> extra.</p>
+<h3 id="windows">Windows<a class="headerlink" href="#windows" title="Permanent link">&para;</a></h3>
+<p>Works out of the box. Tk ships with the python.org installer. Drag-and-drop requires the <code>[dnd]</code> extra.</p>
+<h3 id="linux">Linux<a class="headerlink" href="#linux" title="Permanent link">&para;</a></h3>
+<p>Tk might not be bundled with your system Python. Install it:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Debian/Ubuntu</span>
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>python3-tk
+
+<span class="c1"># Fedora</span>
+sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>python3-tkinter
+
+<span class="c1"># Arch</span>
+sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>tk
+</code></pre></div>
+<p>Drag-and-drop requires <code>[dnd]</code> <strong>plus</strong> the <code>tkdnd</code> system library (<code>sudo apt install tkdnd</code> on Debian/Ubuntu).</p>
 <h2 id="development-install">Development install<a class="headerlink" href="#development-install" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/vexyart/vexy-lines.git
 <span class="nb">cd</span><span class="w"> </span>vexy-lines/vexy-lines-run
@@ -767,6 +862,7 @@ uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </s
 <p>Run tests:</p>
 <div class="highlight"><pre><span></span><code>uvx<span class="w"> </span>hatch<span class="w"> </span><span class="nb">test</span>
 </code></pre></div>
+<p>The test suite mocks the MCP client and macOS APIs, so tests run on any platform — no Vexy Lines app needed.</p>
 
 
 

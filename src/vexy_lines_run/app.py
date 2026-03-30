@@ -135,7 +135,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
         if TkinterDnD is not None:
             self.TkdndVersion = TkinterDnD._require(self)
 
-        self.title("Style with Vexy Lines")
+        self.title("Vexy Lines Run")
         self.geometry("1024x768")
         self.minsize(960, 480)
 
@@ -940,7 +940,7 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
             text=self._truncate_start_for_width(path, max(10, self.video_path_label.winfo_width() - 10))
         )
         self._video_total_frames = total
-        self._video_has_audio = True
+        self._video_has_audio = self._probe_video_audio(path)
         self._set_video_range(1, total)
         self._update_audio_toggle_visibility()
 
@@ -950,6 +950,16 @@ class App(*_BASE_CLASSES, metaclass=_AppMeta):  # type: ignore[misc]
             return max(0, int(cap.get(cv2.CAP_PROP_FRAME_COUNT)))
         finally:
             cap.release()
+
+    def _probe_video_audio(self, path: str) -> bool:
+        """Check whether a video file contains an audio track."""
+        try:
+            import av  # noqa: PLC0415
+
+            with av.open(path) as container:
+                return len(container.streams.audio) > 0
+        except Exception:  # noqa: BLE001
+            return True
 
     def _clear_video(self) -> None:
         self._video_path = ""

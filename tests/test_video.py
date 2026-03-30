@@ -83,34 +83,34 @@ class TestProbe:
 
 
 # ---------------------------------------------------------------------------
-# _svg_to_pil
+# svg_to_pil
 # ---------------------------------------------------------------------------
 
 
 class TestSvgToPil:
     def test_fallback_returns_correct_size(self):
         """Without resvg or svglab, returns a blank image of the right size."""
-        from vexy_lines_run.video import _svg_to_pil
+        from vexy_lines_run.video import svg_to_pil
 
         # Patch out both rasterisers so we hit the fallback
         with (
             patch.dict("sys.modules", {"resvg": None, "svglab": None}),
         ):
-            img = _svg_to_pil("<svg></svg>", 200, 100)
+            img = svg_to_pil("<svg></svg>", 200, 100)
             assert img.size == (200, 100)
             assert img.mode == "RGBA"
 
     def test_returns_pil_image(self):
         from PIL import Image
 
-        from vexy_lines_run.video import _svg_to_pil
+        from vexy_lines_run.video import svg_to_pil
 
-        img = _svg_to_pil("<svg></svg>", 50, 50)
+        img = svg_to_pil("<svg></svg>", 50, 50)
         assert isinstance(img, Image.Image)
 
     @patch("vexy_lines_run.video.resvg", create=True)
     def test_uses_resvg_when_available(self, mock_resvg):
-        """When resvg is importable, _svg_to_pil should call svg_to_png."""
+        """When resvg is importable, svg_to_pil should call svg_to_png."""
         import io
 
         from PIL import Image
@@ -121,9 +121,9 @@ class TestSvgToPil:
         img.save(buf, format="PNG")
         mock_resvg.svg_to_png.return_value = buf.getvalue()
 
-        from vexy_lines_run.video import _svg_to_pil
+        from vexy_lines_run.video import svg_to_pil
 
-        result = _svg_to_pil("<svg></svg>", 100, 80)
+        result = svg_to_pil("<svg></svg>", 100, 80)
         assert isinstance(result, Image.Image)
 
 

@@ -41,7 +41,7 @@ from vexy_lines_api import (
     styles_compatible,
 )
 from vexy_lines_api.video import (
-    _svg_to_pil,
+    svg_to_pil,
     probe,
     process_video_with_style,
 )
@@ -149,17 +149,20 @@ def _process_lines(
     style = _load_style(style_path) if style_path else None
     end_style = _load_style(end_style_path) if end_style_path else None
 
-    if style is not None:
-        with MCPClient() as client:
-            for idx, path in enumerate(input_paths):
-                if abort_event and abort_event.is_set():
-                    raise Exception("Export aborted by user")
+    with MCPClient() as client:
+        for idx, path in enumerate(input_paths):
+            if abort_event and abort_event.is_set():
+                raise Exception("Export aborted by user")
 
+            stem = Path(path).stem
+
+            if fmt == "LINES":
+                _report_progress(on_progress, idx, total, f"Copying {Path(path).name}")
+                shutil.copy2(path, out_dir / Path(path).name)
+                continue
+
+            if style is not None:
                 _report_progress(on_progress, idx, total, f"Processing {Path(path).name}")
-
-                if fmt == "LINES":
-                    shutil.copy2(path, out_dir / Path(path).name)
-                    continue
 
                 try:
                     doc = parse_lines(path)
@@ -176,48 +179,38 @@ def _process_lines(
                 if end_style is not None and styles_compatible(style, end_style) and total > 1:
                     current_style = interpolate_style(style, end_style, idx / (total - 1))
 
-                stem = Path(path).stem
                 with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as tmp:
                     tmp.write(img_bytes)
                     tmp_path = Path(tmp.name)
                 try:
-                    res: str | bytes = apply_style(client, current_style, str(tmp_path), relative=relative_style)
-                    final_bytes = res if isinstance(res, bytes) else res.encode()
-                    if fmt in ("PNG", "JPG"):
-                        _save_image_bytes(final_bytes, out_dir / f"{stem}.{fmt.lower()}", fmt, multiplier)
-                    elif fmt == "SVG":
-                        (out_dir / f"{stem}.svg").write_bytes(final_bytes)
+                    svg_text = apply_style(client, current_style, str(tmp_path), relative=relative_style)
+                    if fmt == "SVG":
+                        (out_dir / f"{stem}.svg").write_text(svg_text, encoding="utf-8")
+                    elif fmt in ("PNG", "JPG"):
+                        _save_image_bytes(svg_text.encode(), out_dir / f"{stem}.{fmt.lower()}", fmt, multiplier)
                 finally:
                     tmp_path.unlink(missing_ok=True)
-    else:
-        with MCPClient() as client:
-            for idx, path in enumerate(input_paths):
-                if abort_event and abort_event.is_set():
-                    raise Exception("Export aborted by user")
+            else:
                 _report_progress(on_progress, idx, total, f"Exporting {Path(path).name}")
-                stem = Path(path).stem
-                if fmt == "LINES":
-                    shutil.copy2(path, out_dir / Path(path).name)
-                else:
-                    try:
-                        client.open_document(path)
-                        client.render()
-                        if fmt == "SVG":
-                            client.export_svg(str(out_dir / f"{stem}.svg"))
-                        elif fmt == "PNG":
-                            dest = out_dir / f"{stem}.png"
-                            client.export_png(str(dest))
-                            if multiplier > 1:
-                                file_bytes = dest.read_bytes()
-                                _save_image_bytes(file_bytes, dest, fmt, multiplier)
-                        elif fmt == "JPG":
-                            dest = out_dir / f"{stem}.jpg"
-                            client.export_jpeg(str(dest))
-                            if multiplier > 1:
-                                file_bytes = dest.read_bytes()
-                                _save_image_bytes(file_bytes, dest, fmt, multiplier)
-                    except Exception:
-                        logger.opt(exception=True).warning("MCP export failed for {}", path)
+                try:
+                    client.open_document(path)
+                    client.render()
+                    if fmt == "SVG":
+                        client.export_svg(str(out_dir / f"{stem}.svg"))
+                    elif fmt == "PNG":
+                        dest = out_dir / f"{stem}.png"
+                        client.export_png(str(dest))
+                        if multiplier > 1:
+                            file_bytes = dest.read_bytes()
+                            _save_image_bytes(file_bytes, dest, fmt, multiplier)
+                    elif fmt == "JPG":
+                        dest = out_dir / f"{stem}.jpg"
+                        client.export_jpeg(str(dest))
+                        if multiplier > 1:
+                            file_bytes = dest.read_bytes()
+                            _save_image_bytes(file_bytes, dest, fmt, multiplier)
+                except Exception:
+                    logger.opt(exception=True).warning("MCP export failed for {}", path)
 
     _report_progress(on_progress, total, total, "Done")
 
@@ -482,7 +475,7 @@ def _save_svg_as_image(
     """Rasterise SVG."""
     svg_str = svg_data if isinstance(svg_data, str) else svg_data.decode()
     w, h = _estimate_svg_dimensions(svg_str)
-    img = _svg_to_pil(svg_str, w * multiplier, h * multiplier)
+            img = svg_to_pil(svg_str, w * multiplier, h * multiplier)
     pil_fmt = "JPEG" if fmt == "JPG" else fmt
     img.save(str(dest), format=pil_fmt)
 

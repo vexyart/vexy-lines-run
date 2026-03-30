@@ -1,108 +1,236 @@
 # GUI Guide
 
-The Vexy Lines Run is a CustomTkinter desktop app with three sections: input selection, style pickers, and export controls.
+Three tabs on the left. Style picker on the right. Export controls at the bottom. That's the whole app.
+
+![The app window showing the Lines tab with files loaded and a lettering preview](images/lines-mode.png)
 
 ## Layout
 
 ```
-+-------------------------------------------+
-|  Tab: Lines | Images | Video              |  <- input file selection
-+-------------------------------------------+
-|  Style picker  |  End Style (optional)    |  <- .lines style files
-+-------------------------------------------+
-|  Format  Size  Audio  [Export]  ░░░░░░░   |  <- export controls + progress
-+-------------------------------------------+
++--------------------------------------+-----------------+
+|                                      |                 |
+|  Tab: Lines | Images | Video         |  Style          |
+|                                      |  End Style      |
+|  [file list]       [preview]         |  [preview]      |
+|                                      |                 |
++--------------------------------------+-----------------+
+|  Export as [Format ▾]  [Size ▾]  Audio ○  ░░░  [Export ▶] |
++-----------------------------------------------------------+
 ```
 
-## Input tabs
+The left panel takes roughly two-thirds of the window. The right panel holds your style. The bottom strip handles export.
 
-### Lines tab
+The window title reads "Style with Vexy Lines". Default size is 1024x768, minimum 960x480. Resize freely — previews, file lists, and path labels adapt automatically.
 
-Load one or more `.lines` files. Each file appears in a scrollable list showing its filename. Use the "Add Files" button or drag-and-drop (requires `[dnd]` extra).
+## Menu bar
 
-When you export from this tab:
+Six menus sit at the top: **File**, **Lines**, **Image**, **Video**, **Style**, **Export**.
 
-- If a style is selected, the style's fill structure is applied to each file's source image
-- If no style is selected, the embedded preview image is extracted directly
+| Menu | Key items |
+|------|-----------|
+| **File** | Add Lines, Export, Stop, Quit (Cmd/Ctrl+Q) |
+| **Lines** | Add, Remove Selected, Remove All |
+| **Image** | Add, Remove Selected, Remove All |
+| **Video** | Add, Reset Range, Remove |
+| **Style** | Open Style, Open End Style, Reset Styles |
+| **Export** | Export, Stop, Location, Format submenu, Size submenu, Audio toggle |
 
-### Images tab
+The menu bar requires the `[menus]` extra. Without it, the app works fine — you just use the buttons instead.
 
-Load raster images: PNG, JPG, JPEG, WEBP, BMP, TIFF, and others supported by Pillow.
+## Lines tab
 
-A style must be selected. Each image is opened as a new document in Vexy Lines via MCP, the style's fill tree is replicated, the document is rendered, and the result is exported.
+Load `.lines` files — the native Vexy Lines document format.
 
-### Video tab
+![Lines tab: nine files listed on the left, a purple-and-teal "Vexy Lines" lettering preview on the right](images/lines-mode.png)
 
-Load video files: MP4, MOV, MKV, AVI, and others supported by PyAV.
+The left half is a scrollable file list. Click a filename to select it (highlights in blue). The right half shows a preview image extracted from the selected file's embedded data.
 
-Requires the `[video]` extra. Style transfer runs per-frame: each frame is decoded, styled via MCP, and re-encoded. Audio is passed through when available.
+**Buttons along the bottom:**
 
-The dual-handle range slider lets you select a frame range (start/end) instead of processing the entire video.
+| Button | What it does |
+|--------|-------------|
+| **Add Lines...** | Opens a file dialog filtered to `*.lines` |
+| **−** | Removes the selected file from the list |
+| **✕** | Clears the entire list |
 
-## Style pickers
+**What happens on export:**
 
-### Primary style
+| Condition | Behavior |
+|-----------|----------|
+| Style selected | The style's fill structure is applied to each file's source image via MCP |
+| No style selected | The file is opened in Vexy Lines via MCP, rendered, and exported directly |
+| Format = LINES | Plain file copy — no MCP, no rendering |
 
-Click "Select Style" to choose a `.lines` file. The picker shows an inline thumbnail preview extracted from the file's embedded preview image.
+When no files are loaded, the list area shows a "Drop lines here" placeholder.
 
-The primary style defines the fill structure applied to every input.
+## Images tab
 
-### End style (optional)
+Load raster images and turn them into vector art.
 
-Click "Select End Style" for a second `.lines` file. When set, the two styles are interpolated linearly across the input sequence:
+![Images tab: eight bear photos listed, a teddy bear preview in the center, and a halftone cat style loaded on the right](images/images-mode.png)
 
-- First input gets 100% primary style
-- Last input gets 100% end style
-- Inputs in between are blended proportionally
+Supported formats: PNG, JPG, JPEG, GIF, BMP, TIFF, WEBP — anything Pillow can open.
 
-Both styles must have compatible structures (same groups, layers, fills, fill types). The app checks compatibility and warns if they don't match.
+A style **must** be selected for image export. Without one, there's nothing to apply. Each image gets opened as a new document in Vexy Lines through the MCP API, the style's fill tree is replicated onto it, the document renders, and the result exports.
+
+The screenshot above shows eight bear photos loaded with a halftone cat style (`kitty.lines`) ready to apply. The preview shows the currently selected photo; the style panel shows what the fill pattern looks like.
+
+**Buttons:** Same as the Lines tab — Add Images, remove selected (−), clear all (✕).
+
+If style application fails for a particular image (MCP timeout, connection error), the app logs a warning and continues to the next file rather than aborting the entire batch.
+
+## Video tab
+
+Process video frame-by-frame with style transfer.
+
+![Video tab: first and last frames of a teddy bear video side by side, a range slider set to frames 1–5, and a halftone cat style loaded](images/video-mode.png)
+
+Requires the `[video]` extra (`pip install "vexy-lines-run[video]"`). Supported formats: MP4, MOV, MKV, AVI, WEBM.
+
+Two preview panes sit side by side — the first and last frames of your selected range. Below them:
+
+| Control | What it does |
+|---------|-------------|
+| **Start entry** | Type an exact start frame number (1-indexed) |
+| **Range slider** | Drag the two handles to set start and end frames |
+| **Frame count** | Shows how many frames are in the selected range (e.g. "5 frames") |
+| **End entry** | Type an exact end frame number |
+| **Open Video...** | File dialog for video files |
+| **Path label** | Shows the loaded video's path (truncated to fit) |
+| **✕** | Removes the loaded video |
+
+The range slider and text entries stay in sync — change one, the other updates. Values are clamped to valid bounds (1 to total frames). The previews update when the range changes, extracting the actual frames via OpenCV.
+
+**Audio passthrough** appears as a toggle switch only when all four conditions are met:
+
+1. A video with an audio track is loaded
+2. Format is MP4
+3. The full frame range is selected (first frame to last)
+4. You're on the Video tab
+
+Why the full-range restriction? Re-encoding a frame subset with the original audio would produce mismatched timing. For partial ranges, the audio is silently dropped.
+
+## Style picker
+
+The right panel has two tabs: **Style** and **End Style**.
+
+Click **Open Lines...** to choose a `.lines` file. A thumbnail preview extracted from the file appears immediately. The file path displays below, truncated from the left with "..." if it's too long for the panel width.
+
+Click **✕** to clear the style and return to the "Drop lines here" placeholder.
+
+### How styles work
+
+A `.lines` file contains a tree of groups, layers, and fills — each fill is an algorithm (linear, halftone, scribble, spiral, etc.) with numeric parameters. When you apply a style, the app replicates that entire fill tree onto your input image through the MCP API. The Vexy Lines engine then renders each fill algorithm against the image's pixel data.
+
+### End style and interpolation
+
+Select a second `.lines` file to enable style interpolation across a batch:
+
+| Position in sequence | Style blend |
+|---------------------|-------------|
+| First input | 100% primary style |
+| Middle inputs | Proportional blend |
+| Last input | 100% end style |
+
+Both styles must be structurally compatible — same number of groups, layers, and fills, with matching fill types. If they don't match, `styles_compatible()` returns false and the interpolation won't apply.
+
+This is useful for animated sequences: load 100 frames, set a "clean lines" start style and a "chaotic scribble" end style, and watch the artwork gradually transform.
+
+### Style panel and the Lines tab
+
+When the Lines tab is active, the style panel is disabled (grayed out). Lines files carry their own fill structure — selecting an external style would override it. Switch to Images or Video to enable the style picker.
 
 ## Export controls
 
-### Format selector
+The bottom strip of the window:
 
-| Format | Notes |
-|--------|-------|
-| SVG | Vector output from the style engine |
-| PNG | Raster with optional 2x upscale |
-| JPG | Raster with optional 2x upscale |
-| MP4 | Re-encoded video (Video tab only) |
-| LINES | Copy `.lines` files directly (Lines tab only) |
+```
+Export as [SVG ▾]  [— ▾]  ○ Audio   ░░░░░░░░░░   [Export ▶]
+```
 
-### Size options
+### Format
 
-For raster and video exports, choose the output resolution. The "2x" option doubles the dimensions for higher-quality output.
+| Format | Available on | Notes |
+|--------|-------------|-------|
+| **SVG** | Lines, Images | Vector output — no size scaling needed |
+| **PNG** | Lines, Images, Video | Raster, supports 1x–4x upscale |
+| **JPG** | Lines, Images, Video | Raster, supports 1x–4x upscale |
+| **MP4** | Video only | Re-encoded video with styled frames |
+| **LINES** | Lines only | Direct file copy, no processing |
 
-### Audio passthrough
+The format dropdown updates its options when you switch tabs. If your current format isn't available on the new tab, it resets to the first option.
 
-For video exports, toggle whether to copy the audio track from the input video to the output.
+### Size
+
+Choose output scaling: **1x**, **2x**, **3x**, or **4x**. The multiplier applies to raster and video exports. For 2x, a 1000x800 source produces a 2000x1600 output using Lanczos resampling.
+
+Disabled (shows "—") for SVG and LINES formats — vector output has no fixed resolution, and LINES is a file copy.
 
 ### Export button
 
-Starts the export. Processing runs on a daemon thread -- the UI stays responsive. The progress bar shows completion percentage. Cancel at any time.
+Click **Export ▶** to start. A dialog appears:
 
-### Progress feedback
+- **MP4 format:** Save-file dialog — choose a filename and location
+- **All other formats:** Folder dialog — files are named automatically based on the input filenames
 
-Three callbacks drive the UI:
+The button turns red and reads **Stop ■ (3/10)** during export, showing a running file count. The progress bar fills proportionally. Click Stop to cancel — the current file finishes, then the export halts. The button briefly shows "Stopping..." while the worker thread winds down.
 
-- `on_progress(current, total)` -- updates the progress bar
-- `on_complete(results)` -- shows a completion dialog with file counts
-- `on_error(message)` -- shows an error dialog
+On completion, the button returns to green **Export ▶** and the progress bar disappears.
 
-All callbacks are marshalled to the Tk main thread via `self.after(0, ...)`.
+### Error handling
+
+If an export fails, a dialog pops up with the error message. Common causes:
+
+- Vexy Lines app not running (MCP connection refused)
+- Style file deleted or moved since it was selected
+- Output directory not writable
+- Video codec not available
+
+User-initiated cancellation ("Export aborted by user") does not show an error dialog — it resets silently.
+
+For batch exports (multiple images), a single file failure logs a warning and continues. The export doesn't abort over one bad apple.
 
 ## Drag-and-drop
 
-With the `[dnd]` extra installed, drop files directly onto any input list. The app accepts `.lines` files (Lines tab), image files (Images tab), and video files (Video tab) based on the active tab.
+Install the `[dnd]` extra:
 
-## Dark/light mode
+```bash
+pip install "vexy-lines-run[dnd]"
+```
 
-CustomTkinter follows the system appearance by default. The app uses the `slate` dark theme and `deep purple` accent colour.
+Now drop files directly onto the app:
+
+| Drop target | Accepts |
+|-------------|---------|
+| Lines file list or preview | `.lines` files |
+| Images file list or preview | Image files (PNG, JPG, etc.) |
+| Video preview areas or path label | Video files |
+| Style preview or path label | `.lines` files (loads as style) |
+| End Style preview or path label | `.lines` files (loads as end style) |
+
+The app filters by extension based on the drop target. Drop a PNG on the Lines list and nothing happens — no error, just no action.
+
+Paths with spaces or special characters work correctly. The app handles both brace-enclosed (`{/path/to/my file.png}`) and space-separated drop data from tkinterdnd2.
+
+Duplicate files are silently ignored — drop the same image twice and it only appears once in the list.
 
 ## Keyboard shortcuts
 
 | Shortcut | Action |
 |----------|--------|
-| Cmd/Ctrl+O | Open file dialog for the active tab |
-| Cmd/Ctrl+E | Start export |
-| Escape | Cancel running export |
+| **Cmd/Ctrl+O** | Open file dialog for the active tab |
+| **Cmd/Ctrl+E** | Start export |
+| **Escape** | Cancel a running export |
+| **Cmd/Ctrl+Q** | Quit the app |
+
+## Appearance
+
+CustomTkinter follows your system's dark/light mode. The app uses a dark slate theme with deep purple accents. Selected files highlight in blue. The export button is green (#2E7D32) at rest and red (#D32F2F) during export.
+
+Preview images maintain their aspect ratio — a tall narrow image scales to fit within the preview box without stretching. When no image is loaded, the area shows placeholder text ("Drop lines here" or similar).
+
+Path labels truncate from the left: a path like `/Users/adam/Documents/projects/art/kitty.lines` becomes `...projects/art/kitty.lines` to fit the available width. Labels re-truncate when you resize the window.
+
+## Tooltips
+
+If the CTkToolTip package is installed, hovering over buttons and controls shows brief descriptions. Tooltips appear after 200ms with a slight offset from the cursor. This is optional — the app works without it.

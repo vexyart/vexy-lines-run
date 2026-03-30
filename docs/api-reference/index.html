@@ -397,10 +397,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#appctk" class="md-nav__link">
+  <a href="#appcustomtkinterctk" class="md-nav__link">
     <span class="md-ellipsis">
       
-        App(CTk)
+        App(customtkinter.CTk)
       
     </span>
   </a>
@@ -446,6 +446,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#size-multiplier-parsing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Size multiplier parsing
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -475,10 +486,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#probepath-videoinfo" class="md-nav__link">
+  <a href="#probepath-str-videoinfo" class="md-nav__link">
     <span class="md-ellipsis">
       
-        probe(path) -&gt; VideoInfo
+        probe(path: str) -&gt; VideoInfo
       
     </span>
   </a>
@@ -518,6 +529,56 @@
     <span class="md-ellipsis">
       
         CTkRangeSlider
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#utility-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Utility functions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Utility functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#extract_preview_from_linesfilepath-str-bytes-none" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        extract_preview_from_lines(filepath: str) -&gt; bytes | None
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extract_framevideo_path-str-frame_number-int-imageimage-none" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        extract_frame(video_path: str, frame_number: int) -&gt; Image.Image | None
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fit_image_to_boximage-imageimage-width-int-height-int-imageimage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fit_image_to_box(image: Image.Image, width: int, height: int) -&gt; Image.Image
       
     </span>
   </a>
@@ -630,10 +691,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#appctk" class="md-nav__link">
+  <a href="#appcustomtkinterctk" class="md-nav__link">
     <span class="md-ellipsis">
       
-        App(CTk)
+        App(customtkinter.CTk)
       
     </span>
   </a>
@@ -679,6 +740,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#size-multiplier-parsing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Size multiplier parsing
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -708,10 +780,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#probepath-videoinfo" class="md-nav__link">
+  <a href="#probepath-str-videoinfo" class="md-nav__link">
     <span class="md-ellipsis">
       
-        probe(path) -&gt; VideoInfo
+        probe(path: str) -&gt; VideoInfo
       
     </span>
   </a>
@@ -762,6 +834,56 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#utility-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Utility functions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Utility functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#extract_preview_from_linesfilepath-str-bytes-none" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        extract_preview_from_lines(filepath: str) -&gt; bytes | None
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extract_framevideo_path-str-frame_number-int-imageimage-none" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        extract_frame(video_path: str, frame_number: int) -&gt; Image.Image | None
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fit_image_to_boximage-imageimage-width-int-height-int-imageimage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fit_image_to_box(image: Image.Image, width: int, height: int) -&gt; Image.Image
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -779,37 +901,261 @@
 
 <h1 id="api-reference">API Reference<a class="headerlink" href="#api-reference" title="Permanent link">&para;</a></h1>
 <h2 id="app">App<a class="headerlink" href="#app" title="Permanent link">&para;</a></h2>
-<h3 id="appctk"><code>App(CTk)</code><a class="headerlink" href="#appctk" title="Permanent link">&para;</a></h3>
-<p>The main GUI application window. Subclass of <code>customtkinter.CTk</code>.</p>
+<h3 id="appcustomtkinterctk"><code>App(customtkinter.CTk)</code><a class="headerlink" href="#appcustomtkinterctk" title="Permanent link">&para;</a></h3>
+<p>The main GUI window. Handles layout, file management, style selection, and export dispatch.</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">vexy_lines_run</span><span class="w"> </span><span class="kn">import</span> <span class="n">App</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">App</span><span class="p">()</span>
 <span class="n">app</span><span class="o">.</span><span class="n">mainloop</span><span class="p">()</span>
 </code></pre></div>
-<p>Creates the three-tab layout, style pickers, export controls, and progress bar. Export runs on a daemon thread via <code>processing.process_export()</code>.</p>
+<p><strong>Window defaults:</strong> Title "Style with Vexy Lines", 1024x768, minimum 960x480.</p>
+<p><strong>Key instance attributes:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>abort_event</code></td>
+<td><code>threading.Event</code></td>
+<td>Set this to cancel a running export</td>
+</tr>
+<tr>
+<td><code>format_var</code></td>
+<td><code>tk.StringVar</code></td>
+<td>Current export format ("SVG", "PNG", "JPG", "MP4", "LINES")</td>
+</tr>
+<tr>
+<td><code>size_var</code></td>
+<td><code>tk.StringVar</code></td>
+<td>Current size multiplier ("1x", "2x", "3x", "4x", or "—")</td>
+</tr>
+<tr>
+<td><code>audio_var</code></td>
+<td><code>tk.BooleanVar</code></td>
+<td>Include audio in video exports</td>
+</tr>
+<tr>
+<td><code>inputs_tabview</code></td>
+<td><code>CTkTabview</code></td>
+<td>The Lines/Images/Video tab container</td>
+</tr>
+<tr>
+<td><code>styles_tabview</code></td>
+<td><code>CTkTabview</code></td>
+<td>The Style/End Style tab container</td>
+</tr>
+<tr>
+<td><code>progress_bar</code></td>
+<td><code>CTkProgressBar</code></td>
+<td>Export progress (hidden until export starts)</td>
+</tr>
+<tr>
+<td><code>convert_button</code></td>
+<td><code>CTkButton</code></td>
+<td>The Export/Stop button</td>
+</tr>
+</tbody>
+</table>
 <h3 id="launch-none"><code>launch() -&gt; None</code><a class="headerlink" href="#launch-none" title="Permanent link">&para;</a></h3>
-<p>Convenience function that creates an <code>App</code> instance and calls <code>mainloop()</code>.</p>
+<p>Creates an <code>App</code> and calls <code>mainloop()</code>. The simplest way to start the GUI.</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">vexy_lines_run</span><span class="w"> </span><span class="kn">import</span> <span class="n">launch</span>
-
 <span class="n">launch</span><span class="p">()</span>
 </code></pre></div>
 <hr />
 <h2 id="processing">Processing<a class="headerlink" href="#processing" title="Permanent link">&para;</a></h2>
 <h3 id="process_export-none"><code>process_export(...) -&gt; None</code><a class="headerlink" href="#process_export-none" title="Permanent link">&para;</a></h3>
-<p>Background thread dispatcher for all export modes. Called internally by <code>App</code> when the Export button is pressed.</p>
-<p>Handles three input types:</p>
-<ul>
-<li><strong>Lines files</strong> -- extracts previews or applies styles depending on configuration</li>
-<li><strong>Image files</strong> -- applies style via MCP, exports as SVG/PNG/JPG</li>
-<li><strong>Video files</strong> -- per-frame style transfer with PyAV decode/encode</li>
-</ul>
-<p>Parameters are passed via the <code>App</code> instance's current state (selected files, style, format, DPI, etc.).</p>
-<p>Progress callbacks (<code>on_progress</code>, <code>on_complete</code>, <code>on_error</code>) are invoked on the background thread. The <code>App</code> marshals them to the main thread via <code>self.after(0, callback)</code>.</p>
+<p>The export pipeline. Dispatches to mode-specific processors based on the <code>mode</code> parameter. Called by <code>App</code> on a background thread, but works fine called directly for scripting.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">vexy_lines_run.processing</span><span class="w"> </span><span class="kn">import</span> <span class="n">process_export</span>
+
+<span class="n">process_export</span><span class="p">(</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;images&quot;</span><span class="p">,</span>
+    <span class="n">input_paths</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;photo.jpg&quot;</span><span class="p">],</span>
+    <span class="n">style_path</span><span class="o">=</span><span class="s2">&quot;style.lines&quot;</span><span class="p">,</span>
+    <span class="n">end_style_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">output_path</span><span class="o">=</span><span class="s2">&quot;./output&quot;</span><span class="p">,</span>
+    <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;SVG&quot;</span><span class="p">,</span>
+    <span class="n">size</span><span class="o">=</span><span class="s2">&quot;1x&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mode</code></td>
+<td><code>str</code></td>
+<td>—</td>
+<td><code>"lines"</code>, <code>"images"</code>, or <code>"video"</code></td>
+</tr>
+<tr>
+<td><code>input_paths</code></td>
+<td><code>list[str]</code></td>
+<td>—</td>
+<td>Paths to input files. For video mode, a single-element list.</td>
+</tr>
+<tr>
+<td><code>style_path</code></td>
+<td><code>str \| None</code></td>
+<td>—</td>
+<td>Path to primary <code>.lines</code> style file, or <code>None</code></td>
+</tr>
+<tr>
+<td><code>end_style_path</code></td>
+<td><code>str \| None</code></td>
+<td>—</td>
+<td>Path to end <code>.lines</code> style file for interpolation, or <code>None</code></td>
+</tr>
+<tr>
+<td><code>output_path</code></td>
+<td><code>str</code></td>
+<td>—</td>
+<td>Output directory (or <code>.mp4</code> filepath for video)</td>
+</tr>
+<tr>
+<td><code>fmt</code></td>
+<td><code>str</code></td>
+<td>—</td>
+<td><code>"SVG"</code>, <code>"PNG"</code>, <code>"JPG"</code>, <code>"MP4"</code>, or <code>"LINES"</code></td>
+</tr>
+<tr>
+<td><code>size</code></td>
+<td><code>str</code></td>
+<td>—</td>
+<td><code>"1x"</code>, <code>"2x"</code>, <code>"3x"</code>, <code>"4x"</code>, or <code>"—"</code></td>
+</tr>
+<tr>
+<td><code>audio</code></td>
+<td><code>bool</code></td>
+<td><code>True</code></td>
+<td>Include audio track in MP4 output</td>
+</tr>
+<tr>
+<td><code>frame_range</code></td>
+<td><code>tuple[int, int] \| None</code></td>
+<td><code>None</code></td>
+<td>Start and end frame numbers (1-indexed, inclusive). Video mode only.</td>
+</tr>
+<tr>
+<td><code>relative_style</code></td>
+<td><code>bool</code></td>
+<td><code>False</code></td>
+<td>Use relative style scaling</td>
+</tr>
+<tr>
+<td><code>abort_event</code></td>
+<td><code>threading.Event \| None</code></td>
+<td><code>None</code></td>
+<td>Set to cancel mid-export</td>
+</tr>
+<tr>
+<td><code>on_progress</code></td>
+<td><code>Callable[[int, int, str], None] \| None</code></td>
+<td><code>None</code></td>
+<td>Called with <code>(current, total, message)</code> after each file</td>
+</tr>
+<tr>
+<td><code>on_complete</code></td>
+<td><code>Callable[[str], None] \| None</code></td>
+<td><code>None</code></td>
+<td>Called with a summary message on success</td>
+</tr>
+<tr>
+<td><code>on_error</code></td>
+<td><code>Callable[[str], None] \| None</code></td>
+<td><code>None</code></td>
+<td>Called with an error message on failure</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Mode behavior:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Style required?</th>
+<th>What happens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>"lines"</code></td>
+<td>No</td>
+<td>With style: applies style to each file's source image via MCP. Without: opens in Vexy Lines, renders, exports. Format=LINES: file copy.</td>
+</tr>
+<tr>
+<td><code>"images"</code></td>
+<td>Yes</td>
+<td>Applies style to each image via MCP. Falls back to original image on per-file failure.</td>
+</tr>
+<tr>
+<td><code>"video"</code> + MP4</td>
+<td>Yes</td>
+<td>Full video re-encode with per-frame style transfer. Audio passthrough controlled by <code>audio</code>.</td>
+</tr>
+<tr>
+<td><code>"video"</code> + PNG/JPG</td>
+<td>Yes</td>
+<td>Extracts frames, styles each one, saves as <code>frame_NNNNNN.ext</code>.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Callbacks</strong> are invoked on the calling thread. When <code>App</code> uses this function, it marshals them to the main Tk thread via <code>self.after(0, callback)</code>.</p>
+<p><strong>Exceptions</strong> are caught internally and passed to <code>on_error</code>. The function does not raise.</p>
+<h3 id="size-multiplier-parsing">Size multiplier parsing<a class="headerlink" href="#size-multiplier-parsing" title="Permanent link">&para;</a></h3>
+<p>The <code>size</code> string is parsed internally:</p>
+<table>
+<thead>
+<tr>
+<th>Input</th>
+<th>Multiplier</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>"1x"</code></td>
+<td>1</td>
+<td>Original resolution</td>
+</tr>
+<tr>
+<td><code>"2x"</code></td>
+<td>2</td>
+<td>Double width and height (Lanczos resampling)</td>
+</tr>
+<tr>
+<td><code>"3x"</code></td>
+<td>3</td>
+<td>Triple</td>
+</tr>
+<tr>
+<td><code>"4x"</code></td>
+<td>4</td>
+<td>Quadruple</td>
+</tr>
+<tr>
+<td><code>"—"</code></td>
+<td>1</td>
+<td>Same as 1x (used for SVG/LINES)</td>
+</tr>
+</tbody>
+</table>
 <hr />
 <h2 id="video">Video<a class="headerlink" href="#video" title="Permanent link">&para;</a></h2>
-<p>Requires the <code>[video]</code> extra: PyAV, OpenCV, resvg-py, svglab.</p>
+<p>Re-exported from <code>vexy_lines_api.video</code>. Requires the <code>[video]</code> extra: PyAV, OpenCV, resvg-py, svglab.</p>
 <h3 id="videoinfo"><code>VideoInfo</code><a class="headerlink" href="#videoinfo" title="Permanent link">&para;</a></h3>
-<p>Dataclass with video metadata.</p>
+<p>Dataclass returned by <code>probe()</code> and <code>process_video()</code>.</p>
 <table>
 <thead>
 <tr>
@@ -851,15 +1197,17 @@
 </tr>
 </tbody>
 </table>
-<h3 id="probepath-videoinfo"><code>probe(path) -&gt; VideoInfo</code><a class="headerlink" href="#probepath-videoinfo" title="Permanent link">&para;</a></h3>
-<p>Read video metadata without decoding frames.</p>
+<h3 id="probepath-str-videoinfo"><code>probe(path: str) -&gt; VideoInfo</code><a class="headerlink" href="#probepath-str-videoinfo" title="Permanent link">&para;</a></h3>
+<p>Read video metadata without decoding any frames. Returns instantly even for large files.</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">vexy_lines_run.video</span><span class="w"> </span><span class="kn">import</span> <span class="n">probe</span>
 
 <span class="n">info</span> <span class="o">=</span> <span class="n">probe</span><span class="p">(</span><span class="s2">&quot;clip.mp4&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">width</span><span class="si">}</span><span class="s2">x</span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">height</span><span class="si">}</span><span class="s2"> @ </span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">fps</span><span class="si">}</span><span class="s2">fps, </span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">total_frames</span><span class="si">}</span><span class="s2"> frames&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">width</span><span class="si">}</span><span class="s2">x</span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">height</span><span class="si">}</span><span class="s2"> @ </span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">fps</span><span class="si">}</span><span class="s2">fps&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">total_frames</span><span class="si">}</span><span class="s2"> frames, </span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">duration</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">s&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Audio: </span><span class="si">{</span><span class="s1">&#39;yes&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">info</span><span class="o">.</span><span class="n">has_audio</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;no&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="process_video-videoinfo"><code>process_video(...) -&gt; VideoInfo</code><a class="headerlink" href="#process_video-videoinfo" title="Permanent link">&para;</a></h3>
-<p>Decode a video, process each frame through a callback, and re-encode to a new video.</p>
+<p>Decode a video, process each frame through a callback, and re-encode to a new file.</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">vexy_lines_run.video</span><span class="w"> </span><span class="kn">import</span> <span class="n">process_video</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">frame_callback</span><span class="p">(</span><span class="n">frame_index</span><span class="p">,</span> <span class="n">total_frames</span><span class="p">):</span>
@@ -875,46 +1223,276 @@
     <span class="n">dpi</span><span class="o">=</span><span class="mi">72</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div>
-<hr />
-<h2 id="widgets">Widgets<a class="headerlink" href="#widgets" title="Permanent link">&para;</a></h2>
-<h3 id="ctkrangeslider"><code>CTkRangeSlider</code><a class="headerlink" href="#ctkrangeslider" title="Permanent link">&para;</a></h3>
-<p>A dual-handle range slider built on CustomTkinter. Used in the Video tab for selecting start/end frame ranges.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">vexy_lines_run.widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">CTkRangeSlider</span>
-
-<span class="n">slider</span> <span class="o">=</span> <span class="n">CTkRangeSlider</span><span class="p">(</span>
-    <span class="n">parent</span><span class="p">,</span>
-    <span class="n">from_</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-    <span class="n">to</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-    <span class="n">command</span><span class="o">=</span><span class="k">lambda</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Range: </span><span class="si">{</span><span class="n">low</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">high</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span>
-<span class="p">)</span>
-<span class="n">slider</span><span class="o">.</span><span class="n">pack</span><span class="p">()</span>
-</code></pre></div>
+<p><strong>Parameters:</strong></p>
 <table>
 <thead>
 <tr>
 <th>Parameter</th>
 <th>Type</th>
+<th>Default</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
+<td><code>input_path</code></td>
+<td><code>str</code></td>
+<td>—</td>
+<td>Source video file</td>
+</tr>
+<tr>
+<td><code>output_path</code></td>
+<td><code>str</code></td>
+<td>—</td>
+<td>Destination video file</td>
+</tr>
+<tr>
+<td><code>frame_params</code></td>
+<td><code>Callable[[int, int], dict]</code></td>
+<td>—</td>
+<td>Called with <code>(frame_index, total_frames)</code>, returns fill parameter overrides</td>
+</tr>
+<tr>
+<td><code>max_frames</code></td>
+<td><code>int \| None</code></td>
+<td><code>None</code></td>
+<td>Limit processing to N frames</td>
+</tr>
+<tr>
+<td><code>host</code></td>
+<td><code>str</code></td>
+<td><code>"127.0.0.1"</code></td>
+<td>MCP server host</td>
+</tr>
+<tr>
+<td><code>port</code></td>
+<td><code>int</code></td>
+<td><code>47384</code></td>
+<td>MCP server port</td>
+</tr>
+<tr>
+<td><code>dpi</code></td>
+<td><code>int</code></td>
+<td><code>72</code></td>
+<td>Document DPI for the Vexy Lines engine</td>
+</tr>
+</tbody>
+</table>
+<p>Returns a <code>VideoInfo</code> with the output video's metadata.</p>
+<hr />
+<h2 id="widgets">Widgets<a class="headerlink" href="#widgets" title="Permanent link">&para;</a></h2>
+<h3 id="ctkrangeslider"><code>CTkRangeSlider</code><a class="headerlink" href="#ctkrangeslider" title="Permanent link">&para;</a></h3>
+<p>A dual-handle range slider for CustomTkinter. Used in the Video tab to select frame ranges. Works as a standalone widget in any CustomTkinter app.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">customtkinter</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ctk</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">vexy_lines_run.widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">CTkRangeSlider</span>
+
+<span class="n">slider</span> <span class="o">=</span> <span class="n">CTkRangeSlider</span><span class="p">(</span>
+    <span class="n">parent</span><span class="p">,</span>
+    <span class="n">from_</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">to</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">number_of_steps</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">command</span><span class="o">=</span><span class="k">lambda</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">low</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">high</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="n">slider</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">fill</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Constructor parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>master</code></td>
+<td>widget</td>
+<td>—</td>
+<td>Parent widget</td>
+</tr>
+<tr>
+<td><code>width</code></td>
+<td><code>int</code></td>
+<td><code>200</code></td>
+<td>Widget width (horizontal) or <code>16</code> (vertical)</td>
+</tr>
+<tr>
+<td><code>height</code></td>
+<td><code>int</code></td>
+<td><code>16</code></td>
+<td>Widget height (horizontal) or <code>200</code> (vertical)</td>
+</tr>
+<tr>
+<td><code>corner_radius</code></td>
+<td><code>int</code></td>
+<td>auto</td>
+<td>Track corner radius</td>
+</tr>
+<tr>
+<td><code>button_corner_radius</code></td>
+<td><code>int</code></td>
+<td>auto</td>
+<td>Thumb corner radius</td>
+</tr>
+<tr>
+<td><code>border_width</code></td>
+<td><code>int</code></td>
+<td><code>0</code></td>
+<td>Track border width</td>
+</tr>
+<tr>
+<td><code>button_length</code></td>
+<td><code>int</code></td>
+<td>auto</td>
+<td>Thumb width in pixels</td>
+</tr>
+<tr>
+<td><code>fg_color</code></td>
+<td><code>str \| tuple</code></td>
+<td>theme</td>
+<td>Track background color</td>
+</tr>
+<tr>
+<td><code>border_color</code></td>
+<td><code>str \| tuple</code></td>
+<td>theme</td>
+<td>Track border color</td>
+</tr>
+<tr>
+<td><code>progress_color</code></td>
+<td><code>str \| tuple</code></td>
+<td>theme</td>
+<td>Color of the bar between thumbs</td>
+</tr>
+<tr>
+<td><code>button_color</code></td>
+<td><code>str \| tuple</code></td>
+<td>theme</td>
+<td>Thumb color (or tuple for individual thumbs)</td>
+</tr>
+<tr>
+<td><code>button_hover_color</code></td>
+<td><code>str \| tuple</code></td>
+<td>theme</td>
+<td>Thumb color on hover</td>
+</tr>
+<tr>
 <td><code>from_</code></td>
 <td><code>float</code></td>
-<td>Minimum value</td>
+<td><code>0</code></td>
+<td>Minimum output value</td>
 </tr>
 <tr>
 <td><code>to</code></td>
 <td><code>float</code></td>
-<td>Maximum value</td>
+<td><code>1</code></td>
+<td>Maximum output value</td>
+</tr>
+<tr>
+<td><code>number_of_steps</code></td>
+<td><code>int \| None</code></td>
+<td><code>None</code></td>
+<td>Quantize to this many steps (e.g. 100 for integer percentages)</td>
+</tr>
+<tr>
+<td><code>state</code></td>
+<td><code>str</code></td>
+<td><code>"normal"</code></td>
+<td><code>"normal"</code> or <code>"disabled"</code></td>
+</tr>
+<tr>
+<td><code>hover</code></td>
+<td><code>bool</code></td>
+<td><code>True</code></td>
+<td>Enable hover highlighting on thumbs</td>
 </tr>
 <tr>
 <td><code>command</code></td>
-<td><code>callable</code></td>
-<td>Called with <code>(low, high)</code> on change</td>
+<td><code>callable \| None</code></td>
+<td><code>None</code></td>
+<td>Called with <code>(low, high)</code> on every value change</td>
+</tr>
+<tr>
+<td><code>variables</code></td>
+<td><code>tuple[tk.Variable, tk.Variable] \| None</code></td>
+<td><code>None</code></td>
+<td>Bind to two Tk variables for two-way sync</td>
+</tr>
+<tr>
+<td><code>orientation</code></td>
+<td><code>str</code></td>
+<td><code>"horizontal"</code></td>
+<td><code>"horizontal"</code> or <code>"vertical"</code></td>
 </tr>
 </tbody>
 </table>
+<p><strong>Methods:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>get()</code></td>
+<td><code>tuple[float, float]</code></td>
+<td>Current <code>(low, high)</code> output values</td>
+</tr>
+<tr>
+<td><code>set(values)</code></td>
+<td>—</td>
+<td>Set both values. Accepts <code>[low, high]</code> list.</td>
+</tr>
+<tr>
+<td><code>configure(**kwargs)</code></td>
+<td>—</td>
+<td>Update any constructor parameter at runtime</td>
+</tr>
+<tr>
+<td><code>cget(name)</code></td>
+<td><code>object</code></td>
+<td>Read a property value</td>
+</tr>
+<tr>
+<td><code>bind(seq, cmd)</code></td>
+<td>—</td>
+<td>Bind an event handler (preserves internal bindings)</td>
+</tr>
+<tr>
+<td><code>unbind(seq)</code></td>
+<td>—</td>
+<td>Remove an event handler</td>
+</tr>
+<tr>
+<td><code>focus()</code></td>
+<td>—</td>
+<td>Give keyboard focus to the slider</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Interaction behavior:</strong></p>
+<ul>
+<li>Click anywhere on the track to jump the nearest thumb to that position</li>
+<li>Drag a thumb to slide it</li>
+<li>Hovering over a thumb highlights it (if <code>hover=True</code>)</li>
+<li>The slider prevents the low thumb from exceeding the high thumb and vice versa</li>
+<li>With <code>number_of_steps</code> set, values snap to discrete positions</li>
+</ul>
+<p><strong>Theming:</strong> Follows CustomTkinter's dark/light appearance mode. All colors accept <code>(light_value, dark_value)</code> tuples for per-mode styling. The drawing engine auto-selects the best rendering backend for the platform.</p>
+<hr />
+<h2 id="utility-functions">Utility functions<a class="headerlink" href="#utility-functions" title="Permanent link">&para;</a></h2>
+<p>These are internal to <code>app.py</code> but useful to understand:</p>
+<h3 id="extract_preview_from_linesfilepath-str-bytes-none"><code>extract_preview_from_lines(filepath: str) -&gt; bytes | None</code><a class="headerlink" href="#extract_preview_from_linesfilepath-str-bytes-none" title="Permanent link">&para;</a></h3>
+<p>Extract the embedded preview or source image from a <code>.lines</code> file. Parses the XML, looks for <code>PreviewDoc</code> or <code>SourcePict</code> elements, decompresses zlib data if needed. Returns raw image bytes (typically PNG) or <code>None</code> if extraction fails.</p>
+<h3 id="extract_framevideo_path-str-frame_number-int-imageimage-none"><code>extract_frame(video_path: str, frame_number: int) -&gt; Image.Image | None</code><a class="headerlink" href="#extract_framevideo_path-str-frame_number-int-imageimage-none" title="Permanent link">&para;</a></h3>
+<p>Extract a single frame from a video file using OpenCV. Frame numbers are 1-indexed. Returns a PIL Image in RGB mode, or <code>None</code> if extraction fails.</p>
+<h3 id="fit_image_to_boximage-imageimage-width-int-height-int-imageimage"><code>fit_image_to_box(image: Image.Image, width: int, height: int) -&gt; Image.Image</code><a class="headerlink" href="#fit_image_to_boximage-imageimage-width-int-height-int-imageimage" title="Permanent link">&para;</a></h3>
+<p>Scale an image to fit within the given box while preserving aspect ratio. Converts RGBA to RGB with a white background. Uses Lanczos resampling.</p>
 
 
 

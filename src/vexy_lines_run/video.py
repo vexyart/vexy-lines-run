@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from vexy_lines_api.video import (
     VideoInfo,
-    _svg_to_pil,
+    svg_to_pil,
     probe,
     process_video,
     process_video_with_style,
@@ -17,7 +17,7 @@ from vexy_lines_api.video import (
 
 __all__ = [
     "VideoInfo",
-    "_svg_to_pil",
+    "svg_to_pil",
     "probe",
     "process_video",
     "process_video_with_style",
