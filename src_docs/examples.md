@@ -3,7 +3,7 @@
 ## Launch
 
 ```bash
-vexy-lines-gui
+vexy-lines-run
 ```
 
 Or from Python:

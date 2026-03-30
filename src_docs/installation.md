@@ -48,7 +48,7 @@ Three ways:
 
 ```bash
 # Installed console script
-vexy-lines-gui
+vexy-lines-run
 
 # Module entry point
 python -m vexy_lines_run
@@ -65,7 +65,7 @@ All three do the same thing: create an `App` instance and call `mainloop()`.
 ## Verify
 
 ```bash
-vexy-lines-gui --help
+vexy-lines-run --help
 ```
 
 Or from Python:

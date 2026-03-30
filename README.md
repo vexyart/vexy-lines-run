@@ -26,7 +26,7 @@ pip install "vexy-lines-run[all]"
 ## Launch
 
 ```bash
-vexy-lines-gui
+vexy-lines-run
 ```
 
 Or:

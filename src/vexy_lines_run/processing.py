@@ -475,7 +475,7 @@ def _save_svg_as_image(
     """Rasterise SVG."""
     svg_str = svg_data if isinstance(svg_data, str) else svg_data.decode()
     w, h = _estimate_svg_dimensions(svg_str)
-            img = svg_to_pil(svg_str, w * multiplier, h * multiplier)
+    img = svg_to_pil(svg_str, w * multiplier, h * multiplier)
     pil_fmt = "JPEG" if fmt == "JPG" else fmt
     img.save(str(dest), format=pil_fmt)
 
