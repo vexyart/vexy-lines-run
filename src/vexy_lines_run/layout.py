@@ -119,6 +119,18 @@ class AppLayoutMixin:
             font=menu_font,
         )
         style_menu.add_option("Reset Styles", command=self._clear_all_styles, font=menu_font)
+        style_menu.add_separator()
+        mode_sub = style_menu.add_submenu("Mode\u2004\u203a", font=menu_font)
+        self._style_mode_buttons: dict[str, object] = {}
+        for mode in ("auto", "fast", "slow"):
+            label = mode.capitalize()
+            prefix = "\u2713\u2004" if mode == "auto" else "    "
+            btn = mode_sub.add_option(
+                f"{prefix}{label}",
+                command=lambda m=mode: self._set_style_mode(m),
+                font=menu_font,
+            )
+            self._style_mode_buttons[mode] = btn
 
         export_btn = menu_bar.add_cascade("Export", font=menu_font)
         export_menu = CustomDropdownMenu(widget=export_btn, font=menu_font)

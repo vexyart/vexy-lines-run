@@ -23,6 +23,7 @@ from vexy_lines_run.helpers import (
     extract_preview_from_lines,
 )
 from vexy_lines_run.layout import AppLayoutMixin
+from vexy_lines_api.export.models import ExportRequest
 from vexy_lines_run.processing import process_export
 
 _CTK_MISSING = "customtkinter is required for the GUI. Install with: pip install customtkinter"
@@ -81,6 +82,7 @@ class App(AppLayoutMixin, AppHandlersMixin, *_BASE_CLASSES, metaclass=_AppMeta):
             else "Click: Open Video\nto apply a Vexy Lines style to a video"
         )
 
+        self._style_mode: str = "auto"
         self._style_paths: dict[str, str | None] = {"start": None, "end": None}
         self._style_labels: dict[str, customtkinter.CTkLabel] = {}
         self._style_previews: dict[str, customtkinter.CTkLabel] = {}
@@ -212,6 +214,20 @@ class App(AppLayoutMixin, AppHandlersMixin, *_BASE_CLASSES, metaclass=_AppMeta):
         self._style_raw_images[key] = None
         self._set_style_preview_image(key)
 
+    def _set_style_mode(self, mode: str) -> None:
+        """Set the style transfer mode and update menu checkmarks."""
+        self._style_mode = mode
+        self._update_style_mode_menu()
+
+    def _update_style_mode_menu(self) -> None:
+        """Update checkmarks on the Style Mode submenu buttons."""
+        if not hasattr(self, "_style_mode_buttons"):
+            return
+        for m, btn in self._style_mode_buttons.items():
+            label = m.capitalize()
+            prefix = "\u2713\u2004" if self._style_mode == m else "    "
+            btn.configure(text=f"{prefix}{label}")
+
     # ── export preview ──────────────────────────────────────────────
 
     def _show_export_preview(self) -> None:
@@ -291,20 +307,22 @@ class App(AppLayoutMixin, AppHandlersMixin, *_BASE_CLASSES, metaclass=_AppMeta):
 
     def _run_export(self) -> None:
         mode = self.inputs_tabview.get().lower()
+        request = ExportRequest(
+            mode=mode,  # type: ignore[arg-type]
+            input_paths=self._get_active_input_paths(),
+            style_path=self._style_paths["start"],
+            end_style_path=self._style_paths["end"],
+            output_path=self._output_path,
+            format=self.format_var.get(),  # type: ignore[arg-type]
+            size=self.size_var.get(),
+            audio=self.audio_var.get(),
+            frame_range=self._video_range if mode == "video" else None,
+            style_mode=self._style_mode,
+        )
         threading.Thread(
             target=process_export,
-            args=(
-                mode,
-                self._get_active_input_paths(),
-                self._style_paths["start"],
-                self._style_paths["end"],
-                self._output_path,
-                self.format_var.get(),
-                self.size_var.get(),
-            ),
+            args=(request,),
             kwargs={
-                "audio": self.audio_var.get(),
-                "frame_range": self._video_range if mode == "video" else None,
                 "abort_event": self.abort_event,
                 "on_progress": lambda c, t, m: self.after(0, self._on_export_progress, c, t, m),
                 "on_preview": lambda b: self.after(0, self._on_export_preview, b),
