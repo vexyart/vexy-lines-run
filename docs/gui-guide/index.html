@@ -508,6 +508,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#crash-safe-exports-job-folders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Crash-safe exports (job folders)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#error-handling" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -826,6 +837,17 @@
     <span class="md-ellipsis">
       
         Export button
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#crash-safe-exports-job-folders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Crash-safe exports (job folders)
       
     </span>
   </a>
@@ -1158,6 +1180,8 @@
 </ul>
 <p>The button turns red and reads <strong>Stop ■ (3/10)</strong> during export, showing a running file count. The progress bar fills proportionally. Click Stop to cancel — the current file finishes, then the export halts. The button briefly shows "Stopping..." while the worker thread winds down.</p>
 <p>On completion, the button returns to green <strong>Export ▶</strong> and the progress bar disappears.</p>
+<h3 id="crash-safe-exports-job-folders">Crash-safe exports (job folders)<a class="headerlink" href="#crash-safe-exports-job-folders" title="Permanent link">&para;</a></h3>
+<p>Every export creates a persistent job folder alongside the output directory. Intermediate artifacts — <code>.lines</code> documents, <code>.svg</code> exports, rasterized frames — accumulate there as the export progresses. If the app quits mid-export, re-running the same export picks up from where it left off rather than starting over. The GUI never deletes job folders automatically; use the CLI <code>--cleanup</code> flag if you want them removed after a successful run.</p>
 <h3 id="error-handling">Error handling<a class="headerlink" href="#error-handling" title="Permanent link">&para;</a></h3>
 <p>If an export fails, a dialog pops up with the error message. Common causes:</p>
 <ul>

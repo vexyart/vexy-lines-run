@@ -177,6 +177,10 @@ The button turns red and reads **Stop ■ (3/10)** during export, showing a runn
 
 On completion, the button returns to green **Export ▶** and the progress bar disappears.
 
+### Crash-safe exports (job folders)
+
+Every export creates a persistent job folder alongside the output directory. Intermediate artifacts — `.lines` documents, `.svg` exports, rasterized frames — accumulate there as the export progresses. If the app quits mid-export, re-running the same export picks up from where it left off rather than starting over. The GUI never deletes job folders automatically; use the CLI `--cleanup` flag if you want them removed after a successful run.
+
 ### Error handling
 
 If an export fails, a dialog pops up with the error message. Common causes:

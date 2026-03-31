@@ -67,6 +67,12 @@ widgets.py      CTkRangeSlider   — dual-handle range slider for video frame se
 
 Style transfer calls into `vexy-lines-apy` (`MCPClient`, `apply_style`, `interpolate_style`). Video uses PyAV for mux/demux and OpenCV for frame extraction.
 
+## Job folders (crash-safe exports)
+
+All exports create a persistent **job folder** alongside the output directory. Every intermediate artifact — `.lines` documents, `.svg` exports, rasterized frames — is saved there. If the app quits or the process is interrupted mid-export, re-running the export resumes from where it left off.
+
+The GUI never deletes job folders automatically. Use the CLI with `--force` to start fresh or `--cleanup` to remove the folder after completion.
+
 ## Full documentation
 
 [Read the docs](https://vexyart.github.io/vexy-lines/vexy-lines-run/) for the complete GUI guide, API reference, and more examples.

@@ -1,5 +1,11 @@
 # CHANGELOG.md
 
+## 2026-04-01 — Job Folder System (Issue #617)
+
+- **feat**: All exports now create a persistent job folder alongside the output, storing every intermediate artifact (`.lines`, `.svg`, raster frames). Interrupted exports resume automatically when re-run.
+- **feat**: GUI always continues with existing job folders — no work is lost on crash or app quit.
+- **internal**: `ExportRequest` construction now includes `force=False, cleanup=False` (GUI never force-cleans).
+
 ## 2026-03-31 — Refactoring Cleanup & Test Fixes (Issue 613)
 
 - **refactor**: Deleted stale `protocols.py` — was out of sync with live code (used `int` indices instead of `str` keys, referenced non-existent `_FileListState`), unused at runtime.
