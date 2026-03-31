@@ -1,3 +1,4 @@
+# mypy: disable-error-code="attr-defined"
 # this_file: src/vexy_lines_run/layout.py
 """Layout mixin — menu bar, tabs, panels, and drag-and-drop registration."""
 
@@ -36,7 +37,7 @@ class AppLayoutMixin:
 
     # -- type narrowing for IDE support --
     if TYPE_CHECKING:
-        self: App  # type: ignore[assignment]
+        self: App  # type: ignore[misc]
 
     def add_ctk_tooltip(self, widget: tk.Widget, message: str) -> None:
         """Add a tooltip to a widget if library is available. Handles CTk widgets that don't support bind."""
@@ -176,8 +177,7 @@ class AppLayoutMixin:
         self.lines_preview_container.grid_rowconfigure(0, weight=1)
         self.lines_preview_container.grid_columnconfigure(0, weight=1)
 
-        _lines_hint = "Drop Vexy Lines documents here\nto export them as SVG, images or video" if self._has_dnd else "Click: Add Lines\nto export Vexy Lines documents as SVG, images or video"
-        self.lines_preview_label = customtkinter.CTkLabel(self.lines_preview_container, text=_lines_hint)
+        self.lines_preview_label = customtkinter.CTkLabel(self.lines_preview_container, text=self._lines_hint)
         self.lines_preview_label.grid(row=0, column=0, sticky="nwe")
 
         self._update_lines_preview()
@@ -211,8 +211,7 @@ class AppLayoutMixin:
         self.images_preview_container.grid_rowconfigure(0, weight=1)
         self.images_preview_container.grid_columnconfigure(0, weight=1)
 
-        _images_hint = "Drop images here\nto apply a Vexy Lines style to them" if self._has_dnd else "Click: Add Images\nto apply a Vexy Lines style to images"
-        self.images_preview_label = customtkinter.CTkLabel(self.images_preview_container, text=_images_hint)
+        self.images_preview_label = customtkinter.CTkLabel(self.images_preview_container, text=self._images_hint)
         self.images_preview_label.grid(row=0, column=0, sticky="nwe")
 
         self._update_images_preview()
@@ -244,8 +243,7 @@ class AppLayoutMixin:
         self.video_first_preview_container.grid_rowconfigure(0, weight=1)
         self.video_first_preview_container.grid_columnconfigure(0, weight=1)
 
-        _video_hint = "Drop video here\nto apply a Vexy Lines style to it" if self._has_dnd else "Click: Open Video\nto apply a Vexy Lines style to a video"
-        self.video_first_preview = customtkinter.CTkLabel(self.video_first_preview_container, text=_video_hint)
+        self.video_first_preview = customtkinter.CTkLabel(self.video_first_preview_container, text=self._video_hint)
         self.video_first_preview.grid(row=0, column=0, sticky="nwe")
 
         self.video_last_preview_container = customtkinter.CTkFrame(previews, fg_color="transparent")

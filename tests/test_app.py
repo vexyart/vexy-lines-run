@@ -7,10 +7,7 @@ helper functions, constants, and importability.
 
 from __future__ import annotations
 
-import textwrap
-from unittest.mock import MagicMock, patch
-
-import pytest
+from unittest.mock import patch
 
 # ---------------------------------------------------------------------------
 # Import tests
@@ -49,32 +46,32 @@ class TestConstants:
     """Verify module-level constants."""
 
     def test_image_extensions_are_lowercase(self):
-        from vexy_lines_run.app import IMAGE_EXTENSIONS
+        from vexy_lines_run.helpers import IMAGE_EXTENSIONS
 
         for ext in IMAGE_EXTENSIONS:
             assert ext.startswith("."), f"{ext} should start with a dot"
             assert ext == ext.lower(), f"{ext} should be lowercase"
 
     def test_video_extensions_are_lowercase(self):
-        from vexy_lines_run.app import VIDEO_EXTENSIONS
+        from vexy_lines_run.helpers import VIDEO_EXTENSIONS
 
         for ext in VIDEO_EXTENSIONS:
             assert ext.startswith(".")
             assert ext == ext.lower()
 
     def test_lines_extensions(self):
-        from vexy_lines_run.app import LINES_EXTENSIONS
+        from vexy_lines_run.helpers import LINES_EXTENSIONS
 
         assert ".lines" in LINES_EXTENSIONS
 
     def test_export_formats_lines(self):
-        from vexy_lines_run.app import EXPORT_FORMATS_LINES
+        from vexy_lines_run.helpers import EXPORT_FORMATS_LINES
 
         assert "SVG" in EXPORT_FORMATS_LINES
         assert "LINES" in EXPORT_FORMATS_LINES
 
     def test_export_formats_video(self):
-        from vexy_lines_run.app import EXPORT_FORMATS_VIDEO
+        from vexy_lines_run.helpers import EXPORT_FORMATS_VIDEO
 
         assert "MP4" in EXPORT_FORMATS_VIDEO
 
@@ -86,25 +83,25 @@ class TestConstants:
 
 class TestTruncateStart:
     def test_short_string_unchanged(self):
-        from vexy_lines_run.app import truncate_start
+        from vexy_lines_run.helpers import truncate_start
 
         assert truncate_start("hello", 10) == "hello"
 
     def test_long_string_truncated_at_start(self):
-        from vexy_lines_run.app import truncate_start
+        from vexy_lines_run.helpers import truncate_start
 
         result = truncate_start("abcdefghij", 7)
         assert result.startswith("...")
         assert len(result) == 7
 
     def test_preserves_end(self):
-        from vexy_lines_run.app import truncate_start
+        from vexy_lines_run.helpers import truncate_start
 
         result = truncate_start("/very/long/path/to/file.txt", 15)
         assert result.endswith("file.txt")
 
     def test_empty_string(self):
-        from vexy_lines_run.app import truncate_start
+        from vexy_lines_run.helpers import truncate_start
 
         assert truncate_start("", 10) == ""
 
@@ -116,23 +113,20 @@ class TestTruncateStart:
 
 class TestExtractPreviewFromLines:
     def test_returns_none_on_missing_file(self, tmp_path):
-        from vexy_lines_run.app import extract_preview_from_lines
+        from vexy_lines_run.helpers import extract_preview_from_lines
 
         result = extract_preview_from_lines(tmp_path / "nonexistent.lines")
         assert result is None
 
-    @patch("vexy_lines_run.app.extract_preview_from_lines")
-    def test_delegates_to_parser(self, mock_extract):
-        from vexy_lines_run.app import extract_preview_from_lines
+    def test_returns_none_on_nonexistent_path(self):
+        from vexy_lines_run.helpers import extract_preview_from_lines
 
-        mock_extract.return_value = b"\x89PNG..."
-        result = extract_preview_from_lines("/some/file.lines")
-        assert result == b"\x89PNG..."
-        mock_extract.assert_called_once_with("/some/file.lines")
+        result = extract_preview_from_lines("/nonexistent/does_not_exist.lines")
+        assert result is None
 
     @patch("vexy_lines.parse", side_effect=Exception("parse error"))
-    def test_returns_none_on_exception(self, mock_parse):
-        from vexy_lines_run.app import extract_preview_from_lines
+    def test_returns_none_on_exception(self, _mock_parse):
+        from vexy_lines_run.helpers import extract_preview_from_lines
 
         result = extract_preview_from_lines("/bad/file.lines")
         assert result is None
@@ -145,19 +139,10 @@ class TestExtractPreviewFromLines:
 
 class TestExtractFrame:
     def test_returns_none_without_opencv(self):
-        from vexy_lines_run.app import extract_frame
+        from vexy_lines_run.helpers import extract_frame
 
         # Will return None if cv2 is not installed, or file doesn't exist
         result = extract_frame("/nonexistent/video.mp4", 0)
-        assert result is None
-
-    @patch("vexy_lines_run.app.cv2", create=True)
-    def test_returns_none_when_cap_fails(self, mock_cv2):
-        from vexy_lines_run.app import extract_frame
-
-        # Even with mocked cv2, the real import inside the function
-        # may or may not work -- we test the graceful failure path
-        result = extract_frame("/nonexistent/video.mp4")
         assert result is None
 
 

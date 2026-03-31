@@ -1,0 +1,10 @@
+{
+  "typeCheckingMode": "strict",
+  "pythonVersion": "3.11",
+  "include": ["src", "tests"],
+  "exclude": ["**/__pycache__", "**/node_modules", "**/.git"],
+  "ignore": [
+    "**/__pycache__",
+    "**/tests/**"
+  ]
+}

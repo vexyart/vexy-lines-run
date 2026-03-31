@@ -255,21 +255,21 @@ wheels = [
 ]
 
 [[package]]
-name = "opencv-python"
+name = "opencv-python-headless"
 version = "4.13.0.92"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "numpy" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/fc/6f/5a28fef4c4a382be06afe3938c64cc168223016fa520c5abaf37e8862aa5/opencv_python-4.13.0.92-cp37-abi3-macosx_13_0_arm64.whl", hash = "sha256:caf60c071ec391ba51ed00a4a920f996d0b64e3e46068aac1f646b5de0326a19", size = 46247052, upload-time = "2026-02-05T07:01:25.046Z" },
-    { url = "https://files.pythonhosted.org/packages/08/ac/6c98c44c650b8114a0fb901691351cfb3956d502e8e9b5cd27f4ee7fbf2f/opencv_python-4.13.0.92-cp37-abi3-macosx_14_0_x86_64.whl", hash = "sha256:5868a8c028a0b37561579bfb8ac1875babdc69546d236249fff296a8c010ccf9", size = 32568781, upload-time = "2026-02-05T07:01:41.379Z" },
-    { url = "https://files.pythonhosted.org/packages/3e/51/82fed528b45173bf629fa44effb76dff8bc9f4eeaee759038362dfa60237/opencv_python-4.13.0.92-cp37-abi3-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:0bc2596e68f972ca452d80f444bc404e08807d021fbba40df26b61b18e01838a", size = 47685527, upload-time = "2026-02-05T06:59:11.24Z" },
-    { url = "https://files.pythonhosted.org/packages/db/07/90b34a8e2cf9c50fe8ed25cac9011cde0676b4d9d9c973751ac7616223a2/opencv_python-4.13.0.92-cp37-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:402033cddf9d294693094de5ef532339f14ce821da3ad7df7c9f6e8316da32cf", size = 70460872, upload-time = "2026-02-05T06:59:19.162Z" },
-    { url = "https://files.pythonhosted.org/packages/02/6d/7a9cc719b3eaf4377b9c2e3edeb7ed3a81de41f96421510c0a169ca3cfd4/opencv_python-4.13.0.92-cp37-abi3-manylinux_2_28_aarch64.whl", hash = "sha256:bccaabf9eb7f897ca61880ce2869dcd9b25b72129c28478e7f2a5e8dee945616", size = 46708208, upload-time = "2026-02-05T06:59:15.419Z" },
-    { url = "https://files.pythonhosted.org/packages/fd/55/b3b49a1b97aabcfbbd6c7326df9cb0b6fa0c0aefa8e89d500939e04aa229/opencv_python-4.13.0.92-cp37-abi3-manylinux_2_28_x86_64.whl", hash = "sha256:620d602b8f7d8b8dab5f4b99c6eb353e78d3fb8b0f53db1bd258bb1aa001c1d5", size = 72927042, upload-time = "2026-02-05T06:59:23.389Z" },
-    { url = "https://files.pythonhosted.org/packages/fb/17/de5458312bcb07ddf434d7bfcb24bb52c59635ad58c6e7c751b48949b009/opencv_python-4.13.0.92-cp37-abi3-win32.whl", hash = "sha256:372fe164a3148ac1ca51e5f3ad0541a4a276452273f503441d718fab9c5e5f59", size = 30932638, upload-time = "2026-02-05T07:02:14.98Z" },
-    { url = "https://files.pythonhosted.org/packages/e9/a5/1be1516390333ff9be3a9cb648c9f33df79d5096e5884b5df71a588af463/opencv_python-4.13.0.92-cp37-abi3-win_amd64.whl", hash = "sha256:423d934c9fafb91aad38edf26efb46da91ffbc05f3f59c4b0c72e699720706f5", size = 40212062, upload-time = "2026-02-05T07:02:12.724Z" },
+    { url = "https://files.pythonhosted.org/packages/79/42/2310883be3b8826ac58c3f2787b9358a2d46923d61f88fedf930bc59c60c/opencv_python_headless-4.13.0.92-cp37-abi3-macosx_13_0_arm64.whl", hash = "sha256:1a7d040ac656c11b8c38677cc8cccdc149f98535089dbe5b081e80a4e5903209", size = 46247192, upload-time = "2026-02-05T07:01:35.187Z" },
+    { url = "https://files.pythonhosted.org/packages/2d/1e/6f9e38005a6f7f22af785df42a43139d0e20f169eb5787ce8be37ee7fcc9/opencv_python_headless-4.13.0.92-cp37-abi3-macosx_14_0_x86_64.whl", hash = "sha256:3e0a6f0a37994ec6ce5f59e936be21d5d6384a4556f2d2da9c2f9c5dc948394c", size = 32568914, upload-time = "2026-02-05T07:01:51.989Z" },
+    { url = "https://files.pythonhosted.org/packages/21/76/9417a6aef9def70e467a5bf560579f816148a4c658b7d525581b356eda9e/opencv_python_headless-4.13.0.92-cp37-abi3-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:5c8cfc8e87ed452b5cecb9419473ee5560a989859fe1d10d1ce11ae87b09a2cb", size = 33703709, upload-time = "2026-02-05T10:24:46.469Z" },
+    { url = "https://files.pythonhosted.org/packages/92/ce/bd17ff5772938267fd49716e94ca24f616ff4cb1ff4c6be13085108037be/opencv_python_headless-4.13.0.92-cp37-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:0525a3d2c0b46c611e2130b5fdebc94cf404845d8fa64d2f3a3b679572a5bd22", size = 56016764, upload-time = "2026-02-05T10:26:48.904Z" },
+    { url = "https://files.pythonhosted.org/packages/8f/b4/b7bcbf7c874665825a8c8e1097e93ea25d1f1d210a3e20d4451d01da30aa/opencv_python_headless-4.13.0.92-cp37-abi3-manylinux_2_28_aarch64.whl", hash = "sha256:eb60e36b237b1ebd40a912da5384b348df8ed534f6f644d8e0b4f103e272ba7d", size = 35010236, upload-time = "2026-02-05T10:28:11.031Z" },
+    { url = "https://files.pythonhosted.org/packages/4b/33/b5db29a6c00eb8f50708110d8d453747ca125c8b805bc437b289dbdcc057/opencv_python_headless-4.13.0.92-cp37-abi3-manylinux_2_28_x86_64.whl", hash = "sha256:0bd48544f77c68b2941392fcdf9bcd2b9cdf00e98cb8c29b2455d194763cf99e", size = 60391106, upload-time = "2026-02-05T10:30:14.236Z" },
+    { url = "https://files.pythonhosted.org/packages/fb/c3/52cfea47cd33e53e8c0fbd6e7c800b457245c1fda7d61660b4ffe9596a7f/opencv_python_headless-4.13.0.92-cp37-abi3-win32.whl", hash = "sha256:a7cf08e5b191f4ebb530791acc0825a7986e0d0dee2a3c491184bd8599848a4b", size = 30812232, upload-time = "2026-02-05T07:02:29.594Z" },
+    { url = "https://files.pythonhosted.org/packages/4a/90/b338326131ccb2aaa3c2c85d00f41822c0050139a4bfe723cfd95455bd2d/opencv_python_headless-4.13.0.92-cp37-abi3-win_amd64.whl", hash = "sha256:77a82fe35ddcec0f62c15f2ba8a12ecc2ed4207c17b0902c7a3151ae29f37fb6", size = 40070414, upload-time = "2026-02-05T07:02:26.448Z" },
 ]
 
 [[package]]
@@ -441,6 +441,31 @@ wheels = [
 ]
 
 [[package]]
+name = "pywin32"
+version = "311"
+source = { registry = "https://pypi.org/simple" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/7c/af/449a6a91e5d6db51420875c54f6aff7c97a86a3b13a0b4f1a5c13b988de3/pywin32-311-cp311-cp311-win32.whl", hash = "sha256:184eb5e436dea364dcd3d2316d577d625c0351bf237c4e9a5fabbcfa5a58b151", size = 8697031, upload-time = "2025-07-14T20:13:13.266Z" },
+    { url = "https://files.pythonhosted.org/packages/51/8f/9bb81dd5bb77d22243d33c8397f09377056d5c687aa6d4042bea7fbf8364/pywin32-311-cp311-cp311-win_amd64.whl", hash = "sha256:3ce80b34b22b17ccbd937a6e78e7225d80c52f5ab9940fe0506a1a16f3dab503", size = 9508308, upload-time = "2025-07-14T20:13:15.147Z" },
+    { url = "https://files.pythonhosted.org/packages/44/7b/9c2ab54f74a138c491aba1b1cd0795ba61f144c711daea84a88b63dc0f6c/pywin32-311-cp311-cp311-win_arm64.whl", hash = "sha256:a733f1388e1a842abb67ffa8e7aad0e70ac519e09b0f6a784e65a136ec7cefd2", size = 8703930, upload-time = "2025-07-14T20:13:16.945Z" },
+    { url = "https://files.pythonhosted.org/packages/e7/ab/01ea1943d4eba0f850c3c61e78e8dd59757ff815ff3ccd0a84de5f541f42/pywin32-311-cp312-cp312-win32.whl", hash = "sha256:750ec6e621af2b948540032557b10a2d43b0cee2ae9758c54154d711cc852d31", size = 8706543, upload-time = "2025-07-14T20:13:20.765Z" },
+    { url = "https://files.pythonhosted.org/packages/d1/a8/a0e8d07d4d051ec7502cd58b291ec98dcc0c3fff027caad0470b72cfcc2f/pywin32-311-cp312-cp312-win_amd64.whl", hash = "sha256:b8c095edad5c211ff31c05223658e71bf7116daa0ecf3ad85f3201ea3190d067", size = 9495040, upload-time = "2025-07-14T20:13:22.543Z" },
+    { url = "https://files.pythonhosted.org/packages/ba/3a/2ae996277b4b50f17d61f0603efd8253cb2d79cc7ae159468007b586396d/pywin32-311-cp312-cp312-win_arm64.whl", hash = "sha256:e286f46a9a39c4a18b319c28f59b61de793654af2f395c102b4f819e584b5852", size = 8710102, upload-time = "2025-07-14T20:13:24.682Z" },
+    { url = "https://files.pythonhosted.org/packages/a5/be/3fd5de0979fcb3994bfee0d65ed8ca9506a8a1260651b86174f6a86f52b3/pywin32-311-cp313-cp313-win32.whl", hash = "sha256:f95ba5a847cba10dd8c4d8fefa9f2a6cf283b8b88ed6178fa8a6c1ab16054d0d", size = 8705700, upload-time = "2025-07-14T20:13:26.471Z" },
+    { url = "https://files.pythonhosted.org/packages/e3/28/e0a1909523c6890208295a29e05c2adb2126364e289826c0a8bc7297bd5c/pywin32-311-cp313-cp313-win_amd64.whl", hash = "sha256:718a38f7e5b058e76aee1c56ddd06908116d35147e133427e59a3983f703a20d", size = 9494700, upload-time = "2025-07-14T20:13:28.243Z" },
+    { url = "https://files.pythonhosted.org/packages/04/bf/90339ac0f55726dce7d794e6d79a18a91265bdf3aa70b6b9ca52f35e022a/pywin32-311-cp313-cp313-win_arm64.whl", hash = "sha256:7b4075d959648406202d92a2310cb990fea19b535c7f4a78d3f5e10b926eeb8a", size = 8709318, upload-time = "2025-07-14T20:13:30.348Z" },
+]
+
+[[package]]
+name = "pyxdg"
+version = "0.28"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/b0/25/7998cd2dec731acbd438fbf91bc619603fc5188de0a9a17699a781840452/pyxdg-0.28.tar.gz", hash = "sha256:3267bb3074e934df202af2ee0868575484108581e6f3cb006af1da35395e88b4", size = 77776, upload-time = "2022-06-05T11:35:01Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e5/8d/cf41b66a8110670e3ad03dab9b759704eeed07fa96e90fdc0357b2ba70e2/pyxdg-0.28-py2.py3-none-any.whl", hash = "sha256:bdaf595999a0178ecea4052b7f4195569c1ff4d344567bccdc12dfdf02d545ab", size = 49520, upload-time = "2022-06-05T11:34:58.832Z" },
+]
+
+[[package]]
 name = "resvg-py"
 version = "0.2.6"
 source = { registry = "https://pypi.org/simple" }
@@ -504,6 +529,17 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/13/97/1ad94f8c8e04912a67ee001c11edbc3a06667fefa03c1ffdc4723187dc36/resvg_py-0.2.6-pp311-pypy311_pp73-musllinux_1_2_i686.whl", hash = "sha256:9694f88d1047a35ebfebb18c5fe947561a61db80a5a5808cbcf8062a8daad069", size = 1398001, upload-time = "2026-01-14T06:28:49.996Z" },
     { url = "https://files.pythonhosted.org/packages/32/75/c44454a0a9760cb2623eed8f5a388f191352d6ab51a5fd1d017073a7a674/resvg_py-0.2.6-pp311-pypy311_pp73-musllinux_1_2_x86_64.whl", hash = "sha256:b3b7388666a6655ea6b932c7044d8c97ecec05ab46728e4f2e58d7c2090b2a5c", size = 1376284, upload-time = "2026-01-14T06:29:04.788Z" },
 ]
+
+[[package]]
+name = "show-in-file-manager"
+version = "1.1.6"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "packaging" },
+    { name = "pywin32", marker = "sys_platform == 'win32'" },
+    { name = "pyxdg", marker = "sys_platform == 'linux'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/86/5e/1092f0054bd939d7ea471b06e2ab7895ebb5d6f7a7c2e736d0d1ce079582/show_in_file_manager-1.1.6.tar.gz", hash = "sha256:559b596e3e563800cf69d734cd236824279a9d820d1d841640c5f13e0058f9b6", size = 37156, upload-time = "2026-02-17T06:58:05.042Z" }
 
 [[package]]
 name = "six"
@@ -587,42 +623,51 @@ wheels = [
 
 [[package]]
 name = "vexy-lines-apy"
-version = "1.0.7"
-source = { registry = "https://pypi.org/simple" }
+source = { directory = "/Users/adam/Developer/vcs3/github.vexyart/vexy-lines/vexy-lines-apy" }
 dependencies = [
+    { name = "av" },
     { name = "loguru" },
+    { name = "opencv-python-headless" },
+    { name = "pillow" },
+    { name = "resvg-py" },
     { name = "typing-extensions" },
     { name = "vexy-lines-py" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/7f/05/584aa451495e2e2fe008ad89d466800e6e2fa30bf205fa3043df176e0a62/vexy_lines_apy-1.0.7.tar.gz", hash = "sha256:51c60d5e3c279af1dd044bbab41a51ce027a6552fee325c83a4cd44cd23db5a5", size = 10694, upload-time = "2026-03-30T15:04:41.378Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/28/7b/5055c499aa14cc9ec40372e03338f34d36f1c3e44f721e04f971a54e07c4/vexy_lines_apy-1.0.7-py3-none-any.whl", hash = "sha256:34d950df19e08b7d35bf8e41a372b0b74aa74899d8440d78c5ed0471fba1ecc3", size = 30333, upload-time = "2026-03-30T15:04:40.083Z" },
+
+[package.metadata]
+requires-dist = [
+    { name = "av", specifier = ">=12.0.0" },
+    { name = "loguru", specifier = ">=0.7.2" },
+    { name = "opencv-python-headless", specifier = ">=4.8.0" },
+    { name = "pillow", specifier = ">=10.0.0" },
+    { name = "resvg-py", specifier = ">=0.2.0" },
+    { name = "typing-extensions", specifier = ">=4.0" },
+    { name = "vexy-lines-py", specifier = ">=0.1.0" },
 ]
+provides-extras = ["video"]
 
 [[package]]
 name = "vexy-lines-py"
-version = "1.0.6"
-source = { registry = "https://pypi.org/simple" }
+source = { directory = "/Users/adam/Developer/vcs3/github.vexyart/vexy-lines/vexy-lines-py" }
 dependencies = [
     { name = "loguru" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/d2/af/85ac1d2b90e8bc9c0f325a4bcd07b741891b0ed9a92eff00b1304f5a063a/vexy_lines_py-1.0.6.tar.gz", hash = "sha256:227f3a9f6eebcc4ff60135a3d0b4b09572198f237c6b384c68124447f6da55b3", size = 10083, upload-time = "2026-03-30T14:09:48.583Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/02/a0/1ed6dd2a5a05e467e22198b3deeeaa6642cf68639d6ff63d7fa4998b7694/vexy_lines_py-1.0.6-py3-none-any.whl", hash = "sha256:9396c0c9219670f15d0ba02eebc9ae9b3bebf368481e065939fb3dd760e9562d", size = 16631, upload-time = "2026-03-30T14:09:47.365Z" },
-]
+
+[package.metadata]
+requires-dist = [{ name = "loguru", specifier = ">=0.7.2" }]
 
 [[package]]
 name = "vexy-lines-run"
 source = { editable = "." }
 dependencies = [
-    { name = "av" },
     { name = "ctkmenubarplus" },
     { name = "ctktooltip" },
     { name = "customtkinter" },
     { name = "loguru" },
-    { name = "opencv-python" },
+    { name = "opencv-python-headless" },
     { name = "pillow" },
     { name = "resvg-py" },
+    { name = "show-in-file-manager" },
     { name = "svglab" },
     { name = "tkinterdnd2" },
     { name = "vexy-lines-apy" },
@@ -631,18 +676,18 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "av", specifier = ">=17.0.0" },
     { name = "ctkmenubarplus", specifier = ">=0.1.0" },
     { name = "ctktooltip" },
     { name = "customtkinter", specifier = ">=5.2.0" },
     { name = "loguru", specifier = ">=0.7.2" },
-    { name = "opencv-python", specifier = ">=4.8.0" },
+    { name = "opencv-python-headless", specifier = ">=4.8.0" },
     { name = "pillow", specifier = ">=12.1.0" },
     { name = "resvg-py", specifier = ">=0.2.0" },
+    { name = "show-in-file-manager", specifier = ">=1.1.4" },
     { name = "svglab", specifier = ">=0.1.0" },
     { name = "tkinterdnd2", specifier = ">=0.4.0" },
-    { name = "vexy-lines-apy", specifier = ">=1.0.1" },
-    { name = "vexy-lines-py", specifier = ">=1.0.2" },
+    { name = "vexy-lines-apy", directory = "/Users/adam/Developer/vcs3/github.vexyart/vexy-lines/vexy-lines-apy" },
+    { name = "vexy-lines-py", directory = "/Users/adam/Developer/vcs3/github.vexyart/vexy-lines/vexy-lines-py" },
 ]
 
 [[package]]

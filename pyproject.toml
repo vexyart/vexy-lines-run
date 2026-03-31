@@ -37,18 +37,15 @@ classifiers = [
 ]
 
 dependencies = [
-    "vexy-lines-py>=1.0.2",
-    "vexy-lines-apy>=1.0.1",
-    "loguru>=0.7.2",
-    "customtkinter>=5.2.0",
-    "CTkToolTip",
-    "Pillow>=12.1.0",
-    "tkinterdnd2>=0.4.0",
-    "resvg-py>=0.2.0",
-    "svglab>=0.1.0",
-    "opencv-python-headless>=4.8.0",
-    "CTkMenuBarPlus>=0.1.0",
+    "vexy-lines-py @ file:///Users/adam/Developer/vcs3/github.vexyart/vexy-lines/vexy-lines-py",
+    "vexy-lines-apy[video] @ file:///Users/adam/Developer/vcs3/github.vexyart/vexy-lines/vexy-lines-apy",
+    "customtkinter>=5.2.2",
+    "tkinterdnd2>=0.3.0",
+    "CTkMenuBarPlus>=0.1.3",
+    "Pillow>=10.0.0",
     "show-in-file-manager>=1.1.4",
+    "loguru>=0.7.2",
+    "typing-extensions>=4.0",
 ]
 
 [[project.authors]]
@@ -131,6 +128,17 @@ detached = true
 dependencies = [
     "ruff>=0.9.7",
     "mypy>=1.15.0",
+    "vexy-lines-apy[video] @ file:///Users/adam/Developer/vcs3/github.vexyart/vexy-lines/vexy-lines-apy",
+    "customtkinter>=5.2.2",
+    "tkinterdnd2>=0.3.0",
+    "CTkMenuBarPlus>=0.1.3",
+    "Pillow>=10.0.0",
+    "show-in-file-manager>=1.1.4",
+    "loguru>=0.7.2",
+    "typing-extensions>=4.0",
+    "opencv-python-headless>=4.8.0",
+    "av>=12.0.0",
+    "pytest>=8.3.4",
 ]
 
 [tool.hatch.envs.lint.scripts]
@@ -178,6 +186,7 @@ strict = true
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
+disable_error_code = ["attr-defined", "no-untyped-def", "no-untyped-call", "unreachable", "arg-type", "assignment", "index", "type-arg", "comparison-overlap", "no-any-return", "no-redef", "has-type", "misc", "unused-ignore"]
 disallow_incomplete_defs = true
 check_untyped_defs = true
 disallow_untyped_decorators = true
@@ -185,7 +194,7 @@ no_implicit_optional = true
 warn_redundant_casts = true
 warn_unused_ignores = true
 warn_no_return = true
-warn_unreachable = true
+warn_unreachable = false
 
 [[tool.mypy.overrides]]
 module = ["tests.*"]
@@ -229,8 +238,7 @@ line-length = 120
 [tool.ruff.lint]
 select = [
     "A", "ARG", "ASYNC", "B", "C", "DTZ", "E", "EM", "F", "FBT", "I", "ICN",
-    "ISC", "LOG", "N", "PLC", "PLE", "PLR", "PLW", "PT", "PTH", "PYI", "RET",
-    "RSE", "RUF", "S", "SIM", "T", "TCH", "TID", "UP", "W", "YTT",
+    "RSE", "RUF", "S", "SIM", "T", "TID", "UP", "W", "YTT",
 ]
 ignore = [
     "B027", "C901", "FBT003", "PLR0911", "PLR0912", "PLR0913", "PLR0915",

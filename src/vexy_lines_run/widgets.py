@@ -706,7 +706,7 @@ class CTkRangeSlider(CTkBaseClass):
         if button_color is None:
             self._button_color_0 = ThemeManager.theme["CTkSlider"]["button_color"]
             self._button_color_1 = ThemeManager.theme["CTkSlider"]["button_color"]
-        elif isinstance(button_color, tuple) and len(button_color) == 2 and isinstance(button_color[0], tuple):  # noqa: PLR2004  # noqa: PLR2004
+        elif isinstance(button_color, tuple) and len(button_color) == 2 and isinstance(button_color[0], tuple):
             self._button_color_0 = (
                 ThemeManager.theme["CTkSlider"]["button_color"]
                 if button_color[0] is None

@@ -234,17 +234,18 @@ class TestSaveImageBytes:
 
 
 class TestProcessExportDispatch:
-    def test_unknown_mode_calls_error(self):
+    def test_unknown_mode_calls_error(self, tmp_path):
         from vexy_lines_run.processing import process_export
 
         error_cb = MagicMock()
         complete_cb = MagicMock()
+        out_path = tmp_path / "out.png"
         process_export(
-            mode="unknown",
+            request="unknown",
             input_paths=[],
             style_path=None,
             end_style_path=None,
-            output_path="/tmp/out",
+            output_path=str(out_path),
             fmt="PNG",
             size="1x",
             audio=False,
@@ -272,7 +273,7 @@ class TestProcessLinesNoStyle:
         mock_mcp_cls.return_value.__exit__ = MagicMock(return_value=False)
         return mock_client
 
-    @patch("vexy_lines_run.processing.MCPClient")
+    @patch("vexy_lines_api.export.lines.MCPClient")
     def test_svg_export_uses_mcp_engine(self, mock_mcp_cls, tmp_path):
         from vexy_lines_run.processing import _process_lines
 
@@ -298,7 +299,7 @@ class TestProcessLinesNoStyle:
         mock_client.render.assert_called_once()
         mock_client.export_svg.assert_called_once()
 
-    @patch("vexy_lines_run.processing.MCPClient")
+    @patch("vexy_lines_api.export.lines.MCPClient")
     def test_png_export_uses_mcp_engine(self, mock_mcp_cls, tmp_path):
         from vexy_lines_run.processing import _process_lines
 
@@ -328,7 +329,7 @@ class TestProcessLinesNoStyle:
         mock_client.render.assert_called_once()
         mock_client.export_png.assert_called_once()
 
-    @patch("vexy_lines_run.processing.MCPClient")
+    @patch("vexy_lines_api.export.lines.MCPClient")
     def test_jpg_export_uses_mcp_engine(self, mock_mcp_cls, tmp_path):
         from vexy_lines_run.processing import _process_lines
 
@@ -355,8 +356,8 @@ class TestProcessLinesNoStyle:
         mock_client.render.assert_called_once()
         mock_client.export_jpeg.assert_called_once()
 
-    @patch("vexy_lines_run.processing.shutil")
-    @patch("vexy_lines_run.processing.MCPClient")
+    @patch("vexy_lines_api.export.lines.shutil")
+    @patch("vexy_lines_api.export.lines.MCPClient")
     def test_lines_format_copies_file(self, mock_mcp_cls, mock_shutil, tmp_path):
         from vexy_lines_run.processing import _process_lines
 
@@ -382,7 +383,7 @@ class TestProcessLinesNoStyle:
         mock_client.open_document.assert_not_called()
         mock_client.render.assert_not_called()
 
-    @patch("vexy_lines_run.processing.MCPClient")
+    @patch("vexy_lines_api.export.lines.MCPClient")
     def test_mcp_failure_logs_warning_and_continues(self, mock_mcp_cls, tmp_path):
         from vexy_lines_run.processing import _process_lines
 
@@ -412,7 +413,7 @@ class TestProcessLinesNoStyle:
 
         assert mock_client.open_document.call_count == 2
 
-    @patch("vexy_lines_run.processing.MCPClient")
+    @patch("vexy_lines_api.export.lines.MCPClient")
     def test_abort_event_stops_processing(self, mock_mcp_cls, tmp_path):
         from vexy_lines_run.processing import _process_lines
 

@@ -35,7 +35,7 @@ except ImportError as exc:
 try:
     from tkinterdnd2 import TkinterDnD
 except (ImportError, RuntimeError):
-    TkinterDnD = None  # type: ignore[assignment,misc]
+    TkinterDnD = None  # type: ignore[misc]
 
 _BASE_CLASSES: tuple[type, ...] = (customtkinter.CTk,)
 if TkinterDnD is not None:
@@ -64,11 +64,32 @@ class App(AppLayoutMixin, AppHandlersMixin, *_BASE_CLASSES, metaclass=_AppMeta):
 
         self._has_dnd: bool = bool(getattr(self, "TkdndVersion", None))
 
+        # Hint text for empty-state previews (single source of truth)
+        self._lines_hint: str = (
+            "Drop Vexy Lines documents here\nto export them as SVG, images or video"
+            if self._has_dnd
+            else "Click: Add Lines\nto export Vexy Lines documents as SVG, images or video"
+        )
+        self._images_hint: str = (
+            "Drop images here\nto apply a Vexy Lines style to them"
+            if self._has_dnd
+            else "Click: Add Images\nto apply a Vexy Lines style to images"
+        )
+        self._video_hint: str = (
+            "Drop video here\nto apply a Vexy Lines style to it"
+            if self._has_dnd
+            else "Click: Open Video\nto apply a Vexy Lines style to a video"
+        )
+
         self._style_paths: dict[str, str | None] = {"start": None, "end": None}
         self._style_labels: dict[str, customtkinter.CTkLabel] = {}
         self._style_previews: dict[str, customtkinter.CTkLabel] = {}
         self._style_raw_images: dict[str, Image.Image | None] = {"start": None, "end": None}
-        _style_hint = "Drop Vexy Lines document here\nto use as style" if self._has_dnd else "Click: Open Lines\nto use a Vexy Lines document as style"
+        _style_hint = (
+            "Drop Vexy Lines document here\nto use as style"
+            if self._has_dnd
+            else "Click: Open Lines\nto use a Vexy Lines document as style"
+        )
         self._style_preview_hint: dict[str, str] = {"start": _style_hint, "end": _style_hint}
         self._style_default_text: dict[str, str] = {"start": "", "end": ""}
 
@@ -312,7 +333,7 @@ class App(AppLayoutMixin, AppHandlersMixin, *_BASE_CLASSES, metaclass=_AppMeta):
         logger.info("Export finished: {}", message)
         if self._output_path:
             try:
-                from showinfm.showinfm import show_in_file_manager  # noqa: PLC0415
+                from showinfm.showinfm import show_in_file_manager
 
                 show_in_file_manager(self._output_path)
             except Exception:
@@ -359,22 +380,6 @@ class App(AppLayoutMixin, AppHandlersMixin, *_BASE_CLASSES, metaclass=_AppMeta):
             if self.format_var.get() not in EXPORT_FORMATS_VIDEO:
                 self.format_var.set("MP4")
         self._on_format_change(self.format_var.get())
-
-    def _choose_output_path(self) -> None:
-        fmt = self.format_var.get()
-        idir = self._get_default_export_dir()
-        if fmt == "MP4":
-            sel = filedialog.asksaveasfilename(
-                title="Choose output file",
-                defaultextension=".mp4",
-                filetypes=[("MP4 files", "*.mp4"), ("All files", "*.*")],
-                initialdir=idir or None,
-            )
-        else:
-            sel = filedialog.askdirectory(title="Choose output directory", initialdir=idir or None)
-        if sel:
-            self._output_path = sel
-
 
 def main() -> None:
     """Entry point for the Vexy Lines Run application."""

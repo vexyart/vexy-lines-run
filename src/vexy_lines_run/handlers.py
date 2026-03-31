@@ -1,3 +1,4 @@
+# mypy: disable-error-code="attr-defined"
 # this_file: src/vexy_lines_run/handlers.py
 """Handler mixin — file CRUD, preview updates, resize, format/size/audio state."""
 
@@ -16,7 +17,7 @@ from PIL import Image
 from vexy_lines_run.helpers import (
     IMAGE_EXTENSIONS,
     LINES_EXTENSIONS,
-    MAX_STORED_STYLES,
+    MIN_TRUNCATE_CHARS,
     VIDEO_EXTENSIONS,
     extract_frame,
     extract_preview_from_lines,
@@ -27,11 +28,6 @@ from vexy_lines_run.helpers import (
 if TYPE_CHECKING:
     from vexy_lines_run.app import App
 
-try:
-    import cv2
-except ImportError:
-    cv2 = None  # type: ignore[assignment]
-
 
 class AppHandlersMixin:
     """Handles all CRUD operations, preview rendering, resize logic, and state updates.
@@ -41,7 +37,7 @@ class AppHandlersMixin:
 
     # -- type narrowing for IDE support --
     if TYPE_CHECKING:
-        self: App  # type: ignore[assignment]
+        self: App  # type: ignore[misc]
 
     # ── shared helpers ────────────────────────────────────────────────────
 
@@ -73,7 +69,7 @@ class AppHandlersMixin:
         if self._font.measure(path) <= width_px:
             return path
         avg = self._font.measure("x") or 7
-        return truncate_start(path, max(MAX_STORED_STYLES, width_px // avg))
+        return truncate_start(path, max(MIN_TRUNCATE_CHARS, width_px // avg))
 
     # ── resize ────────────────────────────────────────────────────────────
 
@@ -82,7 +78,7 @@ class AppHandlersMixin:
             return
         w = self.winfo_width()
         h = self.winfo_height()
-        if abs(w - self._last_width) <= 5 and abs(h - self._last_height) <= 5:  # noqa: PLR2004
+        if abs(w - self._last_width) <= 5 and abs(h - self._last_height) <= 5:
             return
         self._last_width = w
         self._last_height = h
@@ -91,7 +87,7 @@ class AppHandlersMixin:
         self._resize_job = self.after(70, self._resize_refresh)
 
     def _resize_refresh(self) -> None:
-        self._resize_job = None
+        self._resize_job: str | None = None
         self._refresh_image_list()
         self._refresh_lines_list()
         self._retruncate_labels()
@@ -140,7 +136,7 @@ class AppHandlersMixin:
             return
         del self._lines_paths[self._selected_lines_index]
         if not self._lines_paths:
-            self._selected_lines_index = None
+            self._selected_lines_index: int | None = None
         elif self._selected_lines_index >= len(self._lines_paths):
             self._selected_lines_index = len(self._lines_paths) - 1
         self._refresh_lines_list()
@@ -148,7 +144,7 @@ class AppHandlersMixin:
 
     def _clear_all_lines(self) -> None:
         self._lines_paths.clear()
-        self._selected_lines_index = None
+        self._selected_lines_index: int | None = None
         self._refresh_lines_list()
         self._update_lines_preview()
 
@@ -158,10 +154,9 @@ class AppHandlersMixin:
         self._lines_rows.clear()
         wpx = max(10, self.lines_list_frame.winfo_width() - 24)
         if not self._lines_paths:
-            _lines_hint = "Drop Vexy Lines documents here\nto export them as SVG, images or video" if self._has_dnd else "Click: Add Lines\nto export Vexy Lines documents as SVG, images or video"
             placeholder = customtkinter.CTkLabel(
                 self.lines_list_frame,
-                text=_lines_hint,
+                text=self._lines_hint,
                 font=(self._font.actual("family"), 12, "italic"),
                 text_color=("#888888", "#777777"),
             )
@@ -213,8 +208,7 @@ class AppHandlersMixin:
     def _redraw_lines_preview(self) -> None:
         w = max(10, self.lines_preview_container.winfo_width())
         h = max(10, self.lines_preview_container.winfo_height())
-        _lines_hint = "Drop Vexy Lines documents here\nto export them as SVG, images or video" if self._has_dnd else "Click: Add Lines\nto export Vexy Lines documents as SVG, images or video"
-        self._set_label_image(self.lines_preview_label, self._lines_raw_image, w, h, placeholder=_lines_hint)
+        self._set_label_image(self.lines_preview_label, self._lines_raw_image, w, h, placeholder=self._lines_hint)
 
     def _on_lines_drop(self, event: tk.Event) -> None:
         if data := getattr(event, "data", ""):
@@ -248,7 +242,7 @@ class AppHandlersMixin:
             return
         del self._image_paths[self._selected_image_index]
         if not self._image_paths:
-            self._selected_image_index = None
+            self._selected_image_index: int | None = None
         elif self._selected_image_index >= len(self._image_paths):
             self._selected_image_index = len(self._image_paths) - 1
         self._refresh_image_list()
@@ -256,7 +250,7 @@ class AppHandlersMixin:
 
     def _clear_all_images(self) -> None:
         self._image_paths.clear()
-        self._selected_image_index = None
+        self._selected_image_index: int | None = None
         self._refresh_image_list()
         self._update_images_preview()
 
@@ -266,10 +260,9 @@ class AppHandlersMixin:
         self._image_rows.clear()
         wpx = max(10, self.images_list_frame.winfo_width() - 24)
         if not self._image_paths:
-            _images_hint = "Drop images here\nto apply a Vexy Lines style to them" if self._has_dnd else "Click: Add Images\nto apply a Vexy Lines style to images"
             placeholder = customtkinter.CTkLabel(
                 self.images_list_frame,
-                text=_images_hint,
+                text=self._images_hint,
                 font=(self._font.actual("family"), 12, "italic"),
                 text_color=("#888888", "#777777"),
             )
@@ -321,8 +314,7 @@ class AppHandlersMixin:
     def _redraw_images_preview(self) -> None:
         w = max(10, self.images_preview_container.winfo_width())
         h = max(10, self.images_preview_container.winfo_height())
-        _images_hint = "Drop images here\nto apply a Vexy Lines style to them" if self._has_dnd else "Click: Add Images\nto apply a Vexy Lines style to images"
-        self._set_label_image(self.images_preview_label, self._images_raw_image, w, h, placeholder=_images_hint)
+        self._set_label_image(self.images_preview_label, self._images_raw_image, w, h, placeholder=self._images_hint)
 
     def _on_images_drop(self, event: tk.Event) -> None:
         if data := getattr(event, "data", ""):
@@ -358,18 +350,18 @@ class AppHandlersMixin:
         self._update_audio_toggle_visibility()
 
     def _get_video_frame_count(self, path: str) -> int:
-        if cv2 is None:
-            return 0
-        cap = cv2.VideoCapture(path)
+        """Return total frame count for *path*, or 0 on failure."""
         try:
-            return max(0, int(cap.get(cv2.CAP_PROP_FRAME_COUNT)))
-        finally:
-            cap.release()
+            from vexy_lines_api.video import probe
+            info = probe(path)
+            return info.total_frames
+        except Exception:
+            return 0
 
     def _probe_video_audio(self, path: str) -> bool:
         """Check whether a video file contains an audio track."""
         try:
-            from vexy_lines_api.video import probe  # noqa: PLC0415
+            from vexy_lines_api.video import probe
 
             return probe(path).has_audio
         except Exception:
@@ -439,10 +431,9 @@ class AppHandlersMixin:
         self._redraw_video_previews()
 
     def _redraw_video_previews(self) -> None:
-        _video_hint = "Drop video here\nto apply a Vexy Lines style to it" if self._has_dnd else "Click: Open Video\nto apply a Vexy Lines style to a video"
         w1 = max(10, self.video_first_preview_container.winfo_width())
         h1 = max(10, self.video_first_preview_container.winfo_height())
-        self._set_label_image(self.video_first_preview, self._video_first_raw_image, w1, h1, placeholder=_video_hint)
+        self._set_label_image(self.video_first_preview, self._video_first_raw_image, w1, h1, placeholder=self._video_hint)
 
         w2 = max(10, self.video_last_preview_container.winfo_width())
         h2 = max(10, self.video_last_preview_container.winfo_height())

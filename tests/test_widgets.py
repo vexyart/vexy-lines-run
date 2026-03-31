@@ -3,8 +3,6 @@
 
 from __future__ import annotations
 
-import pytest
-
 
 class TestCTkRangeSliderImport:
     """Verify the widget class is importable without a display."""
