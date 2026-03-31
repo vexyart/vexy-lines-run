@@ -124,7 +124,7 @@ class AppLayoutMixin:
         self._style_mode_buttons: dict[str, object] = {}
         for mode in ("auto", "fast", "slow"):
             label = mode.capitalize()
-            prefix = "\u2713\u2004" if mode == "auto" else "    "
+            prefix = "\u2713\u2004" if mode == "fast" else "    "
             btn = mode_sub.add_option(
                 f"{prefix}{label}",
                 command=lambda m=mode: self._set_style_mode(m),

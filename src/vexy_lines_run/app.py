@@ -82,7 +82,7 @@ class App(AppLayoutMixin, AppHandlersMixin, *_BASE_CLASSES, metaclass=_AppMeta):
             else "Click: Open Video\nto apply a Vexy Lines style to a video"
         )
 
-        self._style_mode: str = "auto"
+        self._style_mode: str = "fast"
         self._style_paths: dict[str, str | None] = {"start": None, "end": None}
         self._style_labels: dict[str, customtkinter.CTkLabel] = {}
         self._style_previews: dict[str, customtkinter.CTkLabel] = {}
