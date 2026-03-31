@@ -318,6 +318,8 @@ class App(AppLayoutMixin, AppHandlersMixin, *_BASE_CLASSES, metaclass=_AppMeta):
             audio=self.audio_var.get(),
             frame_range=self._video_range if mode == "video" else None,
             style_mode=self._style_mode,
+            force=False,
+            cleanup=False,
         )
         threading.Thread(
             target=process_export,
