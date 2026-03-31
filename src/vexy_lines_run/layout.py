@@ -146,6 +146,8 @@ class AppLayoutMixin:
         audio_sub = export_menu.add_submenu("Audio\u2004\u203a", font=menu_font)
         audio_sub.add_option("On", command=lambda: self.audio_var.set(True), font=menu_font)
         audio_sub.add_option("Off", command=lambda: self.audio_var.set(False), font=menu_font)
+        export_menu.add_separator()
+        export_menu.add_option("Copy CLI", command=self._copy_cli_command, font=menu_font)
 
     def _menu_add_lines(self) -> None:
         self.inputs_tabview.set("Lines")

@@ -380,6 +380,76 @@ class App(AppLayoutMixin, AppHandlersMixin, *_BASE_CLASSES, metaclass=_AppMeta):
             return [self._video_path] if self._video_path else []
         return []
 
+    def _copy_cli_command(self) -> None:
+        """Build the equivalent vexy-lines-cli command and copy to clipboard."""
+        import shlex
+
+        try:
+            import pyperclip
+        except ImportError:
+            messagebox.showerror("Error", "pyperclip is not installed")
+            return
+
+        mode = self.inputs_tabview.get().lower()
+        paths = self._get_active_input_paths()
+        style_start = self._style_paths.get("start")
+        style_end = self._style_paths.get("end")
+        fmt = self.format_var.get()
+        size = self.size_var.get()
+        style_mode = self._style_mode
+
+        if not paths:
+            messagebox.showwarning("Copy CLI", "No input files selected.")
+            return
+
+        parts = ["vexy-lines-cli"]
+
+        if mode == "video":
+            parts.append("style_video")
+            if style_start:
+                parts.extend(["--style", shlex.quote(style_start)])
+            if style_end:
+                parts.extend(["--end-style", shlex.quote(style_end)])
+            parts.extend(["--input", shlex.quote(paths[0])])
+            out = self._output_path or ""
+            if out:
+                parts.extend(["--output", shlex.quote(out)])
+            video_range = getattr(self, "_video_range", None)
+            if video_range:
+                parts.extend(["--start-frame", str(video_range[0])])
+                parts.extend(["--end-frame", str(video_range[1])])
+            audio = self.audio_var.get() if hasattr(self, "audio_var") else True
+            if not audio:
+                parts.append("--no-audio")
+            if size and size != "\u2014":
+                parts.extend(["--size", size])
+            if style_mode != "fast":
+                parts.extend(["--style-mode", style_mode])
+
+        else:
+            # "images" and "lines" both use style_transfer
+            parts.append("style_transfer")
+            if style_start:
+                parts.extend(["--style", shlex.quote(style_start)])
+            if style_end:
+                parts.extend(["--end-style", shlex.quote(style_end)])
+            parts.append("--images")
+            for p in paths:
+                parts.append(shlex.quote(p))
+            out = self._output_path or ""
+            if out:
+                parts.extend(["--output-dir", shlex.quote(out)])
+            if fmt:
+                parts.extend(["--format", fmt.lower()])
+            if size and size != "\u2014":
+                parts.extend(["--size", size])
+            if style_mode != "fast":
+                parts.extend(["--style-mode", style_mode])
+
+        cmd = " ".join(parts)
+        pyperclip.copy(cmd)
+        logger.info("Copied CLI command to clipboard: {}", cmd)
+
     def _on_inputs_tab_changed(self, tab_name: str) -> None:
         self._update_styles_panel_state()
         self._update_audio_toggle_visibility()
