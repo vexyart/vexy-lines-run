@@ -307,6 +307,10 @@ class App(AppLayoutMixin, AppHandlersMixin, *_BASE_CLASSES, metaclass=_AppMeta):
 
     def _run_export(self) -> None:
         mode = self.inputs_tabview.get().lower()
+        frame_range: tuple[int, int] | None = None
+        if mode == "video":
+            frame_range = (max(self._video_range[0] - 1, 0), max(self._video_range[1] - 1, 0))
+
         request = ExportRequest(
             mode=mode,  # type: ignore[arg-type]
             input_paths=self._get_active_input_paths(),
@@ -316,7 +320,7 @@ class App(AppLayoutMixin, AppHandlersMixin, *_BASE_CLASSES, metaclass=_AppMeta):
             format=self.format_var.get(),  # type: ignore[arg-type]
             size=self.size_var.get(),
             audio=self.audio_var.get(),
-            frame_range=self._video_range if mode == "video" else None,
+            frame_range=frame_range,
             style_mode=self._style_mode,
             force=False,
             cleanup=False,
@@ -470,6 +474,7 @@ class App(AppLayoutMixin, AppHandlersMixin, *_BASE_CLASSES, metaclass=_AppMeta):
             if self.format_var.get() not in EXPORT_FORMATS_VIDEO:
                 self.format_var.set("MP4")
         self._on_format_change(self.format_var.get())
+
 
 def main() -> None:
     """Entry point for the Vexy Lines Run application."""

@@ -1045,7 +1045,7 @@
 <td><code>frame_range</code></td>
 <td><code>tuple[int, int] \| None</code></td>
 <td><code>None</code></td>
-<td>Start and end frame numbers (1-indexed, inclusive). Video mode only.</td>
+<td>Start and end frame indexes (0-based, inclusive). Video mode only. The GUI converts its 1-based controls before dispatch.</td>
 </tr>
 <tr>
 <td><code>relative_style</code></td>

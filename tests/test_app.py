@@ -7,7 +7,8 @@ helper functions, constants, and importability.
 
 from __future__ import annotations
 
-from unittest.mock import patch
+from types import SimpleNamespace
+from unittest.mock import MagicMock, patch
 
 # ---------------------------------------------------------------------------
 # Import tests
@@ -144,6 +145,70 @@ class TestExtractFrame:
         # Will return None if cv2 is not installed, or file doesn't exist
         result = extract_frame("/nonexistent/video.mp4", 0)
         assert result is None
+
+
+class _FakeVar:
+    def __init__(self, value):
+        self._value = value
+
+    def get(self):
+        return self._value
+
+
+class _FakeTabView:
+    def __init__(self, value: str):
+        self._value = value
+
+    def get(self) -> str:
+        return self._value
+
+
+class _FakeThread:
+    last_created = None
+
+    def __init__(self, *, target, args, kwargs, daemon):
+        self.target = target
+        self.args = args
+        self.kwargs = kwargs
+        self.daemon = daemon
+        self.started = False
+        _FakeThread.last_created = self
+
+    def start(self):
+        self.started = True
+
+
+class TestRunExport:
+    def test_run_export_converts_ui_video_range_to_zero_based_export_request(self):
+        from vexy_lines_run.app import App
+
+        fake_app = SimpleNamespace(
+            inputs_tabview=_FakeTabView("Video"),
+            _style_paths={"start": "style.lines", "end": None},
+            _output_path="styled.mp4",
+            format_var=_FakeVar("MP4"),
+            size_var=_FakeVar("1x"),
+            audio_var=_FakeVar(True),
+            _video_range=(5, 12),
+            _style_mode="auto",
+            abort_event=object(),
+            after=MagicMock(),
+            _on_export_progress=MagicMock(),
+            _on_export_preview=MagicMock(),
+            _on_export_complete=MagicMock(),
+            _on_export_error=MagicMock(),
+            _get_active_input_paths=lambda: ["input.mp4"],
+        )
+
+        _FakeThread.last_created = None
+        with patch("vexy_lines_run.app.threading.Thread", _FakeThread):
+            App._run_export(fake_app)
+
+        assert _FakeThread.last_created is not None
+        assert _FakeThread.last_created.started is True
+        request = _FakeThread.last_created.args[0]
+        assert request.mode == "video"
+        assert request.frame_range == (4, 11)
 
 
 # ---------------------------------------------------------------------------

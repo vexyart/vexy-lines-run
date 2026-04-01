@@ -71,7 +71,7 @@ process_export(
 | `fmt` | `str` | — | `"SVG"`, `"PNG"`, `"JPG"`, `"MP4"`, or `"LINES"` |
 | `size` | `str` | — | `"1x"`, `"2x"`, `"3x"`, `"4x"`, or `"—"` |
 | `audio` | `bool` | `True` | Include audio track in MP4 output |
-| `frame_range` | `tuple[int, int] \| None` | `None` | Start and end frame numbers (1-indexed, inclusive). Video mode only. |
+| `frame_range` | `tuple[int, int] \| None` | `None` | Start and end frame indexes (0-based, inclusive). Video mode only. The GUI converts its 1-based controls before dispatch. |
 | `relative_style` | `bool` | `False` | Use relative style scaling |
 | `abort_event` | `threading.Event \| None` | `None` | Set to cancel mid-export |
 | `on_progress` | `Callable[[int, int, str], None] \| None` | `None` | Called with `(current, total, message)` after each file |
