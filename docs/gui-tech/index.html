@@ -921,7 +921,7 @@
 <h2 id="widget-hierarchy">Widget Hierarchy<a class="headerlink" href="#widget-hierarchy" title="Permanent link">&para;</a></h2>
 <p><img alt="GUI Diagram" src="../images/gui-diag.svg" /></p>
 <h3 id="root-level">Root Level<a class="headerlink" href="#root-level" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code>App (customtkinter.CTk)
+<p><code>App (customtkinter.CTk)
 ├── CTkMenuBar
 └── root (customtkinter.CTkFrame)
     ├── inputs_tabview (CTkTabview)
@@ -962,17 +962,17 @@
     ├── styles_tabview (CTkTabview)
     │   ├── Style Tab (start)
     │   │   ├── content_frame (CTkFrame)
-    │   │   │   └── _style_previews[&quot;start&quot;] (CTkLabel)
+    │   │   │   └── _style_previews["start"] (CTkLabel)
     │   │   └── controls_frame (CTkFrame)
     │   │       ├── open_style_btn (CTkButton)
-    │   │       ├── _style_labels[&quot;start&quot;] (CTkLabel)
+    │   │       ├── _style_labels["start"] (CTkLabel)
     │   │       └── clear_style_btn (CTkButton)
     │   └── Style Tab (end)
     │       ├── content_frame (CTkFrame)
-    │       │   └── _style_previews[&quot;end&quot;] (CTkLabel)
+    │       │   └── _style_previews["end"] (CTkLabel)
     │       └── controls_frame (CTkFrame)
     │           ├── open_style_btn (CTkButton)
-    │           ├── _style_labels[&quot;end&quot;] (CTkLabel)
+    │           ├── _style_labels["end"] (CTkLabel)
     │           └── clear_style_btn (CTkButton)
     └── bottom_frame (CTkFrame)
         └── controls_frame (CTkFrame)
@@ -980,8 +980,7 @@
             ├── size_menu (CTkOptionMenu)
             ├── audio_toggle (CTkSwitch)
             ├── progress_bar (CTkProgressBar)
-            └── convert_button (CTkButton)
-</code></pre></div>
+            └── convert_button (CTkButton)</code></p>
 <h2 id="key-components">Key Components<a class="headerlink" href="#key-components" title="Permanent link">&para;</a></h2>
 <h3 id="1-menu-bar-ctkmenubar">1. Menu Bar (<code>CTkMenuBar</code>)<a class="headerlink" href="#1-menu-bar-ctkmenubar" title="Permanent link">&para;</a></h3>
 <p>The top-level menu provides access to all major functionality through cascading menus:</p>
@@ -1128,11 +1127,11 @@
 </ol>
 <h3 id="path-truncation">Path Truncation<a class="headerlink" href="#path-truncation" title="Permanent link">&para;</a></h3>
 <p>Long paths are truncated with leading "..." to fit available width:
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">truncate_start</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">max_chars</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">max_chars</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">text</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;...</span><span class="si">{</span><span class="n">text</span><span class="p">[</span><span class="o">-</span><span class="p">(</span><span class="n">max_chars</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">3</span><span class="p">):]</span><span class="si">}</span><span class="s2">&quot;</span>
-</code></pre></div></p>
+<code>python
+def truncate_start(text: str, max_chars: int = 60) -&gt; str:
+    if len(text) &lt;= max_chars:
+        return text
+    return f"...{text[-(max_chars - 3):]}"</code></p>
 <p>Font-based calculation for pixel-accurate truncation based on widget width.</p>
 <h2 id="tooltips">Tooltips<a class="headerlink" href="#tooltips" title="Permanent link">&para;</a></h2>
 <p>Optional tooltips via <code>CTkToolTip</code> library:
