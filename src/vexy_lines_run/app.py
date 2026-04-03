@@ -1,3 +1,4 @@
+# pyright: reportMissingTypeStubs=false, reportUnknownMemberType=false, reportPrivateUsage=false, reportUnknownVariableType=false, reportUnknownArgumentType=false, reportUnknownLambdaType=false, reportAttributeAccessIssue=false, reportConstantRedefinition=false
 # this_file: src/vexy_lines_run/app.py
 """Main GUI application for Vexy Lines style transfer."""
 
@@ -253,6 +254,26 @@ class App(AppLayoutMixin, AppHandlersMixin, *_BASE_CLASSES, metaclass=_AppMeta):
         h = max(10, self.preview_frame.winfo_height())
         self._set_label_image(self.preview_label, self._export_preview_image, w, h)
 
+    def _set_export_running_ui_state(self) -> None:
+        self._is_exporting = True
+        self.abort_event.clear()
+        self._show_export_preview()
+        self.convert_button.pack_forget()
+        self.progress_bar.pack(side="left", fill="x", expand=True, padx=(10, 10), pady=10)
+        self.progress_bar.set(0)
+        self.convert_button.configure(
+            text="Stop \u25a0", fg_color="#D32F2F", hover_color="#B71C1C", command=self._stop_export
+        )
+        self.convert_button.pack(side="right", padx=(0, 10), pady=10)
+
+    def _reset_export_idle_ui_state(self) -> None:
+        self._is_exporting = False
+        self._hide_export_preview()
+        self.progress_bar.pack_forget()
+        self.convert_button.configure(
+            text="Export \u25b6", fg_color="#2E7D32", hover_color="#1B5E20", command=self._do_export, state="normal"
+        )
+
     # ── export lifecycle ────────────────────────────────────────────
 
     def _get_default_export_dir(self) -> str:
@@ -283,20 +304,7 @@ class App(AppLayoutMixin, AppHandlersMixin, *_BASE_CLASSES, metaclass=_AppMeta):
         if not sel:
             return
         self._output_path = sel
-
-        self._is_exporting = True
-        self.abort_event.clear()
-        self._show_export_preview()
-
-        self.convert_button.pack_forget()
-        self.progress_bar.pack(side="left", fill="x", expand=True, padx=(10, 10), pady=10)
-        self.progress_bar.set(0)
-
-        self.convert_button.configure(
-            text="Stop \u25a0", fg_color="#D32F2F", hover_color="#B71C1C", command=self._stop_export
-        )
-        self.convert_button.pack(side="right", padx=(0, 10), pady=10)
-
+        self._set_export_running_ui_state()
         self._run_export()
 
     def _stop_export(self) -> None:
@@ -348,12 +356,7 @@ class App(AppLayoutMixin, AppHandlersMixin, *_BASE_CLASSES, metaclass=_AppMeta):
         logger.debug("Export progress: {}/{} - {}", current, total, message)
 
     def _on_export_complete(self, message: str) -> None:
-        self._is_exporting = False
-        self._hide_export_preview()
-        self.progress_bar.pack_forget()
-        self.convert_button.configure(
-            text="Export \u25b6", fg_color="#2E7D32", hover_color="#1B5E20", command=self._do_export, state="normal"
-        )
+        self._reset_export_idle_ui_state()
         logger.info("Export finished: {}", message)
         if self._output_path:
             try:
@@ -364,12 +367,7 @@ class App(AppLayoutMixin, AppHandlersMixin, *_BASE_CLASSES, metaclass=_AppMeta):
                 logger.opt(exception=True).debug("Could not reveal output in file manager")
 
     def _on_export_error(self, error: str) -> None:
-        self._is_exporting = False
-        self._hide_export_preview()
-        self.progress_bar.pack_forget()
-        self.convert_button.configure(
-            text="Export \u25b6", fg_color="#2E7D32", hover_color="#1B5E20", command=self._do_export, state="normal"
-        )
+        self._reset_export_idle_ui_state()
         if error != "Export aborted by user":
             messagebox.showerror("Export Error", error)
         logger.error("Export error: {}", error)

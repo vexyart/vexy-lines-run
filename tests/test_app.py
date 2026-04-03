@@ -7,7 +7,8 @@ helper functions, constants, and importability.
 
 from __future__ import annotations
 
-from types import SimpleNamespace
+import sys
+from types import ModuleType, SimpleNamespace
 from unittest.mock import MagicMock, patch
 
 # ---------------------------------------------------------------------------
@@ -209,6 +210,102 @@ class TestRunExport:
         request = _FakeThread.last_created.args[0]
         assert request.mode == "video"
         assert request.frame_range == (4, 11)
+
+
+class TestExportUiStateHelpers:
+    def test_set_export_running_ui_state_updates_running_controls(self):
+        from vexy_lines_run.app import App
+
+        fake_app = SimpleNamespace(
+            _is_exporting=False,
+            abort_event=MagicMock(),
+            _show_export_preview=MagicMock(),
+            convert_button=MagicMock(),
+            progress_bar=MagicMock(),
+            _stop_export=MagicMock(),
+        )
+
+        App._set_export_running_ui_state(fake_app)
+
+        assert fake_app._is_exporting is True
+        fake_app.abort_event.clear.assert_called_once_with()
+        fake_app._show_export_preview.assert_called_once_with()
+        fake_app.convert_button.pack_forget.assert_called_once_with()
+        fake_app.progress_bar.pack.assert_called_once_with(side="left", fill="x", expand=True, padx=(10, 10), pady=10)
+        fake_app.progress_bar.set.assert_called_once_with(0)
+        fake_app.convert_button.configure.assert_called_once_with(
+            text="Stop \u25a0",
+            fg_color="#D32F2F",
+            hover_color="#B71C1C",
+            command=fake_app._stop_export,
+        )
+        fake_app.convert_button.pack.assert_called_once_with(side="right", padx=(0, 10), pady=10)
+
+    def test_reset_export_idle_ui_state_restores_idle_controls(self):
+        from vexy_lines_run.app import App
+
+        fake_app = SimpleNamespace(
+            _is_exporting=True,
+            _hide_export_preview=MagicMock(),
+            progress_bar=MagicMock(),
+            convert_button=MagicMock(),
+            _do_export=MagicMock(),
+        )
+
+        App._reset_export_idle_ui_state(fake_app)
+
+        assert fake_app._is_exporting is False
+        fake_app._hide_export_preview.assert_called_once_with()
+        fake_app.progress_bar.pack_forget.assert_called_once_with()
+        fake_app.convert_button.configure.assert_called_once_with(
+            text="Export \u25b6",
+            fg_color="#2E7D32",
+            hover_color="#1B5E20",
+            command=fake_app._do_export,
+            state="normal",
+        )
+
+
+class TestExportLifecycleSideEffects:
+    def test_on_export_complete_resets_ui_and_reveals_output(self):
+        from vexy_lines_run.app import App
+
+        fake_app = SimpleNamespace(_reset_export_idle_ui_state=MagicMock(), _output_path="/tmp/output")
+        showinfm_package = ModuleType("showinfm")
+        showinfm_module = ModuleType("showinfm.showinfm")
+        showinfm_module.show_in_file_manager = MagicMock()
+        showinfm_package.showinfm = showinfm_module
+
+        with patch.dict(
+            sys.modules,
+            {"showinfm": showinfm_package, "showinfm.showinfm": showinfm_module},
+        ):
+            App._on_export_complete(fake_app, "done")
+
+        fake_app._reset_export_idle_ui_state.assert_called_once_with()
+        showinfm_module.show_in_file_manager.assert_called_once_with("/tmp/output")
+
+    def test_on_export_error_shows_dialog_for_non_abort_errors(self):
+        from vexy_lines_run.app import App
+
+        fake_app = SimpleNamespace(_reset_export_idle_ui_state=MagicMock())
+
+        with patch("vexy_lines_run.app.messagebox.showerror") as showerror:
+            App._on_export_error(fake_app, "boom")
+
+        fake_app._reset_export_idle_ui_state.assert_called_once_with()
+        showerror.assert_called_once_with("Export Error", "boom")
+
+    def test_on_export_error_skips_dialog_for_user_abort(self):
+        from vexy_lines_run.app import App
+
+        fake_app = SimpleNamespace(_reset_export_idle_ui_state=MagicMock())
+
+        with patch("vexy_lines_run.app.messagebox.showerror") as showerror:
+            App._on_export_error(fake_app, "Export aborted by user")
+
+        fake_app._reset_export_idle_ui_state.assert_called_once_with()
+        showerror.assert_not_called()
 
 
 # ---------------------------------------------------------------------------

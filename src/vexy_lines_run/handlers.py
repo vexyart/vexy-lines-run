@@ -1,4 +1,5 @@
 # mypy: disable-error-code="attr-defined"
+# pyright: reportMissingTypeStubs=false, reportUnknownMemberType=false, reportPrivateUsage=false, reportAttributeAccessIssue=false, reportUnknownVariableType=false, reportUnknownArgumentType=false, reportUnnecessaryComparison=false
 # this_file: src/vexy_lines_run/handlers.py
 """Handler mixin — file CRUD, preview updates, resize, format/size/audio state."""
 
@@ -7,6 +8,7 @@ from __future__ import annotations
 import contextlib
 import io
 import tkinter as tk
+from collections.abc import Callable, Collection
 from pathlib import Path
 from tkinter import filedialog
 from typing import TYPE_CHECKING
@@ -71,6 +73,90 @@ class AppHandlersMixin:
         avg = self._font.measure("x") or 7
         return truncate_start(path, max(MIN_TRUNCATE_CHARS, width_px // avg))
 
+    def _add_valid_unique_paths(
+        self,
+        incoming_paths: list[str],
+        current_paths: list[str],
+        valid_extensions: Collection[str],
+    ) -> bool:
+        changed = False
+        for path in incoming_paths:
+            if Path(path).suffix.lower() in valid_extensions and path not in current_paths:
+                current_paths.append(path)
+                changed = True
+        return changed
+
+    def _select_first_index_if_needed(self, paths: list[str], selected_index: int | None) -> int | None:
+        if selected_index is None and paths:
+            return 0
+        return selected_index
+
+    def _repair_selection_after_delete(self, paths: list[str], selected_index: int | None) -> int | None:
+        if not paths:
+            return None
+        if selected_index is None:
+            return None
+        return min(selected_index, len(paths) - 1)
+
+    def _normalized_selected_index(self, paths: list[str], selected_index: int | None) -> int | None:
+        if not paths:
+            return None
+        if selected_index is None or not (0 <= selected_index < len(paths)):
+            return 0
+        return selected_index
+
+    def _remove_selected_path(self, paths: list[str], selected_index: int | None) -> tuple[bool, int | None]:
+        if selected_index is None or not (0 <= selected_index < len(paths)):
+            return False, selected_index
+        del paths[selected_index]
+        return True, self._repair_selection_after_delete(paths, selected_index)
+
+    def _reset_list_rows(self, rows: list[customtkinter.CTkBaseClass]) -> None:
+        for row in rows:
+            row.destroy()
+        rows.clear()
+
+    def _rebuild_path_list_rows(
+        self,
+        parent: customtkinter.CTkFrame,
+        rows: list[customtkinter.CTkBaseClass],
+        paths: list[str],
+        placeholder_text: str,
+        on_select: Callable[[int], None],
+    ) -> None:
+        self._reset_list_rows(rows)
+        width_px = max(10, parent.winfo_width() - 24)
+        if not paths:
+            placeholder = customtkinter.CTkLabel(
+                parent,
+                text=placeholder_text,
+                font=(self._font.actual("family"), 12, "italic"),
+                text_color=("#888888", "#777777"),
+            )
+            placeholder.pack(expand=True, pady=40)
+            rows.append(placeholder)
+            return
+        for index, path in enumerate(paths):
+            row = customtkinter.CTkButton(
+                parent,
+                text=self._truncate_start_for_width(path, width_px),
+                anchor="w",
+                corner_radius=6,
+                fg_color=("#e9e9e9", "#2a2a2a"),
+                text_color=("black", "white"),
+                hover_color=("#d0d0d0", "#3a3a3a"),
+                command=lambda idx=index: on_select(idx),
+            )
+            row.pack(fill="x", padx=2, pady=2)
+            rows.append(row)
+
+    def _style_selected_rows(self, rows: list[customtkinter.CTkBaseClass], selected_index: int | None) -> None:
+        for index, row in enumerate(rows):
+            if index == selected_index:
+                row.configure(fg_color=("#3B8ED0", "#1F6AA5"), hover_color=("#2974A5", "#144C78"))
+            else:
+                row.configure(fg_color=("#e9e9e9", "#2a2a2a"), hover_color=("#d0d0d0", "#3a3a3a"))
+
     # ── resize ────────────────────────────────────────────────────────────
 
     def _on_resize(self, event: tk.Event) -> None:
@@ -119,26 +205,16 @@ class AppHandlersMixin:
             self._add_lines(list(files))
 
     def _add_lines(self, paths: list[str]) -> None:
-        changed = False
-        for p in paths:
-            if Path(p).suffix.lower() in LINES_EXTENSIONS and p not in self._lines_paths:
-                self._lines_paths.append(p)
-                changed = True
-        if not changed:
+        if not self._add_valid_unique_paths(paths, self._lines_paths, LINES_EXTENSIONS):
             return
-        if self._selected_lines_index is None and self._lines_paths:
-            self._selected_lines_index = 0
+        self._selected_lines_index = self._select_first_index_if_needed(self._lines_paths, self._selected_lines_index)
         self._refresh_lines_list()
         self._update_lines_preview()
 
     def _remove_selected_lines(self) -> None:
-        if self._selected_lines_index is None or not (0 <= self._selected_lines_index < len(self._lines_paths)):
+        removed, self._selected_lines_index = self._remove_selected_path(self._lines_paths, self._selected_lines_index)
+        if not removed:
             return
-        del self._lines_paths[self._selected_lines_index]
-        if not self._lines_paths:
-            self._selected_lines_index: int | None = None
-        elif self._selected_lines_index >= len(self._lines_paths):
-            self._selected_lines_index = len(self._lines_paths) - 1
         self._refresh_lines_list()
         self._update_lines_preview()
 
@@ -149,34 +225,15 @@ class AppHandlersMixin:
         self._update_lines_preview()
 
     def _refresh_lines_list(self) -> None:
-        for r in self._lines_rows:
-            r.destroy()
-        self._lines_rows.clear()
-        wpx = max(10, self.lines_list_frame.winfo_width() - 24)
-        if not self._lines_paths:
-            placeholder = customtkinter.CTkLabel(
-                self.lines_list_frame,
-                text=self._lines_hint,
-                font=(self._font.actual("family"), 12, "italic"),
-                text_color=("#888888", "#777777"),
-            )
-            placeholder.pack(expand=True, pady=40)
-            self._lines_rows.append(placeholder)
-            return
-        for i, p in enumerate(self._lines_paths):
-            row = customtkinter.CTkButton(
-                self.lines_list_frame,
-                text=self._truncate_start_for_width(p, wpx),
-                anchor="w",
-                corner_radius=6,
-                fg_color=("#e9e9e9", "#2a2a2a"),
-                text_color=("black", "white"),
-                hover_color=("#d0d0d0", "#3a3a3a"),
-                command=lambda idx=i: self._select_lines_row(idx),
-            )
-            row.pack(fill="x", padx=2, pady=2)
-            self._lines_rows.append(row)
-        self._update_lines_row_styles()
+        self._rebuild_path_list_rows(
+            self.lines_list_frame,
+            self._lines_rows,
+            self._lines_paths,
+            self._lines_hint,
+            self._select_lines_row,
+        )
+        if self._lines_paths:
+            self._update_lines_row_styles()
 
     def _select_lines_row(self, index: int) -> None:
         if 0 <= index < len(self._lines_paths):
@@ -185,21 +242,15 @@ class AppHandlersMixin:
             self._update_lines_preview()
 
     def _update_lines_row_styles(self) -> None:
-        for idx, row in enumerate(self._lines_rows):
-            if idx == self._selected_lines_index:
-                row.configure(fg_color=("#3B8ED0", "#1F6AA5"), hover_color=("#2974A5", "#144C78"))
-            else:
-                row.configure(fg_color=("#e9e9e9", "#2a2a2a"), hover_color=("#d0d0d0", "#3a3a3a"))
+        self._style_selected_rows(self._lines_rows, self._selected_lines_index)
 
     def _update_lines_preview(self) -> None:
-        if not self._lines_paths:
+        index = self._normalized_selected_index(self._lines_paths, self._selected_lines_index)
+        if index is None:
             self._lines_raw_image = None
         else:
-            idx = self._selected_lines_index if self._selected_lines_index is not None else 0
-            if not (0 <= idx < len(self._lines_paths)):
-                idx = 0
-                self._selected_lines_index = 0
-            if pb := extract_preview_from_lines(self._lines_paths[idx]):
+            self._selected_lines_index = index
+            if pb := extract_preview_from_lines(self._lines_paths[index]):
                 self._lines_raw_image = Image.open(io.BytesIO(pb))
             else:
                 self._lines_raw_image = None
@@ -225,26 +276,16 @@ class AppHandlersMixin:
             self._add_images(list(files))
 
     def _add_images(self, paths: list[str]) -> None:
-        changed = False
-        for p in paths:
-            if Path(p).suffix.lower() in IMAGE_EXTENSIONS and p not in self._image_paths:
-                self._image_paths.append(p)
-                changed = True
-        if not changed:
+        if not self._add_valid_unique_paths(paths, self._image_paths, IMAGE_EXTENSIONS):
             return
-        if self._selected_image_index is None and self._image_paths:
-            self._selected_image_index = 0
+        self._selected_image_index = self._select_first_index_if_needed(self._image_paths, self._selected_image_index)
         self._refresh_image_list()
         self._update_images_preview()
 
     def _remove_selected_image(self) -> None:
-        if self._selected_image_index is None or not (0 <= self._selected_image_index < len(self._image_paths)):
+        removed, self._selected_image_index = self._remove_selected_path(self._image_paths, self._selected_image_index)
+        if not removed:
             return
-        del self._image_paths[self._selected_image_index]
-        if not self._image_paths:
-            self._selected_image_index: int | None = None
-        elif self._selected_image_index >= len(self._image_paths):
-            self._selected_image_index = len(self._image_paths) - 1
         self._refresh_image_list()
         self._update_images_preview()
 
@@ -255,34 +296,15 @@ class AppHandlersMixin:
         self._update_images_preview()
 
     def _refresh_image_list(self) -> None:
-        for r in self._image_rows:
-            r.destroy()
-        self._image_rows.clear()
-        wpx = max(10, self.images_list_frame.winfo_width() - 24)
-        if not self._image_paths:
-            placeholder = customtkinter.CTkLabel(
-                self.images_list_frame,
-                text=self._images_hint,
-                font=(self._font.actual("family"), 12, "italic"),
-                text_color=("#888888", "#777777"),
-            )
-            placeholder.pack(expand=True, pady=40)
-            self._image_rows.append(placeholder)
-            return
-        for i, p in enumerate(self._image_paths):
-            row = customtkinter.CTkButton(
-                self.images_list_frame,
-                text=self._truncate_start_for_width(p, wpx),
-                anchor="w",
-                corner_radius=6,
-                fg_color=("#e9e9e9", "#2a2a2a"),
-                text_color=("black", "white"),
-                hover_color=("#d0d0d0", "#3a3a3a"),
-                command=lambda idx=i: self._select_image_row(idx),
-            )
-            row.pack(fill="x", padx=2, pady=2)
-            self._image_rows.append(row)
-        self._update_image_row_styles()
+        self._rebuild_path_list_rows(
+            self.images_list_frame,
+            self._image_rows,
+            self._image_paths,
+            self._images_hint,
+            self._select_image_row,
+        )
+        if self._image_paths:
+            self._update_image_row_styles()
 
     def _select_image_row(self, index: int) -> None:
         if 0 <= index < len(self._image_paths):
@@ -291,24 +313,18 @@ class AppHandlersMixin:
             self._update_images_preview()
 
     def _update_image_row_styles(self) -> None:
-        for idx, row in enumerate(self._image_rows):
-            if idx == self._selected_image_index:
-                row.configure(fg_color=("#3B8ED0", "#1F6AA5"), hover_color=("#2974A5", "#144C78"))
-            else:
-                row.configure(fg_color=("#e9e9e9", "#2a2a2a"), hover_color=("#d0d0d0", "#3a3a3a"))
+        self._style_selected_rows(self._image_rows, self._selected_image_index)
 
     def _update_images_preview(self) -> None:
-        if not self._image_paths:
+        index = self._normalized_selected_index(self._image_paths, self._selected_image_index)
+        if index is None:
             self._images_raw_image = None
         else:
-            idx = self._selected_image_index if self._selected_image_index is not None else 0
-            if not (0 <= idx < len(self._image_paths)):
-                idx = 0
-                self._selected_image_index = 0
+            self._selected_image_index = index
             # Reset before attempting open so stale images never survive a suppressed failure
             self._images_raw_image = None
             with contextlib.suppress(OSError, ValueError):
-                self._images_raw_image = Image.open(self._image_paths[idx]).convert("RGB")
+                self._images_raw_image = Image.open(self._image_paths[index]).convert("RGB")
         self._redraw_images_preview()
 
     def _redraw_images_preview(self) -> None:
@@ -353,6 +369,7 @@ class AppHandlersMixin:
         """Return total frame count for *path*, or 0 on failure."""
         try:
             from vexy_lines_api.video import probe
+
             info = probe(path)
             return info.total_frames
         except Exception:
@@ -433,7 +450,9 @@ class AppHandlersMixin:
     def _redraw_video_previews(self) -> None:
         w1 = max(10, self.video_first_preview_container.winfo_width())
         h1 = max(10, self.video_first_preview_container.winfo_height())
-        self._set_label_image(self.video_first_preview, self._video_first_raw_image, w1, h1, placeholder=self._video_hint)
+        self._set_label_image(
+            self.video_first_preview, self._video_first_raw_image, w1, h1, placeholder=self._video_hint
+        )
 
         w2 = max(10, self.video_last_preview_container.winfo_width())
         h2 = max(10, self.video_last_preview_container.winfo_height())

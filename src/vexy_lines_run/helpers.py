@@ -29,7 +29,7 @@ VIDEO_EXTENSIONS: set[str] = {".mp4", ".mov", ".avi", ".mkv", ".webm"}
 LINES_EXTENSIONS: set[str] = {".lines"}
 
 EXPORT_FORMATS_LINES: list[str] = ["SVG", "PNG", "JPG", "LINES"]
-EXPORT_FORMATS_IMAGES: list[str] = ["SVG", "PNG", "JPG"]
-EXPORT_FORMATS_VIDEO: list[str] = ["MP4", "PNG", "JPG"]
+EXPORT_FORMATS_IMAGES: list[str] = ["SVG", "PNG", "JPG", "LINES"]
+EXPORT_FORMATS_VIDEO: list[str] = ["MP4", "PNG", "JPG", "LINES"]
 
 MIN_TRUNCATE_CHARS = 5

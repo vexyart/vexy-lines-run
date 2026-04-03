@@ -43,49 +43,47 @@ class TestExportButtonColors:
 
     def test_export_button_red_during_export(self):
         """Export button should change to red (#D32F2F) when exporting starts."""
-        # Find where button is reconfigured to red during export (in _do_export before _run_export)
-        # Matches configure() call containing Stop text, fg_color, and _stop_export command (any layout)
         red_pattern = (
-            r"def _do_export.*?"
+            r"def _set_export_running_ui_state.*?"
             r'convert_button\.configure\([^)]*text="Stop[^"]*"[^)]*fg_color="#([0-9A-Fa-f]+)"[^)]*command=self\._stop_export'
         )
         match = re.search(red_pattern, _ALL_SOURCE, re.DOTALL)
-        assert match is not None, "Could not find button reconfiguration with Stop text and red fg_color in _do_export"
+        assert match is not None, "Could not find button reconfiguration with Stop text and red fg_color"
         assert match.group(1).upper() == "D32F2F", f"Stop button fg_color is #{match.group(1)}, expected #D32F2F"
 
     def test_export_button_red_hover_color(self):
         """Stop button hover color should be #B71C1C."""
-        # Find hover color in Stop button configuration (in _do_export)
-        # Matches configure() call containing Stop text, hover_color, and _stop_export command (any layout)
         hover_pattern = (
-            r"def _do_export.*?"
+            r"def _set_export_running_ui_state.*?"
             r'convert_button\.configure\([^)]*text="Stop[^"]*"[^)]*hover_color="#([0-9A-Fa-f]+)"[^)]*command=self\._stop_export'
         )
         match = re.search(hover_pattern, _ALL_SOURCE, re.DOTALL)
-        assert match is not None, (
-            "Could not find button reconfiguration with Stop text and red hover_color in _do_export"
-        )
+        assert match is not None, "Could not find button reconfiguration with Stop text and red hover_color"
         assert match.group(1).upper() == "B71C1C", f"Stop button hover_color is #{match.group(1)}, expected #B71C1C"
 
     def test_export_button_reverts_on_complete(self):
         """Export button should revert to green after export completes."""
-        # Find _on_export_complete method and verify button is reset
-        complete_pattern = (
-            r'def _on_export_complete.*?convert_button\.configure\(\s*text="Export \\u25b6".*fg_color="#([0-9A-Fa-f]+)"'
+        complete_pattern = r"def _on_export_complete.*?self\._reset_export_idle_ui_state\(\)"
+        reset_pattern = r'def _reset_export_idle_ui_state.*?convert_button\.configure\(\s*text="Export \\u25b6".*fg_color="#([0-9A-Fa-f]+)"'
+        complete_match = re.search(complete_pattern, _ALL_SOURCE, re.DOTALL)
+        reset_match = re.search(reset_pattern, _ALL_SOURCE, re.DOTALL)
+        assert complete_match is not None, "Could not find idle-state reset call in _on_export_complete"
+        assert reset_match is not None, "Could not find button reconfiguration in _reset_export_idle_ui_state"
+        assert reset_match.group(1).upper() == "2E7D32", (
+            f"Export complete fg_color is #{reset_match.group(1)}, expected #2E7D32"
         )
-        match = re.search(complete_pattern, _ALL_SOURCE, re.DOTALL)
-        assert match is not None, "Could not find button reconfiguration in _on_export_complete"
-        assert match.group(1).upper() == "2E7D32", f"Export complete fg_color is #{match.group(1)}, expected #2E7D32"
 
     def test_export_button_reverts_on_error(self):
         """Export button should revert to green after export errors."""
-        # Find _on_export_error method and verify button is reset
-        error_pattern = (
-            r'def _on_export_error.*?convert_button\.configure\(\s*text="Export \\u25b6".*fg_color="#([0-9A-Fa-f]+)"'
+        error_pattern = r"def _on_export_error.*?self\._reset_export_idle_ui_state\(\)"
+        reset_pattern = r'def _reset_export_idle_ui_state.*?convert_button\.configure\(\s*text="Export \\u25b6".*fg_color="#([0-9A-Fa-f]+)"'
+        error_match = re.search(error_pattern, _ALL_SOURCE, re.DOTALL)
+        reset_match = re.search(reset_pattern, _ALL_SOURCE, re.DOTALL)
+        assert error_match is not None, "Could not find idle-state reset call in _on_export_error"
+        assert reset_match is not None, "Could not find button reconfiguration in _reset_export_idle_ui_state"
+        assert reset_match.group(1).upper() == "2E7D32", (
+            f"Export error fg_color is #{reset_match.group(1)}, expected #2E7D32"
         )
-        match = re.search(error_pattern, _ALL_SOURCE, re.DOTALL)
-        assert match is not None, "Could not find button reconfiguration in _on_export_error"
-        assert match.group(1).upper() == "2E7D32", f"Export error fg_color is #{match.group(1)}, expected #2E7D32"
 
 
 class TestEmptyListPlaceholders:
@@ -198,17 +196,21 @@ class TestProgressBarVisibility:
 
     def test_progress_bar_hidden_after_export_complete(self):
         """Progress bar should be hidden again after export completes."""
-        # Find pack_forget in _on_export_complete
-        complete_hide_pattern = r"def _on_export_complete.*?self\.progress_bar\.pack_forget\(\)"
-        match = re.search(complete_hide_pattern, _ALL_SOURCE, re.DOTALL)
-        assert match is not None, "Could not find progress_bar.pack_forget() in _on_export_complete"
+        complete_hide_pattern = r"def _on_export_complete.*?self\._reset_export_idle_ui_state\(\)"
+        reset_hide_pattern = r"def _reset_export_idle_ui_state.*?self\.progress_bar\.pack_forget\(\)"
+        complete_match = re.search(complete_hide_pattern, _ALL_SOURCE, re.DOTALL)
+        reset_match = re.search(reset_hide_pattern, _ALL_SOURCE, re.DOTALL)
+        assert complete_match is not None, "Could not find idle-state reset call in _on_export_complete"
+        assert reset_match is not None, "Could not find progress_bar.pack_forget() in _reset_export_idle_ui_state"
 
     def test_progress_bar_hidden_after_export_error(self):
         """Progress bar should be hidden after export errors."""
-        # Find pack_forget in _on_export_error
-        error_hide_pattern = r"def _on_export_error.*?self\.progress_bar\.pack_forget\(\)"
-        match = re.search(error_hide_pattern, _ALL_SOURCE, re.DOTALL)
-        assert match is not None, "Could not find progress_bar.pack_forget() in _on_export_error"
+        error_hide_pattern = r"def _on_export_error.*?self\._reset_export_idle_ui_state\(\)"
+        reset_hide_pattern = r"def _reset_export_idle_ui_state.*?self\.progress_bar\.pack_forget\(\)"
+        error_match = re.search(error_hide_pattern, _ALL_SOURCE, re.DOTALL)
+        reset_match = re.search(reset_hide_pattern, _ALL_SOURCE, re.DOTALL)
+        assert error_match is not None, "Could not find idle-state reset call in _on_export_error"
+        assert reset_match is not None, "Could not find progress_bar.pack_forget() in _reset_export_idle_ui_state"
 
 
 class TestExportButtonStateChanges:
@@ -221,39 +223,38 @@ class TestExportButtonStateChanges:
 
     def test_button_transitions_to_stop_on_export_start(self):
         """Button should change to 'Stop' (red) when export starts."""
-        # Find _do_export method
-        do_export_pattern = r'def _do_export.*?self\.convert_button\.configure\(.*?\n?.*?text="Stop'
+        do_export_pattern = r"def _do_export.*?self\._set_export_running_ui_state\(\)"
+        helper_pattern = r'def _set_export_running_ui_state.*?self\.convert_button\.configure\(.*?\n?.*?text="Stop'
         match = re.search(do_export_pattern, _ALL_SOURCE, re.DOTALL)
-        assert match is not None, "Could not find button configure with 'Stop' text in _do_export"
+        helper_match = re.search(helper_pattern, _ALL_SOURCE, re.DOTALL)
+        assert match is not None, "Could not find running-state helper call in _do_export"
+        assert helper_match is not None, (
+            "Could not find button configure with 'Stop' text in _set_export_running_ui_state"
+        )
 
-        # Check for _is_exporting set to True
-        export_start_pattern = r"def _do_export.*?self\._is_exporting = True"
+        export_start_pattern = r"def _set_export_running_ui_state.*?self\._is_exporting = True"
         match2 = re.search(export_start_pattern, _ALL_SOURCE, re.DOTALL)
-        assert match2 is not None, "Could not find _is_exporting = True in _do_export"
+        assert match2 is not None, "Could not find _is_exporting = True in _set_export_running_ui_state"
 
     def test_button_transitions_to_normal_on_export_complete(self):
         """Button should revert to 'Export ▶' (green) when export completes."""
-        # Find _on_export_complete method
-        complete_pattern = r"def _on_export_complete.*?self\._is_exporting = False"
+        complete_pattern = r"def _on_export_complete.*?self\._reset_export_idle_ui_state\(\)"
         match = re.search(complete_pattern, _ALL_SOURCE, re.DOTALL)
-        assert match is not None, "Could not find _is_exporting = False in _on_export_complete"
+        assert match is not None, "Could not find idle-state reset call in _on_export_complete"
 
-        # Check for button configure with Export text
-        export_complete_text = r'def _on_export_complete.*?convert_button\.configure\(\s*text="Export \\u25b6"'
+        export_complete_text = r'def _reset_export_idle_ui_state.*?convert_button\.configure\(\s*text="Export \\u25b6"'
         match2 = re.search(export_complete_text, _ALL_SOURCE, re.DOTALL)
-        assert match2 is not None, "Could not find button configure with 'Export ▶' text in _on_export_complete"
+        assert match2 is not None, "Could not find button configure with 'Export ▶' text in _reset_export_idle_ui_state"
 
     def test_button_transitions_to_normal_on_export_error(self):
         """Button should revert to 'Export ▶' (green) when export errors."""
-        # Find _on_export_error method
-        error_pattern = r"def _on_export_error.*?self\._is_exporting = False"
+        error_pattern = r"def _on_export_error.*?self\._reset_export_idle_ui_state\(\)"
         match = re.search(error_pattern, _ALL_SOURCE, re.DOTALL)
-        assert match is not None, "Could not find _is_exporting = False in _on_export_error"
+        assert match is not None, "Could not find idle-state reset call in _on_export_error"
 
-        # Check for button configure with Export text
-        export_error_text = r'def _on_export_error.*?convert_button\.configure\(\s*text="Export \\u25b6"'
+        export_error_text = r'def _reset_export_idle_ui_state.*?convert_button\.configure\(\s*text="Export \\u25b6"'
         match2 = re.search(export_error_text, _ALL_SOURCE, re.DOTALL)
-        assert match2 is not None, "Could not find button configure with 'Export ▶' text in _on_export_error"
+        assert match2 is not None, "Could not find button configure with 'Export ▶' text in _reset_export_idle_ui_state"
 
     def test_button_prevents_double_export(self):
         """Button should check _is_exporting to prevent starting a second export."""
@@ -293,10 +294,12 @@ class TestExportLifecycleIntegration:
 
     def test_abort_event_cleared_on_export_start(self):
         """abort_event should be cleared when export starts."""
-        # Find abort_event.clear() in _do_export
-        pattern = r"def _do_export.*?self\.abort_event\.clear\(\)"
-        match = re.search(pattern, _ALL_SOURCE, re.DOTALL)
-        assert match is not None, "Could not find abort_event.clear() in _do_export"
+        do_export_pattern = r"def _do_export.*?self\._set_export_running_ui_state\(\)"
+        helper_pattern = r"def _set_export_running_ui_state.*?self\.abort_event\.clear\(\)"
+        do_export_match = re.search(do_export_pattern, _ALL_SOURCE, re.DOTALL)
+        helper_match = re.search(helper_pattern, _ALL_SOURCE, re.DOTALL)
+        assert do_export_match is not None, "Could not find running-state helper call in _do_export"
+        assert helper_match is not None, "Could not find abort_event.clear() in _set_export_running_ui_state"
 
     def test_abort_event_set_on_stop(self):
         """abort_event should be set when Stop is clicked."""
