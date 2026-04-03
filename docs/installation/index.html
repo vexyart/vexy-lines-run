@@ -342,10 +342,49 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#install" class="md-nav__link">
+  <a href="#quick-start" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Install
+        Quick start
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Quick start">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#macos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        macOS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Windows
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-with-pip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Install with pip
       
     </span>
   </a>
@@ -353,10 +392,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#all-features-included" class="md-nav__link">
+  <a href="#whats-included" class="md-nav__link">
     <span class="md-ellipsis">
       
-        All features included
+        What's included
       
     </span>
   </a>
@@ -368,6 +407,17 @@
     <span class="md-ellipsis">
       
         Runtime dependencies
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#system-dependencies-for-video" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System dependencies for video
       
     </span>
   </a>
@@ -539,10 +589,49 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#install" class="md-nav__link">
+  <a href="#quick-start" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Install
+        Quick start
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Quick start">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#macos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        macOS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Windows
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-with-pip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Install with pip
       
     </span>
   </a>
@@ -550,10 +639,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#all-features-included" class="md-nav__link">
+  <a href="#whats-included" class="md-nav__link">
     <span class="md-ellipsis">
       
-        All features included
+        What's included
       
     </span>
   </a>
@@ -565,6 +654,17 @@
     <span class="md-ellipsis">
       
         Runtime dependencies
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#system-dependencies-for-video" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System dependencies for video
       
     </span>
   </a>
@@ -602,20 +702,28 @@
 <ul>
 <li><strong>Python 3.11+</strong> (3.12 recommended)</li>
 <li><strong>Tk/Tcl</strong> — ships with most Python installs. On Linux, install <code>python3-tk</code> from your package manager.</li>
-<li><strong><a href="https://vexy.art">Vexy Lines</a></strong> desktop app — the style engine runs as an MCP server inside the app on <code>localhost:47384</code>. Without it, the GUI launches but can't export anything that requires style transfer.</li>
+<li><strong><a href="https://vexy.art">Vexy Lines</a></strong> desktop app — the style engine runs as an MCP server inside the app on <code>localhost:47384</code>. Without it, the GUI launches but can only extract previews from <code>.lines</code> files and copy <code>.lines</code> files. Anything involving style transfer requires the app running.</li>
 </ul>
-<h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
+<h2 id="quick-start">Quick start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
+<h3 id="macos">macOS<a class="headerlink" href="#macos" title="Permanent link">&para;</a></h3>
+<p>Open Terminal, paste, press Enter:</p>
+<p><code>sh
+curl -LsSf https://astral.sh/uv/install.sh | sh &amp;&amp; "$HOME/.local/bin/uvx" --python 3.12 vexy-lines-run@latest</code></p>
+<h3 id="windows">Windows<a class="headerlink" href="#windows" title="Permanent link">&para;</a></h3>
+<p>Open Command Prompt, paste, press Enter:</p>
+<p><code>bat
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex; $env:Path = \"$HOME\.local\bin;$HOME\AppData\Roaming\uv;$env:Path\"; uvx --python 3.12 vexy-lines-run@latest"</code></p>
+<p>These one-liners install <a href="https://docs.astral.sh/uv/">uv</a> (a fast Python package manager) and run vexy-lines-run in an isolated environment. Nothing is permanently installed on your system — <code>uvx</code> manages it.</p>
+<h2 id="install-with-pip">Install with pip<a class="headerlink" href="#install-with-pip" title="Permanent link">&para;</a></h2>
 <p><code>bash
 pip install vexy-lines-run</code></p>
 <p>With uv (faster):</p>
 <p><code>bash
 uv add vexy-lines-run</code></p>
-<h2 id="all-features-included">All features included<a class="headerlink" href="#all-features-included" title="Permanent link">&para;</a></h2>
-<p>The base install includes all functionality — video processing, drag-and-drop, and native menus. No optional extras needed:</p>
-<p><code>bash
-pip install vexy-lines-run</code></p>
+<h2 id="whats-included">What's included<a class="headerlink" href="#whats-included" title="Permanent link">&para;</a></h2>
+<p>The base install includes all functionality — video processing, drag-and-drop, and native menus. No optional extras or feature flags needed.</p>
 <h2 id="runtime-dependencies">Runtime dependencies<a class="headerlink" href="#runtime-dependencies" title="Permanent link">&para;</a></h2>
-<p>These install automatically with the base package:</p>
+<p>These install automatically with the package:</p>
 <table>
 <thead>
 <tr>
@@ -629,8 +737,16 @@ pip install vexy-lines-run</code></p>
 <td>MCP client and style engine bindings</td>
 </tr>
 <tr>
+<td><code>vexy-lines-py</code></td>
+<td><code>.lines</code> file parser (transitive, via vexy-lines-apy)</td>
+</tr>
+<tr>
 <td><code>customtkinter</code></td>
 <td>Modern Tk widgets with dark mode</td>
+</tr>
+<tr>
+<td><code>CTkMenuBarPlus</code></td>
+<td>Enhanced menu bar with cascading dropdown menus</td>
 </tr>
 <tr>
 <td><code>Pillow</code></td>
@@ -640,8 +756,44 @@ pip install vexy-lines-run</code></p>
 <td><code>loguru</code></td>
 <td>Debug logging (not shown to users)</td>
 </tr>
+<tr>
+<td><code>tkinterdnd2</code></td>
+<td>Drag-and-drop file support</td>
+</tr>
+<tr>
+<td><code>opencv-python-headless</code></td>
+<td>Video frame reading and writing</td>
+</tr>
+<tr>
+<td><code>svglab</code> or <code>resvg-py</code></td>
+<td>SVG-to-raster conversion for video/image export</td>
+</tr>
 </tbody>
 </table>
+<h2 id="system-dependencies-for-video">System dependencies for video<a class="headerlink" href="#system-dependencies-for-video" title="Permanent link">&para;</a></h2>
+<p>Video processing also depends on system binaries (not Python packages):</p>
+<table>
+<thead>
+<tr>
+<th>Binary</th>
+<th>Required for</th>
+<th>How to install</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ffmpeg</code></td>
+<td>Audio merging in MP4 exports</td>
+<td><code>brew install ffmpeg</code> (macOS), <code>apt install ffmpeg</code> (Debian/Ubuntu), <a href="https://ffmpeg.org/download.html">ffmpeg.org</a> (Windows)</td>
+</tr>
+<tr>
+<td><code>ffprobe</code></td>
+<td>Audio stream detection</td>
+<td>Ships with ffmpeg</td>
+</tr>
+</tbody>
+</table>
+<p>Without ffmpeg, video export still works — you just won't get audio passthrough.</p>
 <h2 id="launch">Launch<a class="headerlink" href="#launch" title="Permanent link">&para;</a></h2>
 <p>Three ways:</p>
 <p>```bash</p>
@@ -655,18 +807,16 @@ pip install vexy-lines-run</code></p>
 <p>from vexy_lines_run import launch
 launch()
 ```</p>
-<p>All three do the same thing: create an <code>App</code> instance and call <code>mainloop()</code>.</p>
+<p>All three do the same thing: create an <code>App</code> instance in dark mode and call <code>mainloop()</code>.</p>
 <h2 id="verify">Verify<a class="headerlink" href="#verify" title="Permanent link">&para;</a></h2>
-<p><code>bash
-vexy-lines-run --help</code></p>
-<p>Or from Python:</p>
+<p>From Python:</p>
 <p><code>python
 from vexy_lines_run import App
 print("vexy-lines-run is ready")</code></p>
 <h2 id="platform-notes">Platform notes<a class="headerlink" href="#platform-notes" title="Permanent link">&para;</a></h2>
-<h3 id="macos">macOS<a class="headerlink" href="#macos" title="Permanent link">&para;</a></h3>
+<h3 id="macos_1">macOS<a class="headerlink" href="#macos_1" title="Permanent link">&para;</a></h3>
 <p>Works out of the box. Tk ships with the Python.org and Homebrew installers.</p>
-<h3 id="windows">Windows<a class="headerlink" href="#windows" title="Permanent link">&para;</a></h3>
+<h3 id="windows_1">Windows<a class="headerlink" href="#windows_1" title="Permanent link">&para;</a></h3>
 <p>Works out of the box. Tk ships with the python.org installer.</p>
 <h3 id="linux">Linux<a class="headerlink" href="#linux" title="Permanent link">&para;</a></h3>
 <p>Tk might not be bundled with your system Python. Install it:</p>
@@ -678,6 +828,7 @@ print("vexy-lines-run is ready")</code></p>
 <h1 id="arch">Arch<a class="headerlink" href="#arch" title="Permanent link">&para;</a></h1>
 <p>sudo pacman -S tk
 ```</p>
+<p>Drag-and-drop depends on the Tcl/Tk DnD extension. On some minimal Linux installs, the underlying <code>tkdnd</code> library may be missing even if <code>tkinterdnd2</code> is installed. The app works without it — you just use the buttons and menus instead.</p>
 <h2 id="development-install">Development install<a class="headerlink" href="#development-install" title="Permanent link">&para;</a></h2>
 <p><code>bash
 git clone https://github.com/vexyart/vexy-lines.git
