@@ -11,6 +11,10 @@
       
       
       
+        <link rel="prev" href="../gui-guide/">
+      
+      
+        <link rel="next" href="../api-reference/">
       
       
         
@@ -21,7 +25,7 @@
     
     
       
-        <title>GUI Technical Documentation - vexy-lines-run</title>
+        <title>Technical Details - vexy-lines-run</title>
       
     
     
@@ -117,7 +121,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              GUI Technical Documentation
+              Technical Details
             
           </span>
         </div>
@@ -310,6 +314,769 @@
   
 
       </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical Details
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical Details
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc">
+      
+        <li class="md-nav__item">
+  <a href="#architecture-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#widget-hierarchy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Widget hierarchy
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Widget hierarchy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#root-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Root level
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key components
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key components">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-menu-bar-ctkmenubar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Menu bar (CTkMenuBar)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-inputs-panel-inputs_tabview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Inputs panel (inputs_tabview)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Inputs panel (inputs_tabview)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lines-tab" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lines tab
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#images-tab" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Images tab
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#video-tab" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Video tab
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-styles-panel-styles_tabview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Styles panel (styles_tabview)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-output-section-bottom_frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Output section (bottom_frame)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#thread-safety" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Thread safety
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Thread safety">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#background-export-thread" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Background export thread
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#no-abort-mechanism" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        No abort mechanism
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#state-accessed-by-the-background-thread" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        State accessed by the background thread
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#customtkinter-theming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CustomTkinter theming
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CustomTkinter theming">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dark-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dark mode
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#color-scheme" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Color scheme
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#layout-grid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Layout grid
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ctkrangeslider-custom-widget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CTkRangeSlider custom widget
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CTkRangeSlider custom widget">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Implementation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#integration-with-the-video-tab" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integration with the Video tab
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-binding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Variable binding
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#drag-and-drop-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Drag-and-drop implementation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Drag-and-drop implementation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How it works
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#path-parsing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Path parsing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#graceful-degradation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Graceful degradation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#video-processing-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Video processing pipeline
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Video processing pipeline">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mp4-output-_process_video_to_mp4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MP4 output (_process_video_to_mp4)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#frame-image-output-_process_video_to_frames" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frame image output (_process_video_to_frames)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#svg-rasterisation-_svg_to_pil" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SVG rasterisation (_svg_to_pil)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#audio-merge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Audio merge
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ui-state-transitions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UI state transitions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="UI state transitions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tab-switching-_on_inputs_tab_changed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tab switching (_on_inputs_tab_changed)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#format-changes-_on_format_change" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Format changes (_on_format_change)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#audio-toggle-visibility-_update_audio_toggle_visibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Audio toggle visibility (_update_audio_toggle_visibility)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#responsive-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Responsive layout
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Responsive layout">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#resize-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resize handling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#path-truncation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Path truncation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#state-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        State management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="State management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#internal-state-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Internal state variables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tkinter-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tkinter variables
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#window-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Window lifecycle
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Window lifecycle">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#initialization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Initialization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#launch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Launch
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-method-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key method architecture
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key method architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#layout-builders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Layout builders
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#export-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Export flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#video-range-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Video range management
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#image-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Image management
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#file-extension-constants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File extension constants
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Dependencies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#required-installed-with-the-package" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required (installed with the package)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#required-for-video-processing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required for video processing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optional
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 

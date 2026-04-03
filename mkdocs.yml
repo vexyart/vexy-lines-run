@@ -34,6 +34,7 @@ nav:
   - Overview: index.md
   - Installation: installation.md
   - GUI Guide: gui-guide.md
+  - Technical Details: gui-tech.md
   - API Reference: api-reference.md
   - Examples: examples.md
   - Changelog: changelog.md
