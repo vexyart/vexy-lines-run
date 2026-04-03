@@ -1129,13 +1129,13 @@
 <p>This document describes the architecture, widget structure, and implementation details of the Vexy Lines Run GUI application.</p>
 <h2 id="architecture-overview">Architecture overview<a class="headerlink" href="#architecture-overview" title="Permanent link">&para;</a></h2>
 <p>The GUI is a single-window CustomTkinter application. The <code>App</code> class owns the entire widget tree, manages internal state, and dispatches export work to a background thread via <code>processing.py</code>.</p>
-<p>```
-launch()
-  └─ App.<strong>init</strong>()
+<div class="highlight"><span class="filename">Text Only</span><pre><span></span><code>launch()
+  └─ App.__init__()
        ├─ _build_layout()        # constructs all widgets
        ├─ _register_drop_targets()   # sets up drag-and-drop
-       └─ mainloop()             # Tk event loop</p>
-<p>User clicks Export ▶
+       └─ mainloop()             # Tk event loop
+
+User clicks Export ▶
   └─ _do_export()
        ├─ file dialog (save-as or folder)
        ├─ gather state (mode, paths, format, size, audio, range)
@@ -1145,14 +1145,14 @@ launch()
                  ├─ on_progress → self.after(0, _update_progress)
                  ├─ on_complete → self.after(0, _export_complete)
                  └─ on_error   → self.after(0, _export_error)
-```</p>
+</code></pre></div>
 <p>The <code>App</code> class inherits from <code>customtkinter.CTk</code>. When tkinterdnd2 is available, it also mixes in <code>TkinterDnD.DnDWrapper</code> via a dynamically constructed base class tuple and a custom metaclass (<code>_AppMeta</code>).</p>
 <h2 id="widget-hierarchy">Widget hierarchy<a class="headerlink" href="#widget-hierarchy" title="Permanent link">&para;</a></h2>
 <p><img alt="GUI Diagram" src="../images/gui-diag.svg" /></p>
 <h3 id="root-level">Root level<a class="headerlink" href="#root-level" title="Permanent link">&para;</a></h3>
-<p><code>App (customtkinter.CTk + optional TkinterDnD.DnDWrapper)
+<div class="highlight"><span class="filename">Text Only</span><pre><span></span><code>App (customtkinter.CTk + optional TkinterDnD.DnDWrapper)
 ├── CTkMenuBar
-└── root (customtkinter.CTkFrame, fg_color="transparent")
+└── root (customtkinter.CTkFrame, fg_color=&quot;transparent&quot;)
     ├── inputs_tabview (CTkTabview)
     │   ├── Lines Tab
     │   │   ├── content_frame (CTkFrame)
@@ -1175,36 +1175,37 @@ launch()
     │       │   ├── video_first_preview (CTkLabel)
     │       │   └── video_last_preview (CTkLabel)
     │       └── controls_frame (CTkFrame)
-    │           ├── range_row (CTkFrame, fg_color="transparent")
+    │           ├── range_row (CTkFrame, fg_color=&quot;transparent&quot;)
     │           │   ├── video_start_entry (CTkEntry, width=60)
     │           │   ├── video_range_slider (CTkRangeSlider)
     │           │   ├── video_count_label (CTkLabel)
     │           │   └── video_end_entry (CTkEntry, width=60)
-    │           └── path_row (CTkFrame, fg_color="transparent")
+    │           └── path_row (CTkFrame, fg_color=&quot;transparent&quot;)
     │               ├── + button (CTkButton, _choose_video)
     │               ├── video_path_label (CTkLabel)
     │               └── ✕ button (CTkButton, _clear_video)
     ├── styles_tabview (CTkTabview)
-    │   ├── Style Tab (key="start")
+    │   ├── Style Tab (key=&quot;start&quot;)
     │   │   ├── content_frame (CTkFrame)
-    │   │   │   └── _style_previews["start"] (CTkLabel)
+    │   │   │   └── _style_previews[&quot;start&quot;] (CTkLabel)
     │   │   └── controls_frame (CTkFrame)
-    │   │       ├── + button (CTkButton, _choose_style_file("start"))
-    │   │       ├── _style_labels["start"] (CTkLabel)
-    │   │       └── ✕ button (CTkButton, _clear_style_file("start"))
-    │   └── End Style Tab (key="end")
+    │   │       ├── + button (CTkButton, _choose_style_file(&quot;start&quot;))
+    │   │       ├── _style_labels[&quot;start&quot;] (CTkLabel)
+    │   │       └── ✕ button (CTkButton, _clear_style_file(&quot;start&quot;))
+    │   └── End Style Tab (key=&quot;end&quot;)
     │       ├── content_frame (CTkFrame)
-    │       │   └── _style_previews["end"] (CTkLabel)
+    │       │   └── _style_previews[&quot;end&quot;] (CTkLabel)
     │       └── controls_frame (CTkFrame)
-    │           ├── + button (CTkButton, _choose_style_file("end"))
-    │           ├── _style_labels["end"] (CTkLabel)
-    │           └── ✕ button (CTkButton, _clear_style_file("end"))
+    │           ├── + button (CTkButton, _choose_style_file(&quot;end&quot;))
+    │           ├── _style_labels[&quot;end&quot;] (CTkLabel)
+    │           └── ✕ button (CTkButton, _clear_style_file(&quot;end&quot;))
     └── bottom_frame (CTkFrame)
-        ├── "Export as" label (CTkLabel)
+        ├── &quot;Export as&quot; label (CTkLabel)
         ├── format_menu (CTkOptionMenu, values=SVG/PNG/JPG/MP4/LINES)
         ├── size_menu (CTkOptionMenu, values=—/1x/2x/3x/4x)
-        ├── audio_toggle (CTkSwitch, text="♪")
-        └── convert_button (CTkButton, text="Export ▶")</code></p>
+        ├── audio_toggle (CTkSwitch, text=&quot;♪&quot;)
+        └── convert_button (CTkButton, text=&quot;Export ▶&quot;)
+</code></pre></div>
 <h2 id="key-components">Key components<a class="headerlink" href="#key-components" title="Permanent link">&para;</a></h2>
 <h3 id="1-menu-bar-ctkmenubar">1. Menu bar (<code>CTkMenuBar</code>)<a class="headerlink" href="#1-menu-bar-ctkmenubar" title="Permanent link">&para;</a></h3>
 <p>Built using <code>CTkMenuBar</code> from <code>CTkMenuBarPlus</code> with <code>CustomDropdownMenu</code> for submenu support. Six cascading menus:</p>
@@ -1257,10 +1258,10 @@ launch()
 <h3 id="background-export-thread">Background export thread<a class="headerlink" href="#background-export-thread" title="Permanent link">&para;</a></h3>
 <p>Export runs on a daemon <code>threading.Thread</code> spawned from <code>_do_export()</code>. The thread calls <code>process_export()</code> from <code>processing.py</code>, which blocks until complete.</p>
 <p>The three callback parameters use <code>self.after(0, ...)</code> to marshal UI updates back to the main Tk thread:</p>
-<p><code>python
-on_progress=lambda cur, tot, msg: self.after(0, self._update_progress, cur, tot, msg)
-on_complete=lambda msg: self.after(0, self._export_complete, msg)
-on_error=lambda msg: self.after(0, self._export_error, msg)</code></p>
+<div class="highlight"><pre><span></span><code><span class="n">on_progress</span><span class="o">=</span><span class="k">lambda</span> <span class="n">cur</span><span class="p">,</span> <span class="n">tot</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_progress</span><span class="p">,</span> <span class="n">cur</span><span class="p">,</span> <span class="n">tot</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+<span class="n">on_complete</span><span class="o">=</span><span class="k">lambda</span> <span class="n">msg</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_export_complete</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+<span class="n">on_error</span><span class="o">=</span><span class="k">lambda</span> <span class="n">msg</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_export_error</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+</code></pre></div>
 <p><code>self.after(0, callback)</code> schedules the callback on the Tk event loop's next iteration, guaranteeing it runs on the main thread. This is the only safe way to update tkinter widgets from a background thread.</p>
 <h3 id="no-abort-mechanism">No abort mechanism<a class="headerlink" href="#no-abort-mechanism" title="Permanent link">&para;</a></h3>
 <p>The current implementation disables the Export button during export but does not provide a way to cancel a running export. There is no <code>abort_event</code> or stop button. The button re-enables on completion or error.</p>
@@ -1316,9 +1317,10 @@ on_error=lambda msg: self.after(0, self._export_error, msg)</code></p>
 </table>
 <h3 id="layout-grid">Layout grid<a class="headerlink" href="#layout-grid" title="Permanent link">&para;</a></h3>
 <p>The root frame uses a 2-column, 2-row grid:</p>
-<p><code>Column 0 (weight=3): inputs_tabview  | Column 1 (weight=1): styles_tabview
+<div class="highlight"><span class="filename">Text Only</span><pre><span></span><code>Column 0 (weight=3): inputs_tabview  | Column 1 (weight=1): styles_tabview
 Row 0 (weight=1):    [tabviews fill available space]
-Row 1 (weight=0):    bottom_frame (spans both columns)</code></p>
+Row 1 (weight=0):    bottom_frame (spans both columns)
+</code></pre></div>
 <p>The 3:1 weight ratio gives the input panel roughly three-quarters of the width.</p>
 <h2 id="ctkrangeslider-custom-widget">CTkRangeSlider custom widget<a class="headerlink" href="#ctkrangeslider-custom-widget" title="Permanent link">&para;</a></h2>
 <p>A dual-handle range slider bundled in <code>widgets.py</code>. Ported from Akash Bora's CTkRangeSlider (version 0.3) and bundled to avoid an external dependency.</p>
@@ -1357,8 +1359,7 @@ Row 1 (weight=0):    bottom_frame (spans both columns)</code></p>
 <h2 id="video-processing-pipeline">Video processing pipeline<a class="headerlink" href="#video-processing-pipeline" title="Permanent link">&para;</a></h2>
 <p>When the GUI dispatches a video export, the processing module handles the heavy lifting:</p>
 <h3 id="mp4-output-_process_video_to_mp4">MP4 output (<code>_process_video_to_mp4</code>)<a class="headerlink" href="#mp4-output-_process_video_to_mp4" title="Permanent link">&para;</a></h3>
-<p>```
-For each frame in range:
+<div class="highlight"><span class="filename">Text Only</span><pre><span></span><code>For each frame in range:
     1. Read frame from source video (OpenCV VideoCapture)
     2. Save frame as temporary PNG
     3. If end_style: interpolate style at t = frame_position / total_frames
@@ -1366,13 +1367,14 @@ For each frame in range:
     5. _svg_to_pil(svg_string, width, height) → PIL Image (via svglab or resvg-py)
     6. Convert PIL Image → OpenCV BGR frame
     7. Write frame to output (OpenCV VideoWriter, mp4v codec)
-    8. Delete temporary PNG</p>
-<p>After all frames:
+    8. Delete temporary PNG
+
+After all frames:
     If audio and full range:
         ffmpeg -i video_only.mp4 -i original.mp4 -c:v copy -c:a aac → merged.mp4
     Else:
         Move video_only.mp4 to output path
-```</p>
+</code></pre></div>
 <h3 id="frame-image-output-_process_video_to_frames">Frame image output (<code>_process_video_to_frames</code>)<a class="headerlink" href="#frame-image-output-_process_video_to_frames" title="Permanent link">&para;</a></h3>
 <p>Same per-frame loop but writes individual image files (<code>frame_000001.svg</code>, <code>frame_000001.png</code>, etc.) instead of feeding into a VideoWriter.</p>
 <h3 id="svg-rasterisation-_svg_to_pil">SVG rasterisation (<code>_svg_to_pil</code>)<a class="headerlink" href="#svg-rasterisation-_svg_to_pil" title="Permanent link">&para;</a></h3>
@@ -1384,7 +1386,8 @@ For each frame in range:
 <p>Both backends resize the result to the target dimensions with Lanczos resampling if needed.</p>
 <h3 id="audio-merge">Audio merge<a class="headerlink" href="#audio-merge" title="Permanent link">&para;</a></h3>
 <p>Audio passthrough uses ffmpeg as a subprocess:
-<code>ffmpeg -y -i video_only.mp4 -i original.mp4 -c:v copy -c:a aac -map 0:v:0 -map 1:a:0 -shortest merged.mp4</code></p>
+<div class="highlight"><span class="filename">Text Only</span><pre><span></span><code>ffmpeg -y -i video_only.mp4 -i original.mp4 -c:v copy -c:a aac -map 0:v:0 -map 1:a:0 -shortest merged.mp4
+</code></pre></div></p>
 <p>Audio detection uses ffprobe to check for audio streams in the source video. If ffprobe is not available, <code>has_audio</code> defaults to <code>False</code>.</p>
 <h2 id="ui-state-transitions">UI state transitions<a class="headerlink" href="#ui-state-transitions" title="Permanent link">&para;</a></h2>
 <h3 id="tab-switching-_on_inputs_tab_changed">Tab switching (<code>_on_inputs_tab_changed</code>)<a class="headerlink" href="#tab-switching-_on_inputs_tab_changed" title="Permanent link">&para;</a></h3>
@@ -1418,20 +1421,20 @@ For each frame in range:
 <h3 id="path-truncation">Path truncation<a class="headerlink" href="#path-truncation" title="Permanent link">&para;</a></h3>
 <p>Two truncation functions:</p>
 <p><strong><code>truncate_start(text, max_chars)</code></strong> — trims leading characters:
-<code>python
-def truncate_start(text: str, max_chars: int = 20) -&gt; str:
-    if len(text) &lt;= max_chars:
-        return text
-    return f"…{text[-max_chars:]}"</code></p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">truncate_start</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">max_chars</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">max_chars</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">text</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;…</span><span class="si">{</span><span class="n">text</span><span class="p">[</span><span class="o">-</span><span class="n">max_chars</span><span class="p">:]</span><span class="si">}</span><span class="s2">&quot;</span>
+</code></pre></div></p>
 <p><strong><code>truncate_middle(text, max_width)</code></strong> — replaces the middle with "⋮":
-<code>python
-def truncate_middle(text: str, max_width: int) -&gt; str:
-    if len(text) &lt;= max_width:
-        return text
-    keep = max_width - 1
-    left = keep // 2
-    right = keep - left
-    return f"{text[:left]}⋮{text[-right:]}"</code></p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">truncate_middle</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">max_width</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">max_width</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">text</span>
+    <span class="n">keep</span> <span class="o">=</span> <span class="n">max_width</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">left</span> <span class="o">=</span> <span class="n">keep</span> <span class="o">//</span> <span class="mi">2</span>
+    <span class="n">right</span> <span class="o">=</span> <span class="n">keep</span> <span class="o">-</span> <span class="n">left</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">text</span><span class="p">[:</span><span class="n">left</span><span class="p">]</span><span class="si">}</span><span class="s2">⋮</span><span class="si">{</span><span class="n">text</span><span class="p">[</span><span class="o">-</span><span class="n">right</span><span class="p">:]</span><span class="si">}</span><span class="s2">&quot;</span>
+</code></pre></div></p>
 <p>Font metrics are computed at init time using <code>tkfont.nametofont()</code> on the default CTkLabel font, enabling pixel-accurate truncation calculations.</p>
 <h2 id="state-management">State management<a class="headerlink" href="#state-management" title="Permanent link">&para;</a></h2>
 <h3 id="internal-state-variables">Internal state variables<a class="headerlink" href="#internal-state-variables" title="Permanent link">&para;</a></h3>
@@ -1604,10 +1607,10 @@ def truncate_middle(text: str, max_width: int) -&gt; str:
 </ul>
 <h2 id="file-extension-constants">File extension constants<a class="headerlink" href="#file-extension-constants" title="Permanent link">&para;</a></h2>
 <p>Defined at module level:</p>
-<p><code>python
-IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff", ".webp"}
-VIDEO_EXTENSIONS = {".mp4", ".mov", ".avi", ".mkv", ".webm"}
-LINES_EXTENSIONS = {".lines"}</code></p>
+<div class="highlight"><pre><span></span><code><span class="n">IMAGE_EXTENSIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;.png&quot;</span><span class="p">,</span> <span class="s2">&quot;.jpg&quot;</span><span class="p">,</span> <span class="s2">&quot;.jpeg&quot;</span><span class="p">,</span> <span class="s2">&quot;.gif&quot;</span><span class="p">,</span> <span class="s2">&quot;.bmp&quot;</span><span class="p">,</span> <span class="s2">&quot;.tiff&quot;</span><span class="p">,</span> <span class="s2">&quot;.webp&quot;</span><span class="p">}</span>
+<span class="n">VIDEO_EXTENSIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;.mp4&quot;</span><span class="p">,</span> <span class="s2">&quot;.mov&quot;</span><span class="p">,</span> <span class="s2">&quot;.avi&quot;</span><span class="p">,</span> <span class="s2">&quot;.mkv&quot;</span><span class="p">,</span> <span class="s2">&quot;.webm&quot;</span><span class="p">}</span>
+<span class="n">LINES_EXTENSIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;.lines&quot;</span><span class="p">}</span>
+</code></pre></div>
 <h2 id="dependencies">Dependencies<a class="headerlink" href="#dependencies" title="Permanent link">&para;</a></h2>
 <h3 id="required-installed-with-the-package">Required (installed with the package)<a class="headerlink" href="#required-installed-with-the-package" title="Permanent link">&para;</a></h3>
 <table>

@@ -571,6 +571,28 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#extract-lines-previews-from-a-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extract .lines previews from a script
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#process-video-with-style-objects-from-python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Process video with style objects from Python
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -792,6 +814,28 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#extract-lines-previews-from-a-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extract .lines previews from a script
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#process-video-with-style-objects-from-python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Process video with style objects from Python
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -810,15 +854,15 @@
 <h1 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h1>
 <h2 id="launch-the-app">Launch the app<a class="headerlink" href="#launch-the-app" title="Permanent link">&para;</a></h2>
 <p>From the terminal:</p>
-<p><code>bash
-vexy-lines-run</code></p>
+<div class="highlight"><pre><span></span><code>vexy-lines-run
+</code></pre></div>
 <p>From Python:</p>
-<p><code>python
-from vexy_lines_run import launch
-launch()</code></p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">vexy_lines_run</span><span class="w"> </span><span class="kn">import</span> <span class="n">launch</span>
+<span class="n">launch</span><span class="p">()</span>
+</code></pre></div>
 <p>As a module:</p>
-<p><code>bash
-python -m vexy_lines_run</code></p>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>vexy_lines_run
+</code></pre></div>
 <p>All three do the same thing: open the GUI in dark mode.</p>
 <h2 id="batch-convert-lines-files-to-svg">Batch convert .lines files to SVG<a class="headerlink" href="#batch-convert-lines-files-to-svg" title="Permanent link">&para;</a></h2>
 <p>You have a folder of <code>.lines</code> documents and want PNG or JPG versions of their embedded previews.</p>
@@ -926,118 +970,125 @@ python -m vexy_lines_run</code></p>
 </ul>
 <p>The app filters by extension. Dropping a PNG on the Lines tab does nothing. Dropping a duplicate file is silently ignored.</p>
 <h2 id="probe-video-metadata-from-python">Probe video metadata from Python<a class="headerlink" href="#probe-video-metadata-from-python" title="Permanent link">&para;</a></h2>
-<p>```python
-from vexy_lines_run.video import probe</p>
-<p>info = probe("clip.mp4")
-print(f"Resolution: {info.width}x{info.height}")
-print(f"FPS:        {info.fps}")
-print(f"Frames:     {info.total_frames}")
-print(f"Duration:   {info.duration:.1f}s")
-print(f"Audio:      {'yes' if info.has_audio else 'no'}")
-```</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">vexy_lines_run.video</span><span class="w"> </span><span class="kn">import</span> <span class="n">probe</span>
+
+<span class="n">info</span> <span class="o">=</span> <span class="n">probe</span><span class="p">(</span><span class="s2">&quot;clip.mp4&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Resolution: </span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">width</span><span class="si">}</span><span class="s2">x</span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">height</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;FPS:        </span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">fps</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Frames:     </span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">total_frames</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Duration:   </span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">duration</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">s&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Audio:      </span><span class="si">{</span><span class="s1">&#39;yes&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">info</span><span class="o">.</span><span class="n">has_audio</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;no&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
 <p><code>probe()</code> reads metadata without decoding frames — it returns instantly even for large files. Requires OpenCV.</p>
 <h2 id="use-the-range-slider-widget-standalone">Use the range slider widget standalone<a class="headerlink" href="#use-the-range-slider-widget-standalone" title="Permanent link">&para;</a></h2>
 <p>The dual-handle range slider is a reusable CustomTkinter widget. Use it in your own apps:</p>
-<p>```python
-import customtkinter as ctk
-from vexy_lines_run.widgets import CTkRangeSlider</p>
-<p>root = ctk.CTk()
-root.geometry("400x100")</p>
-<p>def on_change(low, high):
-    print(f"Range: {low:.0f} – {high:.0f}")</p>
-<p>slider = CTkRangeSlider(
-    root,
-    from_=0,
-    to=300,
-    number_of_steps=300,  # integer steps
-    command=on_change,
-)
-slider.pack(padx=20, pady=20, fill="x")</p>
-<p>root.mainloop()
-```</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">customtkinter</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ctk</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">vexy_lines_run.widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">CTkRangeSlider</span>
+
+<span class="n">root</span> <span class="o">=</span> <span class="n">ctk</span><span class="o">.</span><span class="n">CTk</span><span class="p">()</span>
+<span class="n">root</span><span class="o">.</span><span class="n">geometry</span><span class="p">(</span><span class="s2">&quot;400x100&quot;</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">on_change</span><span class="p">(</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Range: </span><span class="si">{</span><span class="n">low</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2"> – </span><span class="si">{</span><span class="n">high</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">slider</span> <span class="o">=</span> <span class="n">CTkRangeSlider</span><span class="p">(</span>
+    <span class="n">root</span><span class="p">,</span>
+    <span class="n">from_</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">to</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+    <span class="n">number_of_steps</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>  <span class="c1"># integer steps</span>
+    <span class="n">command</span><span class="o">=</span><span class="n">on_change</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">slider</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">padx</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+
+<span class="n">root</span><span class="o">.</span><span class="n">mainloop</span><span class="p">()</span>
+</code></pre></div>
 <p>The slider supports horizontal and vertical orientations, variable binding (<code>tk.IntVar</code> / <code>tk.DoubleVar</code>), step quantization, hover highlighting, and full CustomTkinter theming (dark/light mode, custom colors).</p>
 <h2 id="run-the-processing-pipeline-from-a-script">Run the processing pipeline from a script<a class="headerlink" href="#run-the-processing-pipeline-from-a-script" title="Permanent link">&para;</a></h2>
 <p>For automation without the GUI, call the processing module directly:</p>
-<p>```python
-from vexy_lines_run.processing import process_export</p>
-<p>def on_progress(current, total, message):
-    print(f"[{current}/{total}] {message}")</p>
-<p>def on_complete(message):
-    print(f"Done: {message}")</p>
-<p>def on_error(message):
-    print(f"Error: {message}")</p>
-<h1 id="style-transfer-on-a-batch-of-images">Style transfer on a batch of images<a class="headerlink" href="#style-transfer-on-a-batch-of-images" title="Permanent link">&para;</a></h1>
-<p>process_export(
-    mode="images",
-    input_paths=["photo1.jpg", "photo2.jpg", "photo3.jpg"],
-    style_path="halftone.lines",
-    end_style_path=None,
-    output_path="./output",
-    fmt="SVG",
-    size="1x",
-    audio=False,
-    frame_range=None,
-    on_progress=on_progress,
-    on_complete=on_complete,
-    on_error=on_error,
-)
-```</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">vexy_lines_run.processing</span><span class="w"> </span><span class="kn">import</span> <span class="n">process_export</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">on_progress</span><span class="p">(</span><span class="n">current</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">current</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">total</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">on_complete</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Done: </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">on_error</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Style transfer on a batch of images</span>
+<span class="n">process_export</span><span class="p">(</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;images&quot;</span><span class="p">,</span>
+    <span class="n">input_paths</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;photo1.jpg&quot;</span><span class="p">,</span> <span class="s2">&quot;photo2.jpg&quot;</span><span class="p">,</span> <span class="s2">&quot;photo3.jpg&quot;</span><span class="p">],</span>
+    <span class="n">style_path</span><span class="o">=</span><span class="s2">&quot;halftone.lines&quot;</span><span class="p">,</span>
+    <span class="n">end_style_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">output_path</span><span class="o">=</span><span class="s2">&quot;./output&quot;</span><span class="p">,</span>
+    <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;SVG&quot;</span><span class="p">,</span>
+    <span class="n">size</span><span class="o">=</span><span class="s2">&quot;1x&quot;</span><span class="p">,</span>
+    <span class="n">audio</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">frame_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">on_progress</span><span class="o">=</span><span class="n">on_progress</span><span class="p">,</span>
+    <span class="n">on_complete</span><span class="o">=</span><span class="n">on_complete</span><span class="p">,</span>
+    <span class="n">on_error</span><span class="o">=</span><span class="n">on_error</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
 <p>This runs synchronously on the calling thread. To run in the background (like the GUI does), wrap it in a <code>threading.Thread</code>:</p>
-<p>```python
-import threading</p>
-<p>thread = threading.Thread(
-    target=process_export,
-    kwargs={
-        "mode": "images",
-        "input_paths": ["photo1.jpg"],
-        "style_path": "style.lines",
-        "end_style_path": None,
-        "output_path": "./output",
-        "fmt": "PNG",
-        "size": "2x",
-        "audio": False,
-        "frame_range": None,
-        "on_progress": on_progress,
-        "on_complete": on_complete,
-        "on_error": on_error,
-    },
-    daemon=True,
-)
-thread.start()
-thread.join()  # wait for completion
-```</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
+
+<span class="n">thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span>
+    <span class="n">target</span><span class="o">=</span><span class="n">process_export</span><span class="p">,</span>
+    <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;images&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;input_paths&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;photo1.jpg&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;style_path&quot;</span><span class="p">:</span> <span class="s2">&quot;style.lines&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;end_style_path&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;output_path&quot;</span><span class="p">:</span> <span class="s2">&quot;./output&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;fmt&quot;</span><span class="p">:</span> <span class="s2">&quot;PNG&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="s2">&quot;2x&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;audio&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;frame_range&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;on_progress&quot;</span><span class="p">:</span> <span class="n">on_progress</span><span class="p">,</span>
+        <span class="s2">&quot;on_complete&quot;</span><span class="p">:</span> <span class="n">on_complete</span><span class="p">,</span>
+        <span class="s2">&quot;on_error&quot;</span><span class="p">:</span> <span class="n">on_error</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="n">daemon</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">thread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>  <span class="c1"># wait for completion</span>
+</code></pre></div>
 <h2 id="extract-lines-previews-from-a-script">Extract .lines previews from a script<a class="headerlink" href="#extract-lines-previews-from-a-script" title="Permanent link">&para;</a></h2>
-<p>```python
-from vexy_lines_run.app import extract_preview_from_lines</p>
-<p>image = extract_preview_from_lines("artwork.lines")
-if image is not None:
-    image.save("preview.png")
-    print(f"Extracted {image.size[0]}x{image.size[1]} preview")
-else:
-    print("No preview image found in file")
-```</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">vexy_lines_run.app</span><span class="w"> </span><span class="kn">import</span> <span class="n">extract_preview_from_lines</span>
+
+<span class="n">image</span> <span class="o">=</span> <span class="n">extract_preview_from_lines</span><span class="p">(</span><span class="s2">&quot;artwork.lines&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">image</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">image</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;preview.png&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Extracted </span><span class="si">{</span><span class="n">image</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">x</span><span class="si">{</span><span class="n">image</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> preview&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No preview image found in file&quot;</span><span class="p">)</span>
+</code></pre></div>
 <h2 id="process-video-with-style-objects-from-python">Process video with style objects from Python<a class="headerlink" href="#process-video-with-style-objects-from-python" title="Permanent link">&para;</a></h2>
 <p>For full control over video processing with style interpolation:</p>
-<p>```python
-from vexy_lines_run.video import process_video_with_style
-from vexy_lines_apy.style import extract_style, styles_compatible</p>
-<p>start = extract_style("clean_lines.lines")
-end = extract_style("scribble.lines")</p>
-<p>if not styles_compatible(start, end):
-    print("Styles are not compatible for interpolation")
-else:
-    info = process_video_with_style(
-        input_path="clip.mp4",
-        output_path="styled_clip.mp4",
-        style=start,
-        end_style=end,
-        start_frame=0,     # 0-based
-        end_frame=150,      # 0-based, exclusive
-        dpi=72,
-        on_progress=lambda i, t: print(f"Frame {i}/{t}"),
-    )
-    print(f"Processed {info.total_frames} frames")
-```</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">vexy_lines_run.video</span><span class="w"> </span><span class="kn">import</span> <span class="n">process_video_with_style</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">vexy_lines_apy.style</span><span class="w"> </span><span class="kn">import</span> <span class="n">extract_style</span><span class="p">,</span> <span class="n">styles_compatible</span>
+
+<span class="n">start</span> <span class="o">=</span> <span class="n">extract_style</span><span class="p">(</span><span class="s2">&quot;clean_lines.lines&quot;</span><span class="p">)</span>
+<span class="n">end</span> <span class="o">=</span> <span class="n">extract_style</span><span class="p">(</span><span class="s2">&quot;scribble.lines&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">styles_compatible</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Styles are not compatible for interpolation&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="n">process_video_with_style</span><span class="p">(</span>
+        <span class="n">input_path</span><span class="o">=</span><span class="s2">&quot;clip.mp4&quot;</span><span class="p">,</span>
+        <span class="n">output_path</span><span class="o">=</span><span class="s2">&quot;styled_clip.mp4&quot;</span><span class="p">,</span>
+        <span class="n">style</span><span class="o">=</span><span class="n">start</span><span class="p">,</span>
+        <span class="n">end_style</span><span class="o">=</span><span class="n">end</span><span class="p">,</span>
+        <span class="n">start_frame</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>     <span class="c1"># 0-based</span>
+        <span class="n">end_frame</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span>      <span class="c1"># 0-based, exclusive</span>
+        <span class="n">dpi</span><span class="o">=</span><span class="mi">72</span><span class="p">,</span>
+        <span class="n">on_progress</span><span class="o">=</span><span class="k">lambda</span> <span class="n">i</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Frame </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processed </span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">total_frames</span><span class="si">}</span><span class="s2"> frames&quot;</span><span class="p">)</span>
+</code></pre></div>
 <p>Note: <code>start_frame</code> and <code>end_frame</code> in <code>process_video_with_style()</code> are 0-based, unlike the GUI's 1-indexed display.</p>
 
 

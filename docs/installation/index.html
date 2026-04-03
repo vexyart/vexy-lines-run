@@ -435,6 +435,78 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#verify" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verify
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#platform-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Platform notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Platform notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#macos_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        macOS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#windows_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Windows
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linux" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Linux
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#development-install" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Development install
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -682,6 +754,78 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#verify" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verify
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#platform-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Platform notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Platform notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#macos_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        macOS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#windows_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Windows
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linux" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Linux
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#development-install" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Development install
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -707,19 +851,19 @@
 <h2 id="quick-start">Quick start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
 <h3 id="macos">macOS<a class="headerlink" href="#macos" title="Permanent link">&para;</a></h3>
 <p>Open Terminal, paste, press Enter:</p>
-<p><code>sh
-curl -LsSf https://astral.sh/uv/install.sh | sh &amp;&amp; "$HOME/.local/bin/uvx" --python 3.12 vexy-lines-run@latest</code></p>
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-LsSf<span class="w"> </span>https://astral.sh/uv/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/.local/bin/uvx&quot;</span><span class="w"> </span>--python<span class="w"> </span><span class="m">3</span>.12<span class="w"> </span>vexy-lines-run@latest
+</code></pre></div>
 <h3 id="windows">Windows<a class="headerlink" href="#windows" title="Permanent link">&para;</a></h3>
 <p>Open Command Prompt, paste, press Enter:</p>
-<p><code>bat
-powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex; $env:Path = \"$HOME\.local\bin;$HOME\AppData\Roaming\uv;$env:Path\"; uvx --python 3.12 vexy-lines-run@latest"</code></p>
+<div class="highlight"><span class="filename">Batchfile</span><pre><span></span><code>powershell -ExecutionPolicy ByPass -c <span class="s2">&quot;irm https://astral.sh/uv/install.ps1 | iex; $env:Path = \&quot;</span>$HOME\.local\bin;$HOME\AppData\Roaming\uv;$env:Path\<span class="s2">&quot;; uvx --python 3.12 vexy-lines-run@latest&quot;</span>
+</code></pre></div>
 <p>These one-liners install <a href="https://docs.astral.sh/uv/">uv</a> (a fast Python package manager) and run vexy-lines-run in an isolated environment. Nothing is permanently installed on your system — <code>uvx</code> manages it.</p>
 <h2 id="install-with-pip">Install with pip<a class="headerlink" href="#install-with-pip" title="Permanent link">&para;</a></h2>
-<p><code>bash
-pip install vexy-lines-run</code></p>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>vexy-lines-run
+</code></pre></div>
 <p>With uv (faster):</p>
-<p><code>bash
-uv add vexy-lines-run</code></p>
+<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>add<span class="w"> </span>vexy-lines-run
+</code></pre></div>
 <h2 id="whats-included">What's included<a class="headerlink" href="#whats-included" title="Permanent link">&para;</a></h2>
 <p>The base install includes all functionality — video processing, drag-and-drop, and native menus. No optional extras or feature flags needed.</p>
 <h2 id="runtime-dependencies">Runtime dependencies<a class="headerlink" href="#runtime-dependencies" title="Permanent link">&para;</a></h2>
@@ -796,23 +940,22 @@ uv add vexy-lines-run</code></p>
 <p>Without ffmpeg, video export still works — you just won't get audio passthrough.</p>
 <h2 id="launch">Launch<a class="headerlink" href="#launch" title="Permanent link">&para;</a></h2>
 <p>Three ways:</p>
-<p>```bash</p>
-<h1 id="installed-console-script">Installed console script<a class="headerlink" href="#installed-console-script" title="Permanent link">&para;</a></h1>
-<p>vexy-lines-run</p>
-<h1 id="module-entry-point">Module entry point<a class="headerlink" href="#module-entry-point" title="Permanent link">&para;</a></h1>
-<p>python -m vexy_lines_run
-```</p>
-<p>```python</p>
-<h1 id="from-python">From Python<a class="headerlink" href="#from-python" title="Permanent link">&para;</a></h1>
-<p>from vexy_lines_run import launch
-launch()
-```</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Installed console script</span>
+vexy-lines-run
+
+<span class="c1"># Module entry point</span>
+python<span class="w"> </span>-m<span class="w"> </span>vexy_lines_run
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># From Python</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">vexy_lines_run</span><span class="w"> </span><span class="kn">import</span> <span class="n">launch</span>
+<span class="n">launch</span><span class="p">()</span>
+</code></pre></div>
 <p>All three do the same thing: create an <code>App</code> instance in dark mode and call <code>mainloop()</code>.</p>
 <h2 id="verify">Verify<a class="headerlink" href="#verify" title="Permanent link">&para;</a></h2>
 <p>From Python:</p>
-<p><code>python
-from vexy_lines_run import App
-print("vexy-lines-run is ready")</code></p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">vexy_lines_run</span><span class="w"> </span><span class="kn">import</span> <span class="n">App</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;vexy-lines-run is ready&quot;</span><span class="p">)</span>
+</code></pre></div>
 <h2 id="platform-notes">Platform notes<a class="headerlink" href="#platform-notes" title="Permanent link">&para;</a></h2>
 <h3 id="macos_1">macOS<a class="headerlink" href="#macos_1" title="Permanent link">&para;</a></h3>
 <p>Works out of the box. Tk ships with the Python.org and Homebrew installers.</p>
@@ -820,24 +963,25 @@ print("vexy-lines-run is ready")</code></p>
 <p>Works out of the box. Tk ships with the python.org installer.</p>
 <h3 id="linux">Linux<a class="headerlink" href="#linux" title="Permanent link">&para;</a></h3>
 <p>Tk might not be bundled with your system Python. Install it:</p>
-<p>```bash</p>
-<h1 id="debianubuntu">Debian/Ubuntu<a class="headerlink" href="#debianubuntu" title="Permanent link">&para;</a></h1>
-<p>sudo apt install python3-tk</p>
-<h1 id="fedora">Fedora<a class="headerlink" href="#fedora" title="Permanent link">&para;</a></h1>
-<p>sudo dnf install python3-tkinter</p>
-<h1 id="arch">Arch<a class="headerlink" href="#arch" title="Permanent link">&para;</a></h1>
-<p>sudo pacman -S tk
-```</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Debian/Ubuntu</span>
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>python3-tk
+
+<span class="c1"># Fedora</span>
+sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>python3-tkinter
+
+<span class="c1"># Arch</span>
+sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>tk
+</code></pre></div>
 <p>Drag-and-drop depends on the Tcl/Tk DnD extension. On some minimal Linux installs, the underlying <code>tkdnd</code> library may be missing even if <code>tkinterdnd2</code> is installed. The app works without it — you just use the buttons and menus instead.</p>
 <h2 id="development-install">Development install<a class="headerlink" href="#development-install" title="Permanent link">&para;</a></h2>
-<p><code>bash
-git clone https://github.com/vexyart/vexy-lines.git
-cd vexy-lines/vexy-lines-run
-uv venv --python 3.12
-uv pip install -e ".[dev]"</code></p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/vexyart/vexy-lines.git
+<span class="nb">cd</span><span class="w"> </span>vexy-lines/vexy-lines-run
+uv<span class="w"> </span>venv<span class="w"> </span>--python<span class="w"> </span><span class="m">3</span>.12
+uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[dev]&quot;</span>
+</code></pre></div>
 <p>Run tests:</p>
-<p><code>bash
-uvx hatch test</code></p>
+<div class="highlight"><pre><span></span><code>uvx<span class="w"> </span>hatch<span class="w"> </span><span class="nb">test</span>
+</code></pre></div>
 <p>The test suite mocks the MCP client and macOS APIs, so tests run on any platform — no Vexy Lines app needed.</p>
 
 
