@@ -202,5 +202,6 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
-_version.py 
-.DS_Store
+
+# hatch-vcs generated version file
+src/vexy_lines_run/_version.py
