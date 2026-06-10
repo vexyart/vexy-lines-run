@@ -11,7 +11,9 @@ Three input tabs:
   passthrough. Optional frame range selection via a dual-handle range slider.
 
 Style picker selects a primary style from any ``.lines`` file. Select an
-optional end style to interpolate across the input sequence.
+optional end style to interpolate across the input sequence. Matching
+image-filter chains on fills are preserved and interpolated by the shared
+style engine.
 
 All exports run on a daemon thread so the UI stays responsive. A persistent
 job folder stores every intermediate artifact — if the app quits mid-export,

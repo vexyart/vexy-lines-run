@@ -2,12 +2,14 @@
 
 ## Current Status
 
+- The GUI package inherits `.lines` image-filter chain support through `vexy-lines-py` and `vexy-lines-apy`.
 - Extracted non-GUI processing logic into `vexy-lines-apy` to centralize the export pipeline.
 - `vexy-lines-run` is now functioning as a pure CustomTkinter GUI layer.
-- All 70 unit tests are passing successfully.
+- All 141 unit tests are passing successfully.
 
 ## Recent Work
 
+- **Filter Support**: Documented that matching style image-filter chains are preserved and interpolated by the backend style picker.
 - **Bug Fix**: Fixed `TclError: image "pyimage1" doesn't exist` when dragging an image into the list after clearing it (Issue 603).
 - **Test Fixes**: Updated `test_ui_properties.py` and `test_ui_verification.py` to match exact application strings.
 - **Dependency Setup**: Organized package dependencies using `customtkinter`, `tkinterdnd2`, `Pillow`, and other necessary libraries for image/SVG/video processing.
@@ -17,4 +19,4 @@
 
 | Suite | Tests | Status |
 |---|---|---|
-| vexy-lines-run | 131 | PASS |
+| vexy-lines-run | 141 | PASS |

@@ -1,5 +1,10 @@
 # CHANGELOG.md
 
+## 2026-06-11 — Style Image Filter Awareness
+
+- **docs**: Documented that the GUI style workflow preserves and interpolates matching per-fill image-filter chains through `vexy-lines-apy`.
+- **test**: 141 tests passing.
+
 ## 2026-04-01 — Job Folder System (Issue #617)
 
 - **feat**: All exports now create a persistent job folder alongside the output, storing every intermediate artifact (`.lines`, `.svg`, raster frames). Interrupted exports resume automatically when re-run.

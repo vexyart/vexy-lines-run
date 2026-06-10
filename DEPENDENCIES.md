@@ -6,7 +6,7 @@ The `vexy-lines-run` package is the GUI desktop application layer. It relies on 
 
 ### First-Party Dependencies
 - **vexy-lines-py**: Required for parsing and handling the `.lines` document data model.
-- **vexy-lines-apy**: Provides the core style engine, MCP client, and centralized export pipeline that the GUI calls.
+- **vexy-lines-apy**: Provides the core style engine, MCP client, image-filter chain handling, and centralized export pipeline that the GUI calls.
 
 ### Third-Party Dependencies
 - **customtkinter**: Provides modern, customizable, and dark-mode compatible UI widgets on top of standard Tkinter.

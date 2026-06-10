@@ -42,6 +42,7 @@ launch()
 **Style picker**
 
 Select a primary style from any `.lines` file. Optionally select an end style — the two are interpolated linearly across the input sequence. Both show inline thumbnail previews.
+Matching image-filter chains on fills are preserved and interpolated as part of the style.
 
 **Export formats**
 
