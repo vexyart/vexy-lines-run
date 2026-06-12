@@ -1,5 +1,12 @@
 # WORK.md
 
+## 2026-06-12
+
+- Added "BUNDLE" to both export format menus. In lines mode it exports
+  PDF + SVG + PNG and extracts the embedded source image as `<stem>-src.jpg`
+  via `vexy_lines_api.bundle.export_bundle`. The pipeline rejects BUNDLE for
+  image/video inputs and for style-transfer exports.
+
 ## Current Status
 
 - The GUI package inherits `.lines` image-filter chain support through `vexy-lines-py` and `vexy-lines-apy`.

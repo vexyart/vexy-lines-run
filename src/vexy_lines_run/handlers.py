@@ -466,7 +466,7 @@ class AppHandlersMixin:
 
     def _update_size_dropdown_state(self) -> None:
         fmt = self.format_var.get()
-        if fmt in ("SVG", "LINES"):
+        if fmt in ("SVG", "LINES", "BUNDLE"):
             self.size_var.set("\u2014")
             self.size_menu.configure(values=["\u2014"], state="disabled")
             return

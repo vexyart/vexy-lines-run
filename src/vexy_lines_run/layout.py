@@ -138,7 +138,7 @@ class AppLayoutMixin:
         export_menu.add_option("Stop", command=self._stop_export, font=menu_font)
         export_menu.add_separator()
         fmt_sub = export_menu.add_submenu("Format\u2004\u203a", font=menu_font)
-        for fmt in ("SVG", "PNG", "JPG", "MP4", "LINES"):
+        for fmt in ("SVG", "PNG", "JPG", "MP4", "LINES", "BUNDLE"):
             fmt_sub.add_option(fmt, command=lambda f=fmt: self._set_format(f), font=menu_font)
         size_sub = export_menu.add_submenu("Size\u2004\u203a", font=menu_font)
         for sz in ("1x", "2x", "3x", "4x"):
@@ -352,7 +352,7 @@ class AppLayoutMixin:
         customtkinter.CTkLabel(self.controls_frame, text="Export as").pack(side="left", padx=(10, 4), pady=10)
         self.format_menu = customtkinter.CTkOptionMenu(
             self.controls_frame,
-            values=["SVG", "PNG", "JPG", "MP4", "LINES"],
+            values=["SVG", "PNG", "JPG", "MP4", "LINES", "BUNDLE"],
             variable=self.format_var,
             command=self._on_format_change,
             width=90,
