@@ -49,6 +49,12 @@ dependencies = [
     "pyperclip>=1.8.0",
 ]
 
+[project.optional-dependencies]
+# AI-assisted rename (Lines ▸ AI Rename Layers & Fills): pulls the apy VLM extras.
+ai = [
+    "vexy-lines-apy[ai]>=1.0.20",
+]
+
 [[project.authors]]
 name = "Fontlab Ltd."
 email = "opensource@vexy.art"

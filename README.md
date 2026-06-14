@@ -44,6 +44,21 @@ launch()
 Select a primary style from any `.lines` file. Optionally select an end style — the two are interpolated linearly across the input sequence. Both show inline thumbnail previews.
 Matching image-filter chains on fills are preserved and interpolated as part of the style.
 
+**AI Rename Layers & Fills**
+
+*Lines ▸ AI Rename Layers & Fills…* renames a `.lines` document's generic
+captions (`Layer`, `Blended`, `Linear`) to describe what each
+[fill](https://help.vexy.art/lines/articles/fill-properties-1/) actually draws,
+then names each [layer](https://help.vexy.art/lines/articles/layers-panel/) from
+its fills — only the captions change. After a confirmation and a Save dialog,
+each fill is rendered in Vexy Lines and described by a vision model on a
+background thread (progress shows in the title bar); the renamed copy defaults to
+`<stem>-renamed.lines`. Needs the `[ai]` extra (`pip install "vexy-lines-run[ai]"`),
+the Vexy Lines app, and an OpenAI-compatible `/v1` LLM endpoint — set it in
+**Lines ▸ AI Rename Settings…** or via `VEXY_LINES_LLM_API_URL`,
+`VEXY_LINES_LLM_API_KEY`, `VEXY_LINES_LLM_MODEL_VISION`, and `VEXY_LINES_VLM_MODEL`.
+See the [full guide](https://vexyart.github.io/vexy-lines/vexy-lines-apy/ai-rename/).
+
 **Export formats**
 
 | Format | Notes |

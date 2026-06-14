@@ -87,6 +87,13 @@ class AppLayoutMixin:
         )
         lines_menu.add_option("Remove Selected", command=self._remove_selected_lines, font=menu_font)
         lines_menu.add_option("Remove All Lines", command=self._clear_all_lines, font=menu_font)
+        lines_menu.add_separator()
+        lines_menu.add_option(
+            "AI Rename Layers & Fills…", command=self._do_ai_rename, font=menu_font
+        )
+        lines_menu.add_option(
+            "AI Rename Settings…", command=self._edit_ai_rename_settings, font=menu_font
+        )
 
         image_btn = menu_bar.add_cascade("Image", font=menu_font)
         image_menu = CustomDropdownMenu(widget=image_btn, font=menu_font)

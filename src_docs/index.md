@@ -51,6 +51,7 @@ Pick a primary style from any `.lines` file. Optionally pick an end style — th
 
 - **Style picker** with live thumbnail previews
 - **Style interpolation** — blend two styles across a batch or video
+- **[AI Rename Layers & Fills](gui-guide.md#ai-rename-layers-fills)** — describe each [fill](https://help.vexy.art/lines/articles/fill-properties-1/) with a vision model and rewrite generic captions
 - **Drag-and-drop** onto any panel
 - **Background export** with live progress on the Export button
 - **Output formats:** SVG, PNG, JPG (1x-4x upscale), MP4, LINES

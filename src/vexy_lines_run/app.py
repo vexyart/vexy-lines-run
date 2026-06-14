@@ -372,6 +372,141 @@ class App(AppLayoutMixin, AppHandlersMixin, *_BASE_CLASSES, metaclass=_AppMeta):
             messagebox.showerror("Export Error", error)
         logger.error("Export error: {}", error)
 
+    # ── AI rename ────────────────────────────────────────────────────
+
+    def _do_ai_rename(self) -> None:
+        """Run AI-assisted layer/fill renaming on the selected .lines file."""
+        if self._is_exporting:
+            return
+
+        paths = self._lines_paths
+        if not paths:
+            messagebox.showwarning("AI Rename", "Add a Vexy Lines document first.")
+            return
+        idx = self._selected_lines_index if self._selected_lines_index is not None else 0
+        lines_path = paths[idx]
+
+        from vexy_lines_run.rename import count_fills
+
+        try:
+            n_fills = count_fills(lines_path)
+        except Exception as exc:
+            messagebox.showerror("AI Rename", f"Could not read the document:\n{exc}")
+            return
+
+        if not messagebox.askokcancel(
+            "AI Rename Layers & Fills",
+            f"This will render each of the {n_fills} fill(s) in “{Path(lines_path).name}” one by one in "
+            "Vexy Lines, ask a vision model to describe each, and write a renamed copy.\n\n"
+            "Requires the Vexy Lines app and an LLM endpoint (set it in Lines ▸ AI Rename Settings…). "
+            "It can take a while for documents with many fills.\n\nContinue?",
+        ):
+            return
+
+        out = filedialog.asksaveasfilename(
+            title="Save renamed Vexy Lines document",
+            defaultextension=".lines",
+            initialfile=f"{Path(lines_path).stem}-renamed.lines",
+            initialdir=str(Path(lines_path).parent),
+            filetypes=[("Vexy Lines", "*.lines"), ("All files", "*.*")],
+        )
+        if not out:
+            return
+
+        from vexy_lines_api.rename import config_with_overrides
+        from vexy_lines_run.rename import start_ai_rename_thread
+        from vexy_lines_run.settings import load_ai_settings
+
+        config = config_with_overrides(**load_ai_settings())
+
+        self.title("Vexy Lines Run — AI renaming…")
+
+        start_ai_rename_thread(
+            lines_path,
+            out,
+            config=config,
+            on_progress=lambda c, t, m: self.after(0, self._on_ai_rename_progress, c, t, m),
+            on_complete=lambda plan, path: self.after(0, self._on_ai_rename_complete, plan, path),
+            on_error=lambda e: self.after(0, self._on_ai_rename_error, e),
+        )
+
+    def _edit_ai_rename_settings(self) -> None:
+        """Open a dialog to edit the AI-rename LLM endpoint settings."""
+        from vexy_lines_run.settings import AI_SETTING_KEYS, load_ai_settings, save_ai_settings
+
+        current = load_ai_settings()
+        labels = {
+            "llm_api_url": "API URL (OpenAI-compatible /v1)",
+            "llm_api_key": "API key",
+            "llm_model_vision": "Vision model (describes fills)",
+            "llm_model": "Text model (names layers)",
+        }
+        placeholders = {
+            "llm_api_url": "VEXY_LINES_LLM_API_URL",
+            "llm_api_key": "VEXY_LINES_LLM_API_KEY",
+            "llm_model_vision": "VEXY_LINES_LLM_MODEL_VISION",
+            "llm_model": "VEXY_LINES_VLM_MODEL",
+        }
+
+        dialog = customtkinter.CTkToplevel(self)
+        dialog.title("AI Rename Settings")
+        dialog.geometry("520x320")
+        dialog.transient(self)
+
+        customtkinter.CTkLabel(
+            dialog,
+            text="Leave a field blank to use its VEXY_LINES_* environment variable.",
+            wraplength=480,
+        ).pack(padx=16, pady=(16, 8), anchor="w")
+
+        entries: dict[str, customtkinter.CTkEntry] = {}
+        for key in AI_SETTING_KEYS:
+            customtkinter.CTkLabel(dialog, text=labels[key]).pack(padx=16, anchor="w")
+            entry = customtkinter.CTkEntry(
+                dialog,
+                width=480,
+                placeholder_text=placeholders[key],
+                show="*" if key == "llm_api_key" else "",
+            )
+            if current.get(key):
+                entry.insert(0, current[key])
+            entry.pack(padx=16, pady=(0, 8))
+            entries[key] = entry
+
+        def _save() -> None:
+            save_ai_settings({key: entry.get() for key, entry in entries.items()})
+            dialog.destroy()
+
+        button_row = customtkinter.CTkFrame(dialog, fg_color="transparent")
+        button_row.pack(pady=12)
+        customtkinter.CTkButton(button_row, text="Cancel", command=dialog.destroy, width=120).pack(side="left", padx=8)
+        customtkinter.CTkButton(button_row, text="Save", command=_save, width=120).pack(side="left", padx=8)
+
+        dialog.after(120, dialog.lift)
+
+    def _on_ai_rename_progress(self, current: int, total: int, message: str) -> None:
+        self.title(f"Vexy Lines Run — {message}")
+        logger.debug("AI rename progress: {}/{} - {}", current, total, message)
+
+    def _on_ai_rename_complete(self, plan: object, path: object) -> None:
+        self.title("Vexy Lines Run")
+        n_fills = len(getattr(plan, "fills", []))
+        n_layers = len(getattr(plan, "layers", []))
+        messagebox.showinfo(
+            "AI Rename complete",
+            f"Renamed {n_fills} fill(s) and {n_layers} layer(s).\n\nSaved to:\n{path}",
+        )
+        if path:
+            with contextlib.suppress(Exception):
+                from showinfm.showinfm import show_in_file_manager
+
+                show_in_file_manager(str(path))
+
+    def _on_ai_rename_error(self, error: str) -> None:
+        self.title("Vexy Lines Run")
+        messagebox.showerror("AI Rename Error", error)
+        logger.error("AI rename error: {}", error)
+
     # ── tab / path helpers ──────────────────────────────────────────
 
     def _get_active_input_paths(self) -> list[str]:

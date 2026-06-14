@@ -29,7 +29,7 @@ Six menus sit at the top: **File**, **Lines**, **Image**, **Video**, **Style**, 
 | Menu | Key items |
 |------|-----------|
 | **File** | Add Lines, Export, Quit |
-| **Lines** | Add, Remove Selected, Remove All Lines |
+| **Lines** | Add, Remove Selected, Remove All Lines, AI Rename Layers & Fills…, AI Rename Settings… |
 | **Image** | Add Images, Remove Selected, Remove All Images |
 | **Video** | Add Video, Reset Range, Remove Video |
 | **Style** | Open Style, Open End Style, Reset Styles |
@@ -62,6 +62,41 @@ The left half is a scrollable file list. Click a filename to select it (highligh
 | Format = SVG | Not supported in Lines mode — use Images mode with a style instead |
 
 When no files are loaded, the list area shows a dark placeholder.
+
+### AI Rename Layers & Fills
+
+`.lines` documents often carry generic captions — `Layer`, `Layer 2`, `Blended`, `Linear`. **Lines ▸ AI Rename Layers & Fills…** (under the Lines menu, after Remove All Lines) renames them to describe what each [fill](https://help.vexy.art/lines/articles/fill-properties-1/) actually draws — e.g. `car-on-road`, `top-sky-bridge` — then names each [layer](https://help.vexy.art/lines/articles/layers-panel/) from the fills it contains. Only the captions change; the artwork is untouched.
+
+Add at least one `.lines` file in the Lines tab first. The command operates on the selected file (or the first in the list if none is selected).
+
+**The flow:**
+
+1. A confirmation dialog explains that it will render each of the *N* fills one by one in Vexy Lines, ask a vision model to describe each, and write a renamed copy — and that it needs the Vexy Lines app plus an LLM endpoint and can take a while.
+2. After you confirm, a Save dialog asks where to write the renamed `.lines` (defaults to `<stem>-renamed.lines` beside the input).
+3. The work runs on a background thread. Progress shows in the window title bar (e.g. *"Vexy Lines Run — Describing fill 3/53"*).
+4. On success, a dialog reports how many fills and layers were renamed, and the saved file is revealed in your file manager.
+5. On error, an error dialog explains what went wrong.
+
+**Configuring the model — Lines ▸ AI Rename Settings…**
+
+The endpoint is an OpenAI-compatible `/v1` server. Open **Lines ▸ AI Rename Settings…** to set, in a dialog:
+
+- **API URL** — the `/v1` base URL
+- **API key**
+- **Vision model** — used to describe each fill
+- **Text model** — used to name each layer
+
+Settings are saved to `~/.config/vexy-lines-run/settings.json`. Any field left blank falls back to its environment variable: `VEXY_LINES_LLM_API_URL`, `VEXY_LINES_LLM_API_KEY`, `VEXY_LINES_LLM_MODEL_VISION` (vision), and `VEXY_LINES_VLM_MODEL` (text).
+
+**Requirements:**
+
+- The `[ai]` extra: `pip install "vexy-lines-run[ai]"`.
+- The Vexy Lines desktop app running (renders each fill via MCP).
+- An OpenAI-compatible `/v1` LLM endpoint, configured via the settings dialog or the `VEXY_LINES_*` environment variables above.
+
+**Artifacts:** the inspection images and a `rename-plan.json` are written to a `<stem>-rename/` folder beside the input.
+
+See the full guide: [AI-assisted rename of layers & fills](https://vexy.dev/vexy-lines-apy/ai-rename/). Background on the document model: [Document Structure](https://help.vexy.art/lines/articles/document-structure-overview/).
 
 ## Images tab
 
