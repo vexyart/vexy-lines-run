@@ -275,7 +275,7 @@ For full control over video processing with style interpolation:
 
 ```python
 from vexy_lines_run.video import process_video_with_style
-from vexy_lines_apy.style import extract_style, styles_compatible
+from vexy_lines_api.style import extract_style, styles_compatible
 
 start = extract_style("clean_lines.lines")
 end = extract_style("scribble.lines")

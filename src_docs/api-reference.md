@@ -260,7 +260,7 @@ Higher-level video processing using extracted `Style` objects. Supports style in
 
 ```python
 from vexy_lines_run.video import process_video_with_style
-from vexy_lines_apy.style import extract_style
+from vexy_lines_api.style import extract_style
 
 style = extract_style("halftone.lines")
 end_style = extract_style("scribble.lines")
