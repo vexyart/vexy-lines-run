@@ -10,7 +10,19 @@ Built with CustomTkinter. Runs on macOS, Windows, and Linux wherever Tk is avail
 pip install vexy-lines-run
 ```
 
-All dependencies (CustomTkinter, tkinterdnd2, PyAV, OpenCV, resvg, svglab, CTkMenuBarPlus) are installed automatically.
+Core dependencies (CustomTkinter, tkinterdnd2, CTkMenuBarPlus, Pillow, loguru)
+install automatically.  Video processing dependencies (OpenCV, PyAV) are pulled
+in transitively by `vexy-lines-apy`.  To pin them explicitly:
+
+```bash
+pip install "vexy-lines-run[video]"
+```
+
+For AI-assisted layer rename:
+
+```bash
+pip install "vexy-lines-run[ai]"
+```
 
 ## Launch
 

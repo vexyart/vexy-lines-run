@@ -1,5 +1,20 @@
 # CHANGELOG.md
 
+## 2026-06-29 — Docs, Video Extra, Headless Smoke Test
+
+- **feat**: Added `video` optional extra to `pyproject.toml` (`opencv-python-headless>=4.8.0`, `av>=12.0.0`) so video-processing dependencies can be pinned explicitly: `pip install "vexy-lines-run[video]"`.
+- **docs**: Added `src_docs/gui-tour.md` — quick three-tab visual walkthrough.
+- **docs**: Added `src_docs/video-processing.md` — supported containers, per-frame OpenCV→PIL→MCP→PIL→OpenCV pipeline, memory behaviour, audio passthrough, SVG rasterisation, and frame range semantics.
+- **docs**: Added `src_docs/installation-troubleshooting.md` — platform-specific fixes for tkinterdnd2 (Windows), Framework build (macOS), missing Tk (Linux), missing ffmpeg, missing cv2, and MCP connection errors.
+- **docs**: Added `src_docs/STYLE_GUIDE.md` — voice, structure, language conventions, code block rules, and changelog format for contributors.
+- **docs**: Updated `mkdocs.yml` nav to include all four new pages.
+- **docs**: Updated `README.md` to clarify base vs. video/ai extras.
+- **ci**: Added `.github/workflows/ci.yml` — runs `pytest` on Python 3.11/3.12/3.13 across ubuntu/macos/windows; Linux jobs wrap with `xvfb-run` so the smoke test runs against a real Tk window.
+- **feat**: `launch()` and `main()` in `app.py` now carry docstrings explicitly stating that both functions **block** until the window is closed.
+- **docs**: `video.py` module docstring now describes the full OpenCV→PyAV frame pipeline and per-frame memory behaviour.
+- **test**: Added `tests/test_smoke_headless.py` — instantiates the real `App` window under Xvfb on Linux CI; skips with reason when `$DISPLAY` / `$WAYLAND_DISPLAY` is not set.
+- **test**: 150 tests passing (149 existing + 1 new smoke test, which skips on headless without Xvfb).
+
 ## 2026-06-11 — Style Image Filter Awareness
 
 - **docs**: Documented that the GUI style workflow preserves and interpolates matching per-fill image-filter chains through `vexy-lines-apy`.

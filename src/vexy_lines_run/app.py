@@ -610,12 +610,27 @@ class App(AppLayoutMixin, AppHandlersMixin, *_BASE_CLASSES, metaclass=_AppMeta):
 
 
 def main() -> None:
-    """Entry point for the Vexy Lines Run application."""
+    """Create the App window and run Tk's event loop.
+
+    This function **blocks** until the user closes the window.  It is the
+    canonical entry point used by the console script and by ``launch()``.
+    """
     app = App()
     app.mainloop()
 
 
 def launch() -> None:
+    """Launch the Vexy Lines Run GUI.
+
+    Equivalent to calling :func:`main`.  This function **blocks** — it does
+    not return until the application window is closed by the user.
+
+    Call from Python when you want to embed the launcher in a script::
+
+        from vexy_lines_run import launch
+        launch()          # blocks here until the window closes
+        print("done")     # runs after the user closes the window
+    """
     main()
 
 

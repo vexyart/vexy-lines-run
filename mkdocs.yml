@@ -33,8 +33,12 @@ markdown_extensions:
 nav:
   - Overview: index.md
   - Installation: installation.md
+  - Installation Troubleshooting: installation-troubleshooting.md
+  - GUI Tour: gui-tour.md
   - GUI Guide: gui-guide.md
+  - Video Processing: video-processing.md
   - Technical Details: gui-tech.md
   - API Reference: api-reference.md
   - Examples: examples.md
   - Changelog: changelog.md
+  - Style Guide: STYLE_GUIDE.md
