@@ -1,6 +1,6 @@
 # vexy-lines-run
 
-Desktop GUI for [Vexy Lines](https://vexy.art) style transfer — load images, `.lines` files, or video, pick a style, export.
+Desktop GUI for [Vexy Lines](https://vexy.art) style transfer: load images, `.lines` files, or video, pick a style, export.
 
 Built with CustomTkinter. Runs on macOS, Windows, and Linux wherever Tk is available.
 
@@ -47,14 +47,14 @@ launch()
 
 **Three input tabs**
 
-- **Lines** — load `.lines` files; export embedded previews or apply a new style
-- **Images** — load PNG, JPG, WEBP, and other rasters; style applied via the MCP API
-- **Video** — load MP4, MOV, MKV, or similar; per-frame style transfer with audio passthrough
+- **Lines**: load `.lines` files; export embedded previews or apply a new style
+- **Images**: load PNG, JPG, WEBP, and other rasters; the app applies the style via the MCP API
+- **Video**: load MP4, MOV, MKV, or similar; per-frame style transfer with audio passthrough
 
 **Style picker**
 
-Select a primary style from any `.lines` file. Optionally select an end style — the two are interpolated linearly across the input sequence. Both show inline thumbnail previews.
-Matching image-filter chains on fills are preserved and interpolated as part of the style.
+Select a primary style from any `.lines` file. Optionally select an end style: the app interpolates the two linearly across the input sequence. Both show inline thumbnail previews.
+The app preserves matching image-filter chains on fills and interpolates them as part of the style.
 
 **AI Rename Layers & Fills**
 
@@ -62,11 +62,11 @@ Matching image-filter chains on fills are preserved and interpolated as part of 
 captions (`Layer`, `Blended`, `Linear`) to describe what each
 [fill](https://help.vexy.art/lines/articles/fill-properties-1/) actually draws,
 then names each [layer](https://help.vexy.art/lines/articles/layers-panel/) from
-its fills — only the captions change. After a confirmation and a Save dialog,
+its fills. Only the captions change. After a confirmation and a Save dialog,
 each fill is rendered in Vexy Lines and described by a vision model on a
 background thread (progress shows in the title bar); the renamed copy defaults to
 `<stem>-renamed.lines`. Needs the `[ai]` extra (`pip install "vexy-lines-run[ai]"`),
-the Vexy Lines app, and an OpenAI-compatible `/v1` LLM endpoint — set it in
+the Vexy Lines app, and an OpenAI-compatible `/v1` LLM endpoint. Set it in
 **Lines ▸ AI Rename Settings…** or via `VEXY_LINES_LLM_API_URL`,
 `VEXY_LINES_LLM_API_KEY`, `VEXY_LINES_LLM_MODEL_VISION`, and `VEXY_LINES_VLM_MODEL`.
 See the [full guide](https://vexyart.github.io/vexy-lines/vexy-lines-apy/ai-rename/).
@@ -82,7 +82,7 @@ See the [full guide](https://vexyart.github.io/vexy-lines/vexy-lines-apy/ai-rena
 
 **Drag-and-drop** onto any input list (via `tkinterdnd2`)
 
-**Background processing** — export runs on a daemon thread; the progress bar updates live and the UI stays responsive
+**Background processing**: export runs on a daemon thread; the progress bar updates live and the UI stays responsive
 
 ## Architecture
 
@@ -97,7 +97,7 @@ Style transfer calls into `vexy-lines-apy` (`MCPClient`, `apply_style`, `interpo
 
 ## Job folders (crash-safe exports)
 
-All exports create a persistent **job folder** alongside the output directory. Every intermediate artifact — `.lines` documents, `.svg` exports, rasterized frames — is saved there. If the app quits or the process is interrupted mid-export, re-running the export resumes from where it left off.
+All exports create a persistent **job folder** alongside the output directory. Every intermediate artifact (`.lines` documents, `.svg` exports, rasterized frames) is saved there. If the app quits or the process is interrupted mid-export, re-running the export resumes from where it left off.
 
 The GUI never deletes job folders automatically. Use the CLI with `--force` to start fresh or `--cleanup` to remove the folder after completion.
 

@@ -250,7 +250,7 @@ The drop handlers parse both formats. Duplicate paths are filtered out before ad
 
 ### Graceful degradation
 
-If tkinterdnd2 is not installed, `TkinterDnD` is set to `None` at import time, and `_register_drop_targets()` returns immediately. No error, no crash — the app simply lacks drag-and-drop. Users can still add files via buttons and menus.
+If tkinterdnd2 is not installed, `TkinterDnD` is set to `None` at import time, and `_register_drop_targets()` returns immediately. No error, no crash: the app lacks drag-and-drop. Users can still add files via buttons and menus.
 
 ## Video processing pipeline
 
@@ -341,7 +341,7 @@ The visibility check runs on a 300ms polling timer (`_poll_active_tab`) in addit
 
 Two truncation functions:
 
-**`truncate_start(text, max_chars)`** — trims leading characters:
+**`truncate_start(text, max_chars)`**: trims leading characters:
 ```python
 def truncate_start(text: str, max_chars: int = 20) -> str:
     if len(text) <= max_chars:
@@ -349,7 +349,7 @@ def truncate_start(text: str, max_chars: int = 20) -> str:
     return f"…{text[-max_chars:]}"
 ```
 
-**`truncate_middle(text, max_width)`** — replaces the middle with "⋮":
+**`truncate_middle(text, max_width)`**: replaces the middle with "⋮":
 ```python
 def truncate_middle(text: str, max_width: int) -> str:
     if len(text) <= max_width:
@@ -398,13 +398,13 @@ Font metrics are computed at init time using `tkfont.nametofont()` on the defaul
 ### Initialization
 
 `App.__init__()` calls, in order:
-1. `super().__init__()` — creates the Tk window
+1. `super().__init__()`: creates the Tk window
 2. TkinterDnD initialization (if available)
 3. Window configuration: title, geometry (900x700), minsize (960x480)
 4. State variable initialization
 5. Font metrics setup for truncation
-6. `_build_layout()` — constructs all widgets
-7. `_register_drop_targets()` — sets up drag-and-drop
+6. `_build_layout()`: constructs all widgets
+7. `_register_drop_targets()`: sets up drag-and-drop
 8. Initial state updates (size dropdown, audio toggle, styles panel)
 9. `<Configure>` event binding for resize handling
 10. Raise to front: `lift()`, `attributes("-topmost", True)`, then after 200ms set `-topmost` back to `False`
@@ -416,33 +416,33 @@ Font metrics are computed at init time using `tkfont.nametofont()` on the defaul
 ## Key method architecture
 
 ### Layout builders
-- `_build_layout()` — top-level structure (root frame, grid)
-- `_build_menu_bar()` — menu construction with CTkMenuBar
-- `_build_inputs_panel()` — tabview with three tabs
-- `_build_lines_tab()` — lines-specific widgets
-- `_build_images_tab()` — image-specific widgets
-- `_build_video_tab()` — video-specific widgets
-- `_build_styles_panel()` — style tabview with two tabs
-- `_build_style_picker()` — reusable per-slot style picker
-- `_build_outputs_section()` — export controls bar
+- `_build_layout()`: top-level structure (root frame, grid)
+- `_build_menu_bar()`: menu construction with CTkMenuBar
+- `_build_inputs_panel()`: tabview with three tabs
+- `_build_lines_tab()`: lines-specific widgets
+- `_build_images_tab()`: image-specific widgets
+- `_build_video_tab()`: video-specific widgets
+- `_build_styles_panel()`: style tabview with two tabs
+- `_build_style_picker()`: reusable per-slot style picker
+- `_build_outputs_section()`: export controls bar
 
 ### Export flow
-- `_do_export()` — file dialog, gather state, spawn thread
-- `_run_export()` — background thread entry point
-- `_update_progress()` — update button text with percentage (main thread)
-- `_export_complete()` — re-enable button (main thread)
-- `_export_error()` — re-enable button, show error dialog (main thread)
+- `_do_export()`: file dialog, gather state, spawn thread
+- `_run_export()`: background thread entry point
+- `_update_progress()`: update button text with percentage (main thread)
+- `_export_complete()`: re-enable button (main thread)
+- `_export_error()`: re-enable button, show error dialog (main thread)
 
 ### Video range management
-- `_set_video_range()` — validates and sets range, updates slider/entries/previews
-- `_on_video_slider_change()` — handles slider input, converts normalised values to frame numbers
-- `_on_video_entries_submit()` — handles text entry input (Return key or focus-out)
-- `_syncing_video_controls` — flag to prevent circular updates between slider and entries
+- `_set_video_range()`: validates and sets range, updates slider/entries/previews
+- `_on_video_slider_change()`: handles slider input, converts normalised values to frame numbers
+- `_on_video_entries_submit()`: handles text entry input (Return key or focus-out)
+- `_syncing_video_controls`: flag to prevent circular updates between slider and entries
 
 ### Image management
-- `_set_label_image()` — fits and sets a PIL image on a CTkLabel
-- `fit_image_to_box()` — aspect-ratio-preserving scale onto a dark canvas
-- `_redraw_*_preview()` — refresh specific preview widgets after selection or resize
+- `_set_label_image()`: fits and sets a PIL image on a CTkLabel
+- `fit_image_to_box()`: aspect-ratio-preserving scale onto a dark canvas
+- `_redraw_*_preview()`: refresh specific preview widgets after selection or resize
 
 ## File extension constants
 

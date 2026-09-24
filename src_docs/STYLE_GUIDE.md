@@ -64,7 +64,7 @@ Use MkDocs admonitions sparingly:
     For something that causes data loss or a hard-to-debug failure.
 ```
 
-Do not use admonitions for normal caveats — put those inline.
+Do not use admonitions for normal caveats: put those inline.
 
 ## Screenshots and diagrams
 

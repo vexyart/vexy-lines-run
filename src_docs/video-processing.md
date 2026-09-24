@@ -14,7 +14,7 @@ How `vexy-lines-run` handles video input and output.
 
 OpenCV (`opencv-python-headless`) handles frame extraction for all containers.
 Output is always re-encoded MP4 (H.264 via OpenCV's VideoWriter) or individual
-PNG/JPG frames — the app does not remux the original container.
+PNG/JPG frames. The app does not remux the original container.
 
 ## Per-frame pipeline
 
@@ -40,7 +40,7 @@ PIL Image.save(path)           [PNG/JPG frame output]
 
 ### Memory behaviour
 
-Frames are kept as in-memory PNG bytes while waiting for the MCP round-trip —
+Frames are kept as in-memory PNG bytes while waiting for the MCP round-trip,
 not as raw numpy arrays.  For a 1080p frame this is roughly 1–3 MB compressed
 versus 6 MB uncompressed.  Only one frame is in the pipeline at a time; the
 app does not buffer frames ahead.
@@ -87,8 +87,8 @@ state.
 After the Vexy Lines engine returns an SVG string, it must be rasterised for
 raster outputs (PNG, JPG, MP4 frames).  The app tries these in order:
 
-1. **resvg-py** (`resvg.svg_to_png`) — fast, correct, preferred.
-2. **Pillow fallback** — returns a blank RGBA image of the correct size.  Used
+1. **resvg-py** (`resvg.svg_to_png`): fast, correct, preferred.
+2. **Pillow fallback**: returns a blank RGBA image of the correct size.  Used
    when `resvg` is not installed.  The resulting frame will be blank but the
    export will not fail.
 
@@ -104,11 +104,11 @@ uv add resvg-py
 
 `probe(path)` uses `cv2.VideoCapture` to read:
 
-- `width`, `height` — frame dimensions in pixels.
-- `fps` — frames per second (`CAP_PROP_FPS`).
-- `total_frames` — frame count (`CAP_PROP_FRAME_COUNT`).
-- `duration` — `total_frames / fps`.
-- `has_audio` — detected separately via `ffprobe` (returns `False` if ffprobe is
+- `width`, `height`: frame dimensions in pixels.
+- `fps`: frames per second (`CAP_PROP_FPS`).
+- `total_frames`: frame count (`CAP_PROP_FRAME_COUNT`).
+- `duration`: `total_frames / fps`.
+- `has_audio`: detected separately via `ffprobe` (returns `False` if ffprobe is
   unavailable).
 
 `probe` opens the file only to read properties and closes it immediately.  It

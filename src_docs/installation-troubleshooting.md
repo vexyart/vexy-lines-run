@@ -14,7 +14,7 @@ Windows, the DLL must be on a path that Tcl can find.
 **Symptom:** The app launches but dropping files onto the window does nothing,
 or the title bar shows `tkdnd unavailable`.
 
-**Fix 1 — reinstall with uv or pip:**
+**Fix 1: reinstall with uv or pip:**
 
 ```bat
 pip uninstall tkinterdnd2 -y
@@ -24,12 +24,12 @@ pip install tkinterdnd2
 If you used a conda environment, make sure you installed `tkinterdnd2` from
 PyPI, not from conda-forge (the conda package bundles a different Tcl layout).
 
-**Fix 2 — run as a module rather than a script:**
+**Fix 2: run as a module rather than a script:**
 
 Calling `python -m vexy_lines_run` instead of `vexy-lines-run` ensures that
 the `tkinterdnd2` package root is on `sys.path` before `tkinter` initialises.
 
-**Fix 3 — Tcl/Tk version mismatch:**
+**Fix 3: Tcl/Tk version mismatch:**
 
 The bundled `tkdnd` DLL targets a specific Tcl version.  If your Python ships
 with Tcl 8.6 but `tkinterdnd2` was built for Tcl 9, the extension cannot load.
@@ -41,7 +41,7 @@ import tkinter
 print(tkinter.TclVersion)
 ```
 
-Then check the `tkinterdnd2` wheel name on PyPI — it encodes the Tcl target.
+Then check the `tkinterdnd2` wheel name on PyPI: it encodes the Tcl target.
 Install the matching version or upgrade Python to one that ships Tcl 9.
 
 **Workaround:** The app works without drag-and-drop.  Use the **+** buttons or
@@ -121,7 +121,7 @@ pip install --force-reinstall tkinterdnd2
 ```
 
 If `tk-dnd` is unavailable for your distribution, the app still works using
-the **+** buttons and menu bar — drag-and-drop is a convenience, not a
+the **+** buttons and menu bar. Drag-and-drop is a convenience, not a
 requirement.
 
 ### Running headless (no display server)
@@ -133,7 +133,7 @@ sudo apt install xvfb python3-tk
 xvfb-run python -m vexy_lines_run
 ```
 
-The test suite itself does not require a display — all GUI tests use mocks.
+The test suite itself does not require a display: all GUI tests use mocks.
 Only `tests/test_smoke_headless.py` tries to open a real Tk window and will
 skip automatically if `$DISPLAY` is not set.
 
@@ -200,13 +200,13 @@ The GUI connects to it via a local MCP server on `localhost:47384`.
 2. Wait a few seconds for its MCP server to start.
 3. Try exporting again.
 
-Check the log output (`--log-level DEBUG` is not a flag — use
+Check the log output (`--log-level DEBUG` is not a flag; use the
 `loguru` environment variable `LOGURU_LEVEL=DEBUG python -m vexy_lines_run`)
 for connection errors.
 
 ### "MCP error: Connection refused"
 
-Same as above — the Vexy Lines app is not running or has not finished starting.
+Same as above: the Vexy Lines app is not running or has not finished starting.
 
 ### Reinstalling from scratch
 

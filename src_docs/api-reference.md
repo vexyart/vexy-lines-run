@@ -113,7 +113,7 @@ Note: `audio` and `frame_range` are keyword-only parameters.
 |------|----------------|-------------|
 | `"lines"` + LINES | No | File copy to output directory |
 | `"lines"` + PNG/JPG | No | Extracts embedded preview image from each .lines file |
-| `"lines"` + SVG | N/A | Returns error — SVG export from .lines requires Images mode with a style |
+| `"lines"` + SVG | N/A | Returns error: SVG export from .lines requires Images mode with a style |
 | `"images"` | Yes | Applies style to each image via MCP. Each image → new Vexy Lines document → apply fill tree → render → export SVG → optionally rasterise |
 | `"video"` + MP4 | Yes | Full video re-encode with per-frame style transfer. Audio passthrough when `audio=True` and source has audio and full range selected. |
 | `"video"` + PNG/JPG/SVG | Yes | Extracts frames, styles each one, saves as `frame_NNNNNN.ext` |
@@ -394,4 +394,4 @@ Shorten text by replacing the middle with "⋮", keeping roughly equal amounts f
 
 ### `create_placeholder_image(width: int, height: int, text: str) -> Image.Image`
 
-Returns a plain dark-grey (`#1d1f22`) image. The `text` parameter is accepted but not rendered — the placeholder is a solid color block.
+Returns a plain dark-grey (`#1d1f22`) image. The `text` parameter is accepted but not rendered: the placeholder is a solid color block.

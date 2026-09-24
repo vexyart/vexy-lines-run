@@ -35,9 +35,9 @@ You have a folder of `.lines` documents and want PNG or JPG versions of their em
 4. Click **Export ▶** and choose an output folder
 5. Each file's embedded preview image is extracted and saved
 
-**No style needed** — Lines mode extracts previews directly from the files.
+**No style needed**: Lines mode extracts previews directly from the files.
 
-**Want plain copies?** Set format to **LINES** and the files are copied to the output folder. No MCP, no rendering — just a file copy.
+**Want plain copies?** Set format to **LINES** and the files are copied to the output folder. No MCP, no rendering, only a file copy.
 
 **Want SVG output?** SVG export from `.lines` files isn't available in Lines mode. Instead, switch to **Images** mode, load the source images, pick a style, and export as SVG. Or use the CLI for direct MCP-based export.
 
@@ -48,9 +48,9 @@ You have 50 product photos. You want them all rendered as halftone vector art.
 ![Images tab with bear photos and a halftone cat style loaded](images/images-mode.png)
 
 1. Switch to the **Images** tab
-2. Click **+** and select all 50 photos (PNG, JPG, WEBP — any raster format works)
+2. Click **+** and select all 50 photos (PNG, JPG, WEBP, or any other raster format)
 3. Click **+** in the Style panel and pick a `.lines` file with the halftone look you want
-4. The style preview appears immediately — check it's the right one
+4. The style preview appears immediately. Check it's the right one
 5. Choose **SVG** for vector output, or **PNG**/**JPG** with a size multiplier (2x doubles the resolution)
 6. Click **Export ▶** and choose an output folder
 7. The export button shows progress: "35% Styling product_07..."
@@ -66,7 +66,7 @@ You have a collection of `.lines` documents and want to apply a completely diffe
 2. Drag your `.lines` files onto the file list (or use **+**)
 3. In the Style panel, load the new style you want to apply
 
-Wait — the Style panel is grayed out on the Lines tab. That's by design: `.lines` files carry their own fill structure. To restyle them:
+Wait: the Style panel is grayed out on the Lines tab. That's by design: `.lines` files carry their own fill structure. To restyle them:
 
 1. Extract the source images from the `.lines` files first (export as PNG from Lines mode)
 2. Switch to the **Images** tab
@@ -83,7 +83,7 @@ Load 60 frames from an animation. Set a "clean lines" primary style and a "chaot
 3. Switch to the **End Style** tab and click **+** to pick the scribble style
 4. Export as PNG at 2x
 
-The blend factor `t` for frame `i` of `N` total frames is `i / (N - 1)`. Both styles must be structurally compatible — same number of groups, layers, and fills with matching fill types. If they don't match, the export will show an error.
+The blend factor `t` for frame `i` of `N` total frames is `i / (N - 1)`. Both styles must be structurally compatible: same number of groups, layers, and fills with matching fill types. If they don't match, the export will show an error.
 
 ## Create a 30-second styled video from MP4
 
@@ -139,7 +139,7 @@ Combine video processing with style interpolation to create a gradually transfor
 4. The first frame gets 100% clean lines, the last frame gets 100% scribble, and everything in between blends smoothly
 5. Export as MP4
 
-This works for frame image export too — each frame file gets the interpolated style for its position in the sequence.
+This works for frame image export too: each frame file gets the interpolated style for its position in the sequence.
 
 ## Drag-and-drop workflow
 
@@ -166,7 +166,7 @@ print(f"Duration:   {info.duration:.1f}s")
 print(f"Audio:      {'yes' if info.has_audio else 'no'}")
 ```
 
-`probe()` reads metadata without decoding frames — it returns instantly even for large files. Requires OpenCV.
+`probe()` reads metadata without decoding frames, so it returns instantly even for large files. Requires OpenCV.
 
 ## Use the range slider widget standalone
 

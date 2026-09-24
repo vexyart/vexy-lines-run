@@ -26,19 +26,19 @@ which tab is active.
 
 What you see:
 
-- **Left half** — scrollable file list.  Click a name to select it (blue highlight).
-- **Right half** — preview image extracted from the selected file's embedded data.
-- **Buttons below the list** — **+** add files, **−** remove selected, **✕** clear all.
+- **Left half**: scrollable file list.  Click a name to select it (blue highlight).
+- **Right half**: preview image extracted from the selected file's embedded data.
+- **Buttons below the list**: **+** add files, **−** remove selected, **✕** clear all.
 
 What to try:
 
 1. Click **+** (or drag `.lines` files onto the list).
-2. Select a file — the preview updates immediately.
+2. Select a file. The preview updates immediately.
 3. Choose **LINES** in the format dropdown and click **Export ▶** to copy files
    without touching the MCP API.
 4. Choose **PNG** or **JPG** to extract the embedded preview image from each file.
 
-When the Lines tab is active the Style panel on the right is hidden — `.lines`
+When the Lines tab is active the Style panel on the right is hidden: `.lines`
 files carry their own fill structure and do not accept an external style.
 
 ---
@@ -49,18 +49,18 @@ files carry their own fill structure and do not accept an external style.
 
 What you see:
 
-- **Left half** — scrollable image list with thumbnails.
-- **Right half** — larger preview of the selected image.
-- **Buttons below the list** — same **+** / **−** / **✕** as the Lines tab.
+- **Left half**: scrollable image list with thumbnails.
+- **Right half**: larger preview of the selected image.
+- **Buttons below the list**: same **+** / **−** / **✕** as the Lines tab.
 
 What to try:
 
 1. Load a `.lines` style in the **Style** panel on the right.
 2. Click **+** (or drag PNG/JPG/WEBP files onto the list).
-3. Select an image — the preview updates.
-4. Click **Export ▶** — each image is opened in Vexy Lines via MCP, the style's
-   fill tree is replicated onto it, the engine renders, and the SVG or raster is
-   saved.
+3. Select an image. The preview updates.
+4. Click **Export ▶**. The app opens each image in Vexy Lines via MCP and
+   replicates the style's fill tree onto it. The engine renders, and the app
+   saves the SVG or raster.
 
 A style **must** be loaded for image export.  If you export without one, the
 app reports "A style file is required."
@@ -73,11 +73,11 @@ app reports "A style file is required."
 
 What you see:
 
-- **Two preview panes** side by side — first and last frames of the selected range.
+- **Two preview panes** side by side: first and last frames of the selected range.
 - **Range slider** with two draggable handles below the previews.
-- **Start / End entry fields** — type exact frame numbers (1-indexed).
-- **Frame count label** — shows how many frames are in the selected range.
-- **Buttons** — **+** add a video, **✕** remove it, path label shows the file.
+- **Start / End entry fields**: type exact frame numbers (1-indexed).
+- **Frame count label**: shows how many frames are in the selected range.
+- **Buttons**: **+** add a video, **✕** remove it, path label shows the file.
 
 What to try:
 
@@ -87,7 +87,7 @@ What to try:
 4. Choose **MP4** in the format dropdown and click **Export ▶**.
 
 The range slider and text entries stay in sync.  Previews update whenever the
-range changes — they show the actual first and last frames extracted via OpenCV.
+range changes and show the actual first and last frames extracted via OpenCV.
 
 ---
 
@@ -109,7 +109,7 @@ Two sub-tabs: **Style** and **End Style**.
 |---------|---------|-------|
 | **Format** | SVG, PNG, JPG, MP4, LINES | Not every format works on every tab |
 | **Size** | 1×, 2×, 3×, 4× | Disabled for SVG and LINES |
-| **♪ toggle** | on / off | Audio passthrough — visible only when conditions are met |
+| **♪ toggle** | on / off | Audio passthrough: visible only when conditions are met |
 | **Export ▶** | — | Starts export on a background thread; shows progress |
 
 During export the button label changes to a percentage and status message.
@@ -119,6 +119,6 @@ Click **Stop ■** to abort.
 
 ## Next steps
 
-- [Full GUI Guide](gui-guide.md) — every control, every error message, every edge case.
-- [Video Processing](video-processing.md) — the frame pipeline in detail.
-- [Installation Troubleshooting](installation-troubleshooting.md) — platform gotchas.
+- [Full GUI Guide](gui-guide.md): every control, every error message, every edge case.
+- [Video Processing](video-processing.md): the frame pipeline in detail.
+- [Installation Troubleshooting](installation-troubleshooting.md): platform gotchas.

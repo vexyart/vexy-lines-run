@@ -1,5 +1,9 @@
 # CHANGELOG.md
 
+## 2026-09-25 — Docs Line Edit
+
+- **docs**: Line-edited `README.md` and every `src_docs/` page in the house style: dash glosses replaced with colons or periods, passive phrasing made active, filler removed. No labels, values, or code changed. Rebuilt tracked `docs/`.
+
 ## 2026-06-29 — Docs, Video Extra, Headless Smoke Test
 
 - **feat**: Added `video` optional extra to `pyproject.toml` (`opencv-python-headless>=4.8.0`, `av>=12.0.0`) so video-processing dependencies can be pinned explicitly: `pip install "vexy-lines-run[video]"`.

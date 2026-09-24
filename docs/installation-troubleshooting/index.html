@@ -1,0 +1,1278 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Desktop GUI for Vexy Lines style transfer">
+      
+      
+      
+      
+        <link rel="prev" href="../installation/">
+      
+      
+        <link rel="next" href="../gui-tour/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Installation Troubleshooting - vexy-lines-run</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="amber" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#installation-troubleshooting" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+<div class="vexy-top-nav" style="width: 100%;">
+  <script src="https://i.vexy.art/vl/webcode/vexy-lines-menu.js"></script>
+  <vexy-lines-menu></vexy-lines-menu>
+</div>
+
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="vexy-lines-run" class="md-header__button md-logo" aria-label="vexy-lines-run" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            vexy-lines-run
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Installation Troubleshooting
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="amber" data-md-color-accent="indigo"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="amber" data-md-color-accent="indigo"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+    
+  </nav>
+  
+</header>
+    
+
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="vexy-lines-run" class="md-nav__button md-logo" aria-label="vexy-lines-run" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    vexy-lines-run
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Windows
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Windows">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tkinterdnd2-drag-and-drop-not-working" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tkinterdnd2 — drag-and-drop not working
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#no-module-named-_tkinter-on-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "No module named '_tkinter'" on Windows
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-app-window-appears-behind-other-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The app window appears behind other windows
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#macos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        macOS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="macOS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#python-framework-warning-with-customtkinter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "Python framework" warning with CustomTkinter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#drag-and-drop-works-but-paths-contain-spaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Drag-and-drop works but paths contain spaces
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#linux" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Linux
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Linux">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tk-not-available-no-module-named-_tkinter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tk not available — "No module named '_tkinter'"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#drag-and-drop-not-working" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Drag-and-drop not working
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#running-headless-no-display-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running headless (no display server)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#video-processing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Video processing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Video processing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ffmpeg-not-found" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ffmpeg not found
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opencv-fails-to-open-a-video-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenCV fails to open a video file
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#no-module-named-cv2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "No module named 'cv2'"
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#general" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        General
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="General">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#import-error-customtkinter-not-found" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Import error: customtkinter not found
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-app-launches-but-style-transfer-does-nothing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The app launches but style transfer does nothing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mcp-error-connection-refused" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "MCP error: Connection refused"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reinstalling-from-scratch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reinstalling from scratch
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gui-tour/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GUI Tour
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gui-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GUI Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../video-processing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Video Processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gui-tech/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical Details
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Examples
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../STYLE_GUIDE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Windows
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Windows">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tkinterdnd2-drag-and-drop-not-working" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tkinterdnd2 — drag-and-drop not working
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#no-module-named-_tkinter-on-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "No module named '_tkinter'" on Windows
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-app-window-appears-behind-other-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The app window appears behind other windows
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#macos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        macOS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="macOS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#python-framework-warning-with-customtkinter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "Python framework" warning with CustomTkinter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#drag-and-drop-works-but-paths-contain-spaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Drag-and-drop works but paths contain spaces
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#linux" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Linux
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Linux">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tk-not-available-no-module-named-_tkinter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tk not available — "No module named '_tkinter'"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#drag-and-drop-not-working" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Drag-and-drop not working
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#running-headless-no-display-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running headless (no display server)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#video-processing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Video processing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Video processing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ffmpeg-not-found" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ffmpeg not found
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opencv-fails-to-open-a-video-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenCV fails to open a video file
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#no-module-named-cv2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "No module named 'cv2'"
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#general" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        General
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="General">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#import-error-customtkinter-not-found" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Import error: customtkinter not found
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-app-launches-but-style-transfer-does-nothing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The app launches but style transfer does nothing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mcp-error-connection-refused" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "MCP error: Connection refused"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reinstalling-from-scratch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reinstalling from scratch
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="installation-troubleshooting">Installation Troubleshooting<a class="headerlink" href="#installation-troubleshooting" title="Permanent link">&para;</a></h1>
+<p>Platform-specific issues and fixes for <code>vexy-lines-run</code>.</p>
+<hr />
+<h2 id="windows">Windows<a class="headerlink" href="#windows" title="Permanent link">&para;</a></h2>
+<h3 id="tkinterdnd2-drag-and-drop-not-working">tkinterdnd2 — drag-and-drop not working<a class="headerlink" href="#tkinterdnd2-drag-and-drop-not-working" title="Permanent link">&para;</a></h3>
+<p><code>tkinterdnd2</code> ships a pre-built <code>tkdnd</code> Tcl extension inside the wheel.  On
+Windows, the DLL must be on a path that Tcl can find.</p>
+<p><strong>Symptom:</strong> The app launches but dropping files onto the window does nothing,
+or the title bar shows <code>tkdnd unavailable</code>.</p>
+<p><strong>Fix 1: reinstall with uv or pip:</strong></p>
+<div class="highlight"><span class="filename">Batchfile</span><pre><span></span><code>pip uninstall tkinterdnd2 -y
+pip install tkinterdnd2
+</code></pre></div>
+<p>If you used a conda environment, make sure you installed <code>tkinterdnd2</code> from
+PyPI, not from conda-forge (the conda package bundles a different Tcl layout).</p>
+<p><strong>Fix 2: run as a module rather than a script:</strong></p>
+<p>Calling <code>python -m vexy_lines_run</code> instead of <code>vexy-lines-run</code> ensures that
+the <code>tkinterdnd2</code> package root is on <code>sys.path</code> before <code>tkinter</code> initialises.</p>
+<p><strong>Fix 3: Tcl/Tk version mismatch:</strong></p>
+<p>The bundled <code>tkdnd</code> DLL targets a specific Tcl version.  If your Python ships
+with Tcl 8.6 but <code>tkinterdnd2</code> was built for Tcl 9, the extension cannot load.</p>
+<p>Check your Tcl version:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">tkinter</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tkinter</span><span class="o">.</span><span class="n">TclVersion</span><span class="p">)</span>
+</code></pre></div>
+<p>Then check the <code>tkinterdnd2</code> wheel name on PyPI: it encodes the Tcl target.
+Install the matching version or upgrade Python to one that ships Tcl 9.</p>
+<p><strong>Workaround:</strong> The app works without drag-and-drop.  Use the <strong>+</strong> buttons or
+the menu bar to add files.</p>
+<hr />
+<h3 id="no-module-named-_tkinter-on-windows">"No module named '_tkinter'" on Windows<a class="headerlink" href="#no-module-named-_tkinter-on-windows" title="Permanent link">&para;</a></h3>
+<p>This means Tk was not included in your Python installation.</p>
+<p><strong>Fix:</strong> Download and reinstall Python from <a href="https://www.python.org/downloads/windows/">python.org</a>.
+During setup, make sure <strong>tcl/tk and IDLE</strong> is checked under Optional Features.</p>
+<hr />
+<h3 id="the-app-window-appears-behind-other-windows">The app window appears behind other windows<a class="headerlink" href="#the-app-window-appears-behind-other-windows" title="Permanent link">&para;</a></h3>
+<p>CustomTkinter calls <code>wm_attributes("-topmost", True)</code> briefly on startup to
+bring the window to the front, then drops it back to normal z-order.  If the
+window still appears behind, click the taskbar icon.</p>
+<hr />
+<h2 id="macos">macOS<a class="headerlink" href="#macos" title="Permanent link">&para;</a></h2>
+<h3 id="python-framework-warning-with-customtkinter">"Python framework" warning with CustomTkinter<a class="headerlink" href="#python-framework-warning-with-customtkinter" title="Permanent link">&para;</a></h3>
+<p>On some macOS Python installs (especially <code>pyenv</code> or Homebrew Python), Tkinter
+may fail with:</p>
+<div class="highlight"><span class="filename">Text Only</span><pre><span></span><code>This program needs access to the screen. Please run with a Framework build
+of python, and only when you are logged in on the main display of your Mac.
+</code></pre></div>
+<p><strong>Fix:</strong> Use the python.org installer or the Homebrew cask
+(<code>brew install --cask python</code>), which ships a proper macOS Framework build.</p>
+<hr />
+<h3 id="drag-and-drop-works-but-paths-contain-spaces">Drag-and-drop works but paths contain spaces<a class="headerlink" href="#drag-and-drop-works-but-paths-contain-spaces" title="Permanent link">&para;</a></h3>
+<p>tkinterdnd2 wraps paths with spaces in braces: <code>{/path/to/my file.png}</code>.
+The app handles this automatically via the <code>_parse_drop_data</code> method.</p>
+<hr />
+<h2 id="linux">Linux<a class="headerlink" href="#linux" title="Permanent link">&para;</a></h2>
+<h3 id="tk-not-available-no-module-named-_tkinter">Tk not available — "No module named '_tkinter'"<a class="headerlink" href="#tk-not-available-no-module-named-_tkinter" title="Permanent link">&para;</a></h3>
+<p>Most Linux distributions do not bundle Tk with the system Python.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Debian / Ubuntu</span>
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>python3-tk
+
+<span class="c1"># Fedora / RHEL</span>
+sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>python3-tkinter
+
+<span class="c1"># Arch</span>
+sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>tk
+</code></pre></div>
+<h3 id="drag-and-drop-not-working">Drag-and-drop not working<a class="headerlink" href="#drag-and-drop-not-working" title="Permanent link">&para;</a></h3>
+<p>The underlying <code>tkdnd</code> Tcl extension may be missing on minimal installations
+even when <code>tkinterdnd2</code> is installed.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Debian / Ubuntu — install the system tkdnd package</span>
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>tk-dnd
+
+<span class="c1"># Then reinstall tkinterdnd2 so it finds the system library</span>
+pip<span class="w"> </span>install<span class="w"> </span>--force-reinstall<span class="w"> </span>tkinterdnd2
+</code></pre></div>
+<p>If <code>tk-dnd</code> is unavailable for your distribution, the app still works using
+the <strong>+</strong> buttons and menu bar. Drag-and-drop is a convenience, not a
+requirement.</p>
+<h3 id="running-headless-no-display-server">Running headless (no display server)<a class="headerlink" href="#running-headless-no-display-server" title="Permanent link">&para;</a></h3>
+<p>The GUI requires a display.  For CI or server environments, use Xvfb:</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>xvfb<span class="w"> </span>python3-tk
+xvfb-run<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>vexy_lines_run
+</code></pre></div>
+<p>The test suite itself does not require a display: all GUI tests use mocks.
+Only <code>tests/test_smoke_headless.py</code> tries to open a real Tk window and will
+skip automatically if <code>$DISPLAY</code> is not set.</p>
+<hr />
+<h2 id="video-processing">Video processing<a class="headerlink" href="#video-processing" title="Permanent link">&para;</a></h2>
+<h3 id="ffmpeg-not-found">ffmpeg not found<a class="headerlink" href="#ffmpeg-not-found" title="Permanent link">&para;</a></h3>
+<p>Audio passthrough requires <code>ffmpeg</code> on your PATH.  Without it, the audio
+toggle is hidden and video exports are video-only.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># macOS</span>
+brew<span class="w"> </span>install<span class="w"> </span>ffmpeg
+
+<span class="c1"># Debian / Ubuntu</span>
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>ffmpeg
+
+<span class="c1"># Windows — download from https://ffmpeg.org/download.html and add to PATH</span>
+</code></pre></div>
+<h3 id="opencv-fails-to-open-a-video-file">OpenCV fails to open a video file<a class="headerlink" href="#opencv-fails-to-open-a-video-file" title="Permanent link">&para;</a></h3>
+<p>Some container formats require additional codec support.  Try:</p>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>opencv-python-headless<span class="w"> </span>--upgrade
+</code></pre></div>
+<p>If OpenCV still cannot open the file, convert it first with ffmpeg:</p>
+<div class="highlight"><pre><span></span><code>ffmpeg<span class="w"> </span>-i<span class="w"> </span>input.webm<span class="w"> </span>-c:v<span class="w"> </span>libx264<span class="w"> </span>output.mp4
+</code></pre></div>
+<h3 id="no-module-named-cv2">"No module named 'cv2'"<a class="headerlink" href="#no-module-named-cv2" title="Permanent link">&para;</a></h3>
+<p>OpenCV is pulled in transitively by <code>vexy-lines-apy</code>.  If it is missing from
+your environment, install it explicitly:</p>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>opencv-python-headless
+<span class="c1"># or, with the video extra:</span>
+pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;vexy-lines-run[video]&quot;</span>
+</code></pre></div>
+<hr />
+<h2 id="general">General<a class="headerlink" href="#general" title="Permanent link">&para;</a></h2>
+<h3 id="import-error-customtkinter-not-found">Import error: customtkinter not found<a class="headerlink" href="#import-error-customtkinter-not-found" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>customtkinter
+</code></pre></div>
+<h3 id="the-app-launches-but-style-transfer-does-nothing">The app launches but style transfer does nothing<a class="headerlink" href="#the-app-launches-but-style-transfer-does-nothing" title="Permanent link">&para;</a></h3>
+<p>Style transfer requires the <strong>Vexy Lines desktop app</strong> running on your machine.
+The GUI connects to it via a local MCP server on <code>localhost:47384</code>.</p>
+<ol>
+<li>Launch the Vexy Lines app.</li>
+<li>Wait a few seconds for its MCP server to start.</li>
+<li>Try exporting again.</li>
+</ol>
+<p>Check the log output (<code>--log-level DEBUG</code> is not a flag; use the
+<code>loguru</code> environment variable <code>LOGURU_LEVEL=DEBUG python -m vexy_lines_run</code>)
+for connection errors.</p>
+<h3 id="mcp-error-connection-refused">"MCP error: Connection refused"<a class="headerlink" href="#mcp-error-connection-refused" title="Permanent link">&para;</a></h3>
+<p>Same as above: the Vexy Lines app is not running or has not finished starting.</p>
+<h3 id="reinstalling-from-scratch">Reinstalling from scratch<a class="headerlink" href="#reinstalling-from-scratch" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>uninstall<span class="w"> </span>vexy-lines-run<span class="w"> </span>vexy-lines-apy<span class="w"> </span>vexy-lines-py<span class="w"> </span>-y
+pip<span class="w"> </span>install<span class="w"> </span>vexy-lines-run
+</code></pre></div>
+<p>With uv:</p>
+<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>pip<span class="w"> </span>uninstall<span class="w"> </span>vexy-lines-run<span class="w"> </span>vexy-lines-apy<span class="w"> </span>vexy-lines-py
+uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>vexy-lines-run
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.code.copy", "navigation.sections"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

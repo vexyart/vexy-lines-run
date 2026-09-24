@@ -2,121 +2,109 @@
 <!doctype html>
 <html lang="en" class="no-js">
   <head>
-
+    
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
-
+      
         <meta name="description" content="Desktop GUI for Vexy Lines style transfer">
-
-
-
-
-        <link rel="prev" href="../installation/">
-
-
-        <link rel="next" href="../gui-tech/">
-
-
-
-
-
-
-
-
-
-
-          <link rel="icon" href="../assets/images/favicon.png">
-
-
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-materialx-10.1.7">
-
-
-
+      
+      
+      
+      
+        <link rel="prev" href="../gui-tour/">
+      
+      
+        <link rel="next" href="../video-processing/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
         <title>GUI Guide - vexy-lines-run</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
 
 
-
-      <link rel="stylesheet" href="../assets/stylesheets/main.ad98c137.min.css">
-
-
-        <link rel="stylesheet" href="../assets/stylesheets/palette.a45159b5.min.css">
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
+    
+      
+    
+    
+      
+        
+        
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
         <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
-
-
-
+      
+    
+    
     <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
 
-
-
-
-
+    
+    
   </head>
-
-
-
-
-
-
-
-
-
-
-
-    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="amber" data-md-color-accent="indigo" data-mx-topbar="glass">
-
-
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="amber" data-md-color-accent="indigo">
+  
+    
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
-    <input class="md-toggle" data-md-toggle="toc" type="checkbox" id="__toc" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
-    <label class="md-overlay" for="__toc"></label>
     <div data-md-component="skip">
-
-
+      
+        
         <a href="#gui-guide" class="md-skip">
           Skip to content
         </a>
-
+      
     </div>
     <div data-md-component="announce">
-
+      
     </div>
-
-
+    
+    
 <div class="vexy-top-nav" style="width: 100%;">
   <script src="https://i.vexy.art/vl/webcode/vexy-lines-menu.js"></script>
   <vexy-lines-menu></vexy-lines-menu>
 </div>
 
+      
 
-
-
+  
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href=".." title="vexy-lines-run" class="md-header__button md-logo" aria-label="vexy-lines-run" data-md-component="logo">
-
-
+      
+  
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
-
+      
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
     </label>
     <div class="md-header__title" data-md-component="header-title">
@@ -128,1051 +116,1121 @@
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
-
+            
               GUI Guide
-
+            
           </span>
         </div>
       </div>
     </div>
-
-
+    
+      
         <form class="md-header__option" data-md-component="palette">
-
-
-
-
+  
+    
+    
+    
     <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="amber" data-md-color-accent="indigo"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_0">
-
+    
       <label class="md-header__button md-icon" title="Light mode" for="__palette_1" hidden>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
       </label>
-
-
-
-
-
+    
+  
+    
+    
+    
     <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="amber" data-md-color-accent="indigo"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_1">
-
+    
       <label class="md-header__button md-icon" title="Dark mode" for="__palette_0" hidden>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
       </label>
-
-
+    
+  
 </form>
-
-
-
+      
+    
+    
       <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
-
-
-
-
-
-        <label class="md-header__button md-icon" for="__search">
-
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10.25 2a8.25 8.25 0 0 1 6.34 13.53l5.69 5.69a.749.749 0 0 1-.326 1.275.75.75 0 0 1-.734-.215l-5.69-5.69A8.25 8.25 0 1 1 10.25 2M3.5 10.25a6.75 6.75 0 1 0 13.5 0 6.75 6.75 0 0 0-13.5 0"/></svg>
-        </label>
-        <div class="md-search" data-md-component="search" role="dialog">
-  <label class="md-search__overlay" for="__search"></label>
-  <div class="md-search__inner" role="search">
-    <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
-      <label class="md-search__icon md-icon" for="__search">
-
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10.25 2a8.25 8.25 0 0 1 6.34 13.53l5.69 5.69a.749.749 0 0 1-.326 1.275.75.75 0 0 1-.734-.215l-5.69-5.69A8.25 8.25 0 1 1 10.25 2M3.5 10.25a6.75 6.75 0 1 0 13.5 0 6.75 6.75 0 0 0-13.5 0"/></svg>
-
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
-      </label>
-      <nav class="md-search__options" aria-label="Search">
-
-        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
-
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-        </button>
-      </nav>
-
-    </form>
-    <div class="md-search__output">
-      <div class="md-search__scrollwrap" tabindex="0">
-        <div class="md-search-result" data-md-component="search-result">
-          <div class="md-search-result__meta">
-            Initializing search
-          </div>
-          <ol class="md-search-result__list" role="presentation"></ol>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
+    
+    
+    
+    
   </nav>
-
+  
 </header>
-
+    
 
     <div class="md-container" data-md-component="container">
-
-
-
-
-
-
+      
+      
+        
+          
+        
+      
       <main class="md-main" data-md-component="main">
         <div class="md-main__inner md-grid">
-
-
-
+          
+            
+              
               <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
-
+                    
 
 
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
     <a href=".." title="vexy-lines-run" class="md-nav__button md-logo" aria-label="vexy-lines-run" data-md-component="logo">
-
-
+      
+  
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
     vexy-lines-run
   </label>
-
-  <ul class="md-nav__list">
-
-
-
-
-
-
-
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
     <li class="md-nav__item">
       <a href=".." class="md-nav__link">
-
-
-
+        
+  
+  
   <span class="md-ellipsis">
-
-
+    
+  
     Overview
+  
 
-
-
+    
   </span>
-
-
+  
+  
 
       </a>
     </li>
+  
 
-
-
-
-
-
-
-
-
+    
+      
+      
+  
+  
+  
+  
     <li class="md-nav__item">
       <a href="../installation/" class="md-nav__link">
-
-
-
+        
+  
+  
   <span class="md-ellipsis">
-
-
+    
+  
     Installation
+  
 
-
-
+    
   </span>
-
-
+  
+  
 
       </a>
     </li>
+  
 
-
-
-
-
-
-
-
-
-
-
-    <li class="md-nav__item md-nav__item--active">
-
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-
-
-
-
-
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-
-
-
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation-troubleshooting/" class="md-nav__link">
+        
+  
+  
   <span class="md-ellipsis">
+    
+  
+    Installation Troubleshooting
+  
 
-
-    GUI Guide
-
-
-
+    
   </span>
+  
+  
 
+      </a>
+    </li>
+  
 
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gui-tour/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GUI Tour
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GUI Guide
+  
+
+    
+  </span>
+  
+  
 
           <span class="md-nav__icon md-icon"></span>
         </label>
-
+      
       <a href="./" class="md-nav__link md-nav__link--active">
-
-
-
+        
+  
+  
   <span class="md-ellipsis">
-
-
+    
+  
     GUI Guide
+  
 
-
-
+    
   </span>
-
-
+  
+  
 
       </a>
-
-
+      
+        
 
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-
-
-
-
-
-
+  
+  
+  
+    
+  
+  
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
       Table of contents
     </label>
-    <ul class="md-nav__list" data-md-component="toc">
-
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
         <li class="md-nav__item">
   <a href="#layout" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Layout
-
+      
     </span>
   </a>
-
+  
 </li>
-
+      
         <li class="md-nav__item">
   <a href="#menu-bar" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Menu bar
-
+      
     </span>
   </a>
-
+  
 </li>
-
+      
         <li class="md-nav__item">
   <a href="#lines-tab" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Lines tab
-
+      
     </span>
   </a>
-
+  
     <nav class="md-nav" aria-label="Lines tab">
       <ul class="md-nav__list">
-
+        
           <li class="md-nav__item">
   <a href="#ai-rename-layers-fills" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         AI Rename Layers &amp; Fills
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
       </ul>
     </nav>
-
+  
 </li>
-
+      
         <li class="md-nav__item">
   <a href="#images-tab" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Images tab
-
+      
     </span>
   </a>
-
+  
 </li>
-
+      
         <li class="md-nav__item">
   <a href="#video-tab" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Video tab
-
+      
     </span>
   </a>
-
+  
     <nav class="md-nav" aria-label="Video tab">
       <ul class="md-nav__list">
-
+        
           <li class="md-nav__item">
   <a href="#video-processing-workflow" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Video processing workflow
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
           <li class="md-nav__item">
   <a href="#audio-passthrough" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Audio passthrough
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
       </ul>
     </nav>
-
+  
 </li>
-
+      
         <li class="md-nav__item">
   <a href="#style-picker" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Style picker
-
+      
     </span>
   </a>
-
+  
     <nav class="md-nav" aria-label="Style picker">
       <ul class="md-nav__list">
-
+        
           <li class="md-nav__item">
   <a href="#how-styles-work" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         How styles work
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
           <li class="md-nav__item">
   <a href="#end-style-and-interpolation" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         End style and interpolation
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
           <li class="md-nav__item">
   <a href="#style-panel-and-the-lines-tab" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Style panel and the Lines tab
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
       </ul>
     </nav>
-
+  
 </li>
-
+      
         <li class="md-nav__item">
   <a href="#export-controls" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Export controls
-
+      
     </span>
   </a>
-
+  
     <nav class="md-nav" aria-label="Export controls">
       <ul class="md-nav__list">
-
+        
           <li class="md-nav__item">
   <a href="#format" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Format
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
           <li class="md-nav__item">
   <a href="#size" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Size
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
           <li class="md-nav__item">
   <a href="#export-button" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Export button
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
           <li class="md-nav__item">
   <a href="#error-handling-during-export" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Error handling during export
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
       </ul>
     </nav>
-
+  
 </li>
-
+      
         <li class="md-nav__item">
   <a href="#drag-and-drop" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Drag-and-drop
-
+      
     </span>
   </a>
-
+  
 </li>
-
+      
         <li class="md-nav__item">
   <a href="#appearance" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Appearance
-
+      
     </span>
   </a>
-
+  
 </li>
-
+      
         <li class="md-nav__item">
   <a href="#troubleshooting" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Troubleshooting
-
+      
     </span>
   </a>
-
+  
     <nav class="md-nav" aria-label="Troubleshooting">
       <ul class="md-nav__list">
-
+        
           <li class="md-nav__item">
   <a href="#the-app-launches-but-export-does-nothing" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         The app launches but export does nothing
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
           <li class="md-nav__item">
   <a href="#mcp-error-connection-refused" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         "MCP error: Connection refused"
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
           <li class="md-nav__item">
   <a href="#export-is-very-slow" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Export is very slow
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
           <li class="md-nav__item">
   <a href="#drag-and-drop-doesnt-work" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Drag-and-drop doesn't work
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
           <li class="md-nav__item">
   <a href="#video-has-no-audio-in-the-output" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Video has no audio in the output
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
           <li class="md-nav__item">
   <a href="#preview-images-look-wrong-or-blank" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Preview images look wrong or blank
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
           <li class="md-nav__item">
   <a href="#window-appears-behind-other-windows" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Window appears behind other windows
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
       </ul>
     </nav>
-
+  
 </li>
-
+      
     </ul>
-
+  
 </nav>
-
+      
     </li>
+  
 
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../video-processing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Video Processing
+  
 
+    
+  </span>
+  
+  
 
+      </a>
+    </li>
+  
 
-
-
-
-
-
+    
+      
+      
+  
+  
+  
+  
     <li class="md-nav__item">
       <a href="../gui-tech/" class="md-nav__link">
-
-
-
+        
+  
+  
   <span class="md-ellipsis">
-
-
+    
+  
     Technical Details
+  
 
-
-
+    
   </span>
-
-
+  
+  
 
       </a>
     </li>
+  
 
-
-
-
-
-
-
-
-
+    
+      
+      
+  
+  
+  
+  
     <li class="md-nav__item">
       <a href="../api-reference/" class="md-nav__link">
-
-
-
+        
+  
+  
   <span class="md-ellipsis">
-
-
+    
+  
     API Reference
+  
 
-
-
+    
   </span>
-
-
+  
+  
 
       </a>
     </li>
+  
 
-
-
-
-
-
-
-
-
+    
+      
+      
+  
+  
+  
+  
     <li class="md-nav__item">
       <a href="../examples/" class="md-nav__link">
-
-
-
+        
+  
+  
   <span class="md-ellipsis">
-
-
+    
+  
     Examples
+  
 
-
-
+    
   </span>
-
-
+  
+  
 
       </a>
     </li>
+  
 
-
-
-
-
-
-
-
-
+    
+      
+      
+  
+  
+  
+  
     <li class="md-nav__item">
       <a href="../changelog/" class="md-nav__link">
-
-
-
+        
+  
+  
   <span class="md-ellipsis">
-
-
+    
+  
     Changelog
+  
 
-
-
+    
   </span>
-
-
+  
+  
 
       </a>
     </li>
+  
 
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../STYLE_GUIDE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style Guide
+  
 
+    
+  </span>
+  
+  
 
+      </a>
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
                 </div>
               </div>
-
-
-
+            
+            
+              
               <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
-
+                    
 
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-
-
-
-
-
-
+  
+  
+  
+    
+  
+  
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
       Table of contents
     </label>
-    <ul class="md-nav__list" data-md-component="toc">
-
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
         <li class="md-nav__item">
   <a href="#layout" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Layout
-
+      
     </span>
   </a>
-
+  
 </li>
-
+      
         <li class="md-nav__item">
   <a href="#menu-bar" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Menu bar
-
+      
     </span>
   </a>
-
+  
 </li>
-
+      
         <li class="md-nav__item">
   <a href="#lines-tab" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Lines tab
-
+      
     </span>
   </a>
-
+  
     <nav class="md-nav" aria-label="Lines tab">
       <ul class="md-nav__list">
-
+        
           <li class="md-nav__item">
   <a href="#ai-rename-layers-fills" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         AI Rename Layers &amp; Fills
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
       </ul>
     </nav>
-
+  
 </li>
-
+      
         <li class="md-nav__item">
   <a href="#images-tab" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Images tab
-
+      
     </span>
   </a>
-
+  
 </li>
-
+      
         <li class="md-nav__item">
   <a href="#video-tab" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Video tab
-
+      
     </span>
   </a>
-
+  
     <nav class="md-nav" aria-label="Video tab">
       <ul class="md-nav__list">
-
+        
           <li class="md-nav__item">
   <a href="#video-processing-workflow" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Video processing workflow
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
           <li class="md-nav__item">
   <a href="#audio-passthrough" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Audio passthrough
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
       </ul>
     </nav>
-
+  
 </li>
-
+      
         <li class="md-nav__item">
   <a href="#style-picker" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Style picker
-
+      
     </span>
   </a>
-
+  
     <nav class="md-nav" aria-label="Style picker">
       <ul class="md-nav__list">
-
+        
           <li class="md-nav__item">
   <a href="#how-styles-work" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         How styles work
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
           <li class="md-nav__item">
   <a href="#end-style-and-interpolation" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         End style and interpolation
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
           <li class="md-nav__item">
   <a href="#style-panel-and-the-lines-tab" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Style panel and the Lines tab
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
       </ul>
     </nav>
-
+  
 </li>
-
+      
         <li class="md-nav__item">
   <a href="#export-controls" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Export controls
-
+      
     </span>
   </a>
-
+  
     <nav class="md-nav" aria-label="Export controls">
       <ul class="md-nav__list">
-
+        
           <li class="md-nav__item">
   <a href="#format" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Format
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
           <li class="md-nav__item">
   <a href="#size" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Size
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
           <li class="md-nav__item">
   <a href="#export-button" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Export button
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
           <li class="md-nav__item">
   <a href="#error-handling-during-export" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Error handling during export
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
       </ul>
     </nav>
-
+  
 </li>
-
+      
         <li class="md-nav__item">
   <a href="#drag-and-drop" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Drag-and-drop
-
+      
     </span>
   </a>
-
+  
 </li>
-
+      
         <li class="md-nav__item">
   <a href="#appearance" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Appearance
-
+      
     </span>
   </a>
-
+  
 </li>
-
+      
         <li class="md-nav__item">
   <a href="#troubleshooting" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Troubleshooting
-
+      
     </span>
   </a>
-
+  
     <nav class="md-nav" aria-label="Troubleshooting">
       <ul class="md-nav__list">
-
+        
           <li class="md-nav__item">
   <a href="#the-app-launches-but-export-does-nothing" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         The app launches but export does nothing
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
           <li class="md-nav__item">
   <a href="#mcp-error-connection-refused" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         "MCP error: Connection refused"
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
           <li class="md-nav__item">
   <a href="#export-is-very-slow" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Export is very slow
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
           <li class="md-nav__item">
   <a href="#drag-and-drop-doesnt-work" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Drag-and-drop doesn't work
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
           <li class="md-nav__item">
   <a href="#video-has-no-audio-in-the-output" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Video has no audio in the output
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
           <li class="md-nav__item">
   <a href="#preview-images-look-wrong-or-blank" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Preview images look wrong or blank
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
           <li class="md-nav__item">
   <a href="#window-appears-behind-other-windows" class="md-nav__link">
     <span class="md-ellipsis">
-
+      
         Window appears behind other windows
-
+      
     </span>
   </a>
-
+  
 </li>
-
+        
       </ul>
     </nav>
-
+  
 </li>
-
+      
     </ul>
-
+  
 </nav>
                   </div>
                 </div>
               </div>
-
-
-
+            
+          
+          
             <div class="md-content" data-md-component="content">
-
+              
               <article class="md-content__inner md-typeset">
+                
+                  
 
 
 
@@ -1191,7 +1249,7 @@
 +-----------------------------------------------------------+
 </code></pre></div>
 <p>The left panel takes roughly two-thirds of the window. The right panel holds your style. The bottom strip handles export.</p>
-<p>The window title reads "Style with Vexy Lines". Default size is 900x700, minimum 960x480. Resize freely — previews, file lists, and path labels adapt automatically.</p>
+<p>The window title reads "Style with Vexy Lines". Default size is 900x700, minimum 960x480. Resize freely: previews, file lists, and path labels adapt automatically.</p>
 <h2 id="menu-bar">Menu bar<a class="headerlink" href="#menu-bar" title="Permanent link">&para;</a></h2>
 <p>Six menus sit at the top: <strong>File</strong>, <strong>Lines</strong>, <strong>Image</strong>, <strong>Video</strong>, <strong>Style</strong>, <strong>Export</strong>.</p>
 <table>
@@ -1228,9 +1286,9 @@
 </tr>
 </tbody>
 </table>
-<p>The menu bar mirrors the buttons in the GUI — you can use menus or buttons interchangeably.</p>
+<p>The menu bar mirrors the buttons in the GUI, so you can use menus or buttons interchangeably.</p>
 <h2 id="lines-tab">Lines tab<a class="headerlink" href="#lines-tab" title="Permanent link">&para;</a></h2>
-<p>Load <code>.lines</code> files — the native Vexy Lines document format.</p>
+<p>Load <code>.lines</code> files, the native Vexy Lines document format.</p>
 <p><img alt="Lines tab: nine files listed on the left, a purple-and-teal &quot;Vexy Lines&quot; lettering preview on the right" src="../images/lines-mode.png" /></p>
 <p>The left half is a scrollable file list. Click a filename to select it (highlights in blue). The right half shows a preview image extracted from the selected file's embedded data.</p>
 <p><strong>Buttons along the bottom:</strong></p>
@@ -1267,7 +1325,7 @@
 <tbody>
 <tr>
 <td>Format = LINES</td>
-<td>Plain file copy — no MCP, no rendering</td>
+<td>Plain file copy: no MCP, no rendering</td>
 </tr>
 <tr>
 <td>Format = PNG or JPG</td>
@@ -1275,29 +1333,29 @@
 </tr>
 <tr>
 <td>Format = SVG</td>
-<td>Not supported in Lines mode — use Images mode with a style instead</td>
+<td>Not supported in Lines mode. Use Images mode with a style instead</td>
 </tr>
 </tbody>
 </table>
 <p>When no files are loaded, the list area shows a dark placeholder.</p>
 <h3 id="ai-rename-layers-fills">AI Rename Layers &amp; Fills<a class="headerlink" href="#ai-rename-layers-fills" title="Permanent link">&para;</a></h3>
-<p><code>.lines</code> documents often carry generic captions — <code>Layer</code>, <code>Layer 2</code>, <code>Blended</code>, <code>Linear</code>. <strong>Lines ▸ AI Rename Layers &amp; Fills…</strong> (under the Lines menu, after Remove All Lines) renames them to describe what each <a href="https://help.vexy.art/lines/articles/fill-properties-1/">fill</a> actually draws — e.g. <code>car-on-road</code>, <code>top-sky-bridge</code> — then names each <a href="https://help.vexy.art/lines/articles/layers-panel/">layer</a> from the fills it contains. Only the captions change; the artwork is untouched.</p>
+<p><code>.lines</code> documents often carry generic captions such as <code>Layer</code>, <code>Layer 2</code>, <code>Blended</code>, <code>Linear</code>. <strong>Lines ▸ AI Rename Layers &amp; Fills…</strong> (under the Lines menu, after Remove All Lines) renames them to describe what each <a href="https://help.vexy.art/lines/articles/fill-properties-1/">fill</a> actually draws (e.g. <code>car-on-road</code>, <code>top-sky-bridge</code>), then names each <a href="https://help.vexy.art/lines/articles/layers-panel/">layer</a> from the fills it contains. Only the captions change; the artwork is untouched.</p>
 <p>Add at least one <code>.lines</code> file in the Lines tab first. The command operates on the selected file (or the first in the list if none is selected).</p>
 <p><strong>The flow:</strong></p>
 <ol>
-<li>A confirmation dialog explains that it will render each of the <em>N</em> fills one by one in Vexy Lines, ask a vision model to describe each, and write a renamed copy — and that it needs the Vexy Lines app plus an LLM endpoint and can take a while.</li>
+<li>A confirmation dialog explains that it will render each of the <em>N</em> fills one by one in Vexy Lines, ask a vision model to describe each, and write a renamed copy, and that it needs the Vexy Lines app plus an LLM endpoint and can take a while.</li>
 <li>After you confirm, a Save dialog asks where to write the renamed <code>.lines</code> (defaults to <code>&lt;stem&gt;-renamed.lines</code> beside the input).</li>
 <li>The work runs on a background thread. Progress shows in the window title bar (e.g. <em>"Vexy Lines Run — Describing fill 3/53"</em>).</li>
 <li>On success, a dialog reports how many fills and layers were renamed, and the saved file is revealed in your file manager.</li>
 <li>On error, an error dialog explains what went wrong.</li>
 </ol>
-<p><strong>Configuring the model — Lines ▸ AI Rename Settings…</strong></p>
+<p><strong>Configuring the model: Lines ▸ AI Rename Settings…</strong></p>
 <p>The endpoint is an OpenAI-compatible <code>/v1</code> server. Open <strong>Lines ▸ AI Rename Settings…</strong> to set, in a dialog:</p>
 <ul>
-<li><strong>API URL</strong> — the <code>/v1</code> base URL</li>
+<li><strong>API URL</strong>: the <code>/v1</code> base URL</li>
 <li><strong>API key</strong></li>
-<li><strong>Vision model</strong> — used to describe each fill</li>
-<li><strong>Text model</strong> — used to name each layer</li>
+<li><strong>Vision model</strong>: used to describe each fill</li>
+<li><strong>Text model</strong>: used to name each layer</li>
 </ul>
 <p>Settings are saved to <code>~/.config/vexy-lines-run/settings.json</code>. Any field left blank falls back to its environment variable: <code>VEXY_LINES_LLM_API_URL</code>, <code>VEXY_LINES_LLM_API_KEY</code>, <code>VEXY_LINES_LLM_MODEL_VISION</code> (vision), and <code>VEXY_LINES_VLM_MODEL</code> (text).</p>
 <p><strong>Requirements:</strong></p>
@@ -1311,16 +1369,16 @@
 <h2 id="images-tab">Images tab<a class="headerlink" href="#images-tab" title="Permanent link">&para;</a></h2>
 <p>Load raster images and turn them into vector art.</p>
 <p><img alt="Images tab: eight bear photos listed, a teddy bear preview in the center, and a halftone cat style loaded on the right" src="../images/images-mode.png" /></p>
-<p>Supported formats: PNG, JPG, JPEG, GIF, BMP, TIFF, WEBP — anything Pillow can open.</p>
-<p>A style <strong>must</strong> be selected for image export. Without one, there's nothing to apply. Each image gets opened as a new document in Vexy Lines through the MCP API, the style's fill tree is replicated onto it, the engine renders, and the result exports.</p>
+<p>Supported formats: PNG, JPG, JPEG, GIF, BMP, TIFF, WEBP, or anything else Pillow can open.</p>
+<p>A style <strong>must</strong> be selected for image export. Without one, there's nothing to apply. The app opens each image as a new document in Vexy Lines through the MCP API and replicates the style's fill tree onto it. The engine renders, and the app exports the result.</p>
 <p>The screenshot above shows eight bear photos loaded with a halftone cat style (<code>kitty.lines</code>) ready to apply. The preview shows the currently selected photo; the style panel shows what the fill pattern looks like.</p>
-<p><strong>Buttons:</strong> Same as the Lines tab — <strong>+</strong> (add images), <strong>−</strong> (remove selected), <strong>✕</strong> (clear all).</p>
+<p><strong>Buttons:</strong> Same as the Lines tab: <strong>+</strong> (add images), <strong>−</strong> (remove selected), <strong>✕</strong> (clear all).</p>
 <p>If style application fails for a particular image (MCP timeout, connection error), the app logs a warning and continues to the next file rather than aborting the entire batch.</p>
 <h2 id="video-tab">Video tab<a class="headerlink" href="#video-tab" title="Permanent link">&para;</a></h2>
 <p>Process video frame-by-frame with style transfer.</p>
 <p><img alt="Video tab: first and last frames of a teddy bear video side by side, a range slider set to frames 1–5, and a halftone cat style loaded" src="../images/video-mode.png" /></p>
 <p>Supported video formats: MP4, MOV, MKV, AVI, WEBM.</p>
-<p>Two preview panes sit side by side — the first and last frames of your selected range. Below them:</p>
+<p>Two preview panes sit side by side: the first and last frames of your selected range. Below them:</p>
 <table>
 <thead>
 <tr>
@@ -1359,7 +1417,7 @@
 </tr>
 </tbody>
 </table>
-<p>The range slider and text entries stay in sync — change one, the other updates. Press Enter or click away from a text entry to apply the value. Values are clamped to valid bounds (1 to total frames). The previews update when the range changes, extracting the actual frames via OpenCV.</p>
+<p>The range slider and text entries stay in sync: change one, the other updates. Press Enter or click away from a text entry to apply the value. Values are clamped to valid bounds (1 to total frames). The previews update when the range changes, extracting the actual frames via OpenCV.</p>
 <h3 id="video-processing-workflow">Video processing workflow<a class="headerlink" href="#video-processing-workflow" title="Permanent link">&para;</a></h3>
 <p>The video pipeline works like this:</p>
 <ol>
@@ -1367,9 +1425,9 @@
 <li><strong>Select range</strong>: Use the slider or entry fields to pick which frames to process. The previews update to show the first and last frames of your selection.</li>
 <li><strong>Choose a style</strong>: Load a <code>.lines</code> file in the Style panel. The style's fill structure will be applied to every frame.</li>
 <li><strong>Pick output format</strong>:</li>
-<li><strong>MP4</strong> — re-encodes the styled frames back into a video file</li>
-<li><strong>PNG</strong> or <strong>JPG</strong> — saves each styled frame as a separate image file (<code>frame_000001.png</code>, etc.)</li>
-<li><strong>Export</strong>: Each frame is extracted, saved as a temporary PNG, sent to the Vexy Lines engine via MCP for style transfer, the resulting SVG is rasterised, and the output is written. For MP4, frames go through OpenCV's VideoWriter. For individual images, each frame is saved directly.</li>
+<li><strong>MP4</strong>: re-encodes the styled frames back into a video file</li>
+<li><strong>PNG</strong> or <strong>JPG</strong>: saves each styled frame as a separate image file (<code>frame_000001.png</code>, etc.)</li>
+<li><strong>Export</strong>: The app extracts each frame, saves it as a temporary PNG, sends it to the Vexy Lines engine via MCP for style transfer, rasterises the resulting SVG, and writes the output. For MP4, frames go through OpenCV's VideoWriter. For individual images, each frame is saved directly.</li>
 </ol>
 <h3 id="audio-passthrough">Audio passthrough<a class="headerlink" href="#audio-passthrough" title="Permanent link">&para;</a></h3>
 <p>The audio toggle (♪ switch) appears only when <strong>all five conditions</strong> are met:</p>
@@ -1387,7 +1445,7 @@
 <p>Click <strong>+</strong> to choose a <code>.lines</code> file. A thumbnail preview extracted from the file appears immediately. The file path displays below, truncated from the left with "…" if it's too long for the panel width.</p>
 <p>Click <strong>✕</strong> to clear the style and return to the placeholder.</p>
 <h3 id="how-styles-work">How styles work<a class="headerlink" href="#how-styles-work" title="Permanent link">&para;</a></h3>
-<p>A <code>.lines</code> file contains a tree of groups, layers, and fills — each fill is an algorithm (linear, halftone, scribble, spiral, etc.) with numeric parameters. When you apply a style, the app extracts that fill structure and replicates it onto your input image through the MCP API. The Vexy Lines engine then renders each fill algorithm against the image's pixel data, producing an SVG.</p>
+<p>A <code>.lines</code> file contains a tree of groups, layers, and fills. Each fill is an algorithm (linear, halftone, scribble, spiral, etc.) with numeric parameters. When you apply a style, the app extracts that fill structure and replicates it onto your input image through the MCP API. The Vexy Lines engine then renders each fill algorithm against the image's pixel data, producing an SVG.</p>
 <p>For raster output (PNG, JPG, MP4 frames), the SVG is then rasterised using svglab or resvg-py.</p>
 <h3 id="end-style-and-interpolation">End style and interpolation<a class="headerlink" href="#end-style-and-interpolation" title="Permanent link">&para;</a></h3>
 <p>Select a second <code>.lines</code> file in the <strong>End Style</strong> tab to enable style interpolation across a batch:</p>
@@ -1413,10 +1471,10 @@
 </tr>
 </tbody>
 </table>
-<p>The blend factor <code>t</code> for item <code>i</code> of <code>N</code> total items is <code>i / (N - 1)</code>. Both styles must be structurally compatible — same number of groups, layers, and fills, with matching fill types. If they don't match, the export will report an error ("Start and end styles have incompatible structures").</p>
+<p>The blend factor <code>t</code> for item <code>i</code> of <code>N</code> total items is <code>i / (N - 1)</code>. Both styles must be structurally compatible: same number of groups, layers, and fills, with matching fill types. If they don't match, the export will report an error ("Start and end styles have incompatible structures").</p>
 <p>This is useful for animated sequences: load 100 frames, set a "clean lines" start style and a "chaotic scribble" end style, and watch the artwork gradually transform.</p>
 <h3 id="style-panel-and-the-lines-tab">Style panel and the Lines tab<a class="headerlink" href="#style-panel-and-the-lines-tab" title="Permanent link">&para;</a></h3>
-<p>When the Lines tab is active, the style panel is disabled (grayed out). Lines files carry their own fill structure — the app disables the style picker to avoid confusion. Switch to Images or Video to enable the style picker.</p>
+<p>When the Lines tab is active, the style panel is disabled (grayed out). Lines files carry their own fill structure, so the app disables the style picker to avoid confusion. Switch to Images or Video to enable the style picker.</p>
 <h2 id="export-controls">Export controls<a class="headerlink" href="#export-controls" title="Permanent link">&para;</a></h2>
 <p>The bottom strip of the window:</p>
 <div class="highlight"><span class="filename">Text Only</span><pre><span></span><code>Export as [SVG ▾]  [— ▾]  ♪ ○       [Export ▶]
@@ -1432,7 +1490,7 @@
 <tbody>
 <tr>
 <td><strong>SVG</strong></td>
-<td>Vector output — no size scaling needed</td>
+<td>Vector output: no size scaling needed</td>
 </tr>
 <tr>
 <td><strong>PNG</strong></td>
@@ -1452,27 +1510,27 @@
 </tr>
 </tbody>
 </table>
-<p>The format dropdown always shows all five options. Not every format makes sense on every tab — for example, MP4 only works with video input and LINES only works with .lines input. If you pick an unsupported combination, the export will tell you.</p>
+<p>The format dropdown always shows all five options. Not every format makes sense on every tab. For example, MP4 only works with video input and LINES only works with .lines input. If you pick an unsupported combination, the export will tell you.</p>
 <h3 id="size">Size<a class="headerlink" href="#size" title="Permanent link">&para;</a></h3>
 <p>Choose output scaling: <strong>1x</strong>, <strong>2x</strong>, <strong>3x</strong>, or <strong>4x</strong>. The multiplier applies to raster and video exports. For 2x, a 1000x800 source produces a 2000x1600 output using Lanczos resampling.</p>
-<p>Disabled (shows "—") for SVG and LINES formats — vector output has no fixed resolution, and LINES is a file copy.</p>
+<p>Disabled (shows "—") for SVG and LINES formats: vector output has no fixed resolution, and LINES is a file copy.</p>
 <h3 id="export-button">Export button<a class="headerlink" href="#export-button" title="Permanent link">&para;</a></h3>
 <p>Click <strong>Export ▶</strong> to start. A dialog appears:</p>
 <ul>
-<li><strong>MP4 format:</strong> Save-file dialog — choose a filename and location</li>
-<li><strong>All other formats:</strong> Folder dialog — choose a directory, files are named automatically based on the input filenames</li>
+<li><strong>MP4 format:</strong> Save-file dialog. Choose a filename and location</li>
+<li><strong>All other formats:</strong> Folder dialog. Choose a directory; the app names files automatically after the input filenames</li>
 </ul>
 <p>During export, the button text changes to show progress as a percentage and status message (e.g. "35% Styling bear_03..."). The button is disabled while the export runs. On completion, the button returns to <strong>Export ▶</strong> and re-enables.</p>
 <p>On error, a dialog pops up with the error message.</p>
 <h3 id="error-handling-during-export">Error handling during export<a class="headerlink" href="#error-handling-during-export" title="Permanent link">&para;</a></h3>
 <p>If an export fails, a dialog pops up with the error message. Common causes:</p>
 <ul>
-<li><strong>"MCP error ... Make sure Vexy Lines is running."</strong> — The Vexy Lines app isn't running, or the MCP server on port 47384 isn't responding. Launch Vexy Lines first.</li>
-<li><strong>"A style file is required"</strong> — You're on the Images or Video tab without a style selected. Load a <code>.lines</code> file in the Style panel.</li>
-<li><strong>"Start and end styles have incompatible structures"</strong> — Your primary and end styles have different fill tree layouts. They must have matching numbers of groups, layers, and fills with identical fill types.</li>
-<li><strong>"Failed to read style"</strong> — The style <code>.lines</code> file was deleted, moved, or is corrupted since you loaded it.</li>
-<li><strong>"No input files selected"</strong> — You clicked Export without adding any files.</li>
-<li><strong>"SVG export from .lines files requires the Vexy Lines app (MCP)"</strong> — SVG export isn't available in Lines mode. Use Images mode with a style instead, or choose PNG/JPG/LINES format.</li>
+<li><strong>"MCP error ... Make sure Vexy Lines is running."</strong>: The Vexy Lines app isn't running, or the MCP server on port 47384 isn't responding. Launch Vexy Lines first.</li>
+<li><strong>"A style file is required"</strong>: You're on the Images or Video tab without a style selected. Load a <code>.lines</code> file in the Style panel.</li>
+<li><strong>"Start and end styles have incompatible structures"</strong>: Your primary and end styles have different fill tree layouts. They must have matching numbers of groups, layers, and fills with identical fill types.</li>
+<li><strong>"Failed to read style"</strong>: The style <code>.lines</code> file was deleted, moved, or is corrupted since you loaded it.</li>
+<li><strong>"No input files selected"</strong>: You clicked Export without adding any files.</li>
+<li><strong>"SVG export from .lines files requires the Vexy Lines app (MCP)"</strong>: SVG export isn't available in Lines mode. Use Images mode with a style instead, or choose PNG/JPG/LINES format.</li>
 </ul>
 <p>For batch exports (multiple images), a single file failure logs a warning and continues. The export doesn't abort over one bad file.</p>
 <h2 id="drag-and-drop">Drag-and-drop<a class="headerlink" href="#drag-and-drop" title="Permanent link">&para;</a></h2>
@@ -1507,33 +1565,33 @@
 </tr>
 </tbody>
 </table>
-<p>The app filters by extension based on the drop target. Drop a PNG on the Lines list and nothing happens — no error, just no action.</p>
+<p>The app filters by extension based on the drop target. Drop a PNG on the Lines list and nothing happens: no error, no action.</p>
 <p>Paths with spaces or special characters work correctly. The app handles both brace-enclosed (<code>{/path/to/my file.png}</code>) and space-separated drop data from tkinterdnd2.</p>
-<p>Duplicate files are silently ignored — drop the same image twice and it only appears once in the list.</p>
-<p>Drag-and-drop requires tkinterdnd2, which is included in the base install. If it's missing (e.g. on some Linux minimal installs), the app still works — you just have to use the file dialogs and menus instead.</p>
+<p>The app silently ignores duplicate files: drop the same image twice and it appears only once in the list.</p>
+<p>Drag-and-drop requires tkinterdnd2, which is included in the base install. If it's missing (e.g. on some Linux minimal installs), the app still works; you use the file dialogs and menus instead.</p>
 <h2 id="appearance">Appearance<a class="headerlink" href="#appearance" title="Permanent link">&para;</a></h2>
 <p>The <code>launch()</code> function sets CustomTkinter to dark mode. The app uses a dark slate background. Selected files highlight in blue. The Export button uses a red theme (<code>#D32F2F</code> background, <code>#B71C1C</code> on hover).</p>
-<p>Preview images maintain their aspect ratio — a tall narrow image scales to fit within the preview box without stretching. When no image is loaded, the area shows a dark grey placeholder.</p>
+<p>Preview images maintain their aspect ratio: a tall narrow image scales to fit within the preview box without stretching. When no image is loaded, the area shows a dark grey placeholder.</p>
 <p>Path labels truncate from the left: a path like <code>/Users/adam/Documents/projects/art/kitty.lines</code> becomes <code>…projects/art/kitty.lines</code> to fit the available width. Labels re-truncate when you resize the window.</p>
 <h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
 <h3 id="the-app-launches-but-export-does-nothing">The app launches but export does nothing<a class="headerlink" href="#the-app-launches-but-export-does-nothing" title="Permanent link">&para;</a></h3>
-<p>Make sure the <strong>Vexy Lines desktop app</strong> is running. The GUI connects to it via MCP (a JSON-RPC server on <code>localhost:47384</code>). Without the app, no style transfer can happen — only LINES file copy works without it.</p>
+<p>Make sure the <strong>Vexy Lines desktop app</strong> is running. The GUI connects to it via MCP (a JSON-RPC server on <code>localhost:47384</code>). Without the app, no style transfer can happen. Only LINES file copy works without it.</p>
 <h3 id="mcp-error-connection-refused">"MCP error: Connection refused"<a class="headerlink" href="#mcp-error-connection-refused" title="Permanent link">&para;</a></h3>
 <p>The Vexy Lines app isn't running, or its MCP server hasn't started yet. Launch Vexy Lines and wait a few seconds for it to fully load before trying to export.</p>
 <h3 id="export-is-very-slow">Export is very slow<a class="headerlink" href="#export-is-very-slow" title="Permanent link">&para;</a></h3>
 <p>Each frame or image requires a round-trip to the Vexy Lines engine: load image, apply fills, render, export SVG, then rasterise. For video, this happens per frame. A 5-second video at 30fps means 150 round-trips. Tips:</p>
 <ul>
 <li>Use a shorter frame range for testing (narrow the slider to 5-10 frames first)</li>
-<li>Use 1x size — larger multipliers increase rasterisation time</li>
+<li>Use 1x size, because larger multipliers increase rasterisation time</li>
 <li>Lower DPI in the Vexy Lines app settings reduces render time</li>
 <li>Close other documents in Vexy Lines to free up rendering resources</li>
 </ul>
 <h3 id="drag-and-drop-doesnt-work">Drag-and-drop doesn't work<a class="headerlink" href="#drag-and-drop-doesnt-work" title="Permanent link">&para;</a></h3>
-<p>This requires tkinterdnd2. If you installed with <code>pip install vexy-lines-run</code>, it should be included. On some Linux distributions, the underlying Tcl/Tk DnD extension may be missing. The app works without drag-and-drop — use the <strong>+</strong> buttons or the menu bar to add files.</p>
+<p>This requires tkinterdnd2. If you installed with <code>pip install vexy-lines-run</code>, it should be included. On some Linux distributions, the underlying Tcl/Tk DnD extension may be missing. The app works without drag-and-drop: use the <strong>+</strong> buttons or the menu bar to add files.</p>
 <h3 id="video-has-no-audio-in-the-output">Video has no audio in the output<a class="headerlink" href="#video-has-no-audio-in-the-output" title="Permanent link">&para;</a></h3>
 <p>Audio passthrough requires: (1) MP4 output format, (2) the full frame range selected, (3) the source video must have an audio track, and (4) <strong>ffmpeg</strong> must be installed and available on your PATH. If any condition isn't met, the audio toggle won't appear or audio will be silently dropped.</p>
 <h3 id="preview-images-look-wrong-or-blank">Preview images look wrong or blank<a class="headerlink" href="#preview-images-look-wrong-or-blank" title="Permanent link">&para;</a></h3>
-<p>Previews are extracted from the <code>.lines</code> file's embedded <code>PreviewDoc</code> data (base64-encoded). If the <code>.lines</code> file was saved without a preview, or the preview data is corrupt, the preview area stays blank. This doesn't affect export — the style and source image data are separate from the preview.</p>
+<p>Previews are extracted from the <code>.lines</code> file's embedded <code>PreviewDoc</code> data (base64-encoded). If the <code>.lines</code> file was saved without a preview, or the preview data is corrupt, the preview area stays blank. This doesn't affect export, because the style and source image data are separate from the preview.</p>
 <h3 id="window-appears-behind-other-windows">Window appears behind other windows<a class="headerlink" href="#window-appears-behind-other-windows" title="Permanent link">&para;</a></h3>
 <p>The app tries to bring itself to the front on launch. If it doesn't appear, check your taskbar/dock. On macOS, the window forces itself to the top briefly then drops back to normal stacking order.</p>
 
@@ -1548,70 +1606,48 @@
 
 
 
-
+                
               </article>
             </div>
-
-
+          
+          
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
-          <div class="md-top" data-md-component="top" hidden>
-  <div class="md-top__center">
-    <button type="button" class="md-top__button md-top__button--main" data-md-action="top">
-
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
-      <span>Back to top</span>
-    </button>
-
-
-
-      <label class="md-top__button md-top__side md-top__side--nav" for="__drawer" >
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-panel-left" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/></svg>
-      </label>
-
-
-
-
-      <label class="md-top__button md-top__side md-top__side--toc" for="__toc" >
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-panel-right" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M15 3v18"/></svg>
-      </label>
-
-  </div>
-</div>
+        
       </main>
-
+      
         <footer class="md-footer">
-
+  
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
       <div class="md-copyright">
-
-
+  
+  
     Made with
-    <a href="https://jaywhj.github.io/mkdocs-materialx/" target="_blank" rel="noopener">
-      MaterialX
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
     </a>
-
+  
 </div>
-
+      
     </div>
   </div>
 </footer>
-
+      
     </div>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-
-
-
-
-
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "code": null, "features": ["content.code.copy", "navigation.sections"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "code.collapse": "Collapse", "code.download": "Download", "code.expand": "Expand remaining # lines", "code.select": "Toggle line selection", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
-
-
-      <script src="../assets/javascripts/bundle.fc193f93.min.js"></script>
-
-
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.code.copy", "navigation.sections"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
   </body>
 </html>
